@@ -111,7 +111,7 @@ export default {
                 this.$message.error('请输入比赛编号');
             } else {
                 this.$http.post("/download/checkStatus", obj).then(res => {
-                    if (res.statusCode === 200) {
+                    if (res.statusCode === 50000) {
                         this.downloadFile(obj);
                     } else {
                         this.$message.error(res.message);

@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 const request = axios.create({
-    baseURL: 'http://localhost:80',
+    baseURL: 'http://localhost:80/api',
     timeout: 10000
 })
 
@@ -23,6 +23,10 @@ request.interceptors.request.use(config => {
 request.interceptors.response.use(
     response => {
         let res = response.data;
+        if(res.statusCode === 50002) {
+            router.replace('/login')
+            this.$message.error(res.message)
+        }
         // 如果是返回的文件
         if (response.config.responseType === 'blob') {
             return res

@@ -70,7 +70,7 @@ export default {
         this.$http
           .post("/login/", this.user)
           .then((res) => {
-            if (res.statusCode === 200) {
+            if (res.statusCode === 50000) {
               localStorage.setItem("token", res.data.token);
               this.$router.push({ path: "/admin" });
             } else {

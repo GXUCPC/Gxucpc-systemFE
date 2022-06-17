@@ -30,11 +30,11 @@
         <div class="tableForm">
             <el-table :data="tableData" height="250" style="width: 100%; font-size: 10px;"
                 empty-text="·" v-fitColumns>
-                <el-table-column label="Place" type='index' min-width='30em' />
-                <el-table-column prop="school" label="School" min-width="12em" />
-                <el-table-column prop="name" label="Name" min-width="12em" />
-                <el-table-column prop="solved" label="Solved" min-width="3em" />
-                <el-table-column prop="time" label="Time" min-width="4em" />
+                <el-table-column label="Place" type='index' width="100" />
+                <el-table-column prop="school" label="School" width="100" />
+                <el-table-column prop="name" label="Name" width="100" />
+                <el-table-column prop="solved" label="Solved" width="100" />
+                <el-table-column prop="time" label="Time" width="100" />
                 
             </el-table>
         </div>
@@ -75,7 +75,7 @@ export default {
     // mounted: {
     //     // getItem() {
     //     //     this.$http.get("/contest/" + this.$route.params.itemID).then((res) => {
-    //     //         if (res.statusCode === 200) {
+    //     //         if (res.statusCode === 50000) {
 
     //     //         } else {
     //     //             this.$message.error(res.msg);
