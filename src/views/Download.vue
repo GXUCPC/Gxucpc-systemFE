@@ -79,7 +79,7 @@ export default {
         //  @return: null
         //  @function: Submit a download request to the server. If there is no corresponding file, an error message will be given
         downloadFile(obj) {
-            this.$http.post("/download", obj, { responseType: 'blob' }).then(res => {
+            this.$http.post("/public/download", obj, { responseType: 'blob' }).then(res => {
                 const content = res;
                 const blob = new Blob([content]);
 
@@ -110,7 +110,7 @@ export default {
             } else if (!obj.itemNumber) {
                 this.$message.error('请输入比赛编号');
             } else {
-                this.$http.post("/download/checkStatus", obj).then(res => {
+                this.$http.post("/public/download/checkStatus", obj).then(res => {
                     if (res.statusCode === 50000) {
                         this.downloadFile(obj);
                     } else {

@@ -9,11 +9,11 @@ const router = createRouter({
             name: 'Download',
             component: defineAsyncComponent(() => import('../views/Download.vue')),
         },
-        // {
-        //     path: '/userShow/:applyID',
-        //     name: '报名信息',
-        //     component: defineAsyncComponent(()=>import('../views/UserShow.vue'))
-        // },
+        {
+            path: '/enroll/:itemID',
+            name: '报名信息',
+            component: defineAsyncComponent(()=>import('../views/Enroll.vue'))
+        },
         {
             path: '/login',
             name: 'Name',

@@ -7,6 +7,7 @@ import 'element-plus/dist/index.css'
 import * as ElIcons from '@element-plus/icons-vue'
 import request from "./request/request.js";
 
+
 const app = createApp(App)
 
 for (const icname in ElIcons) {
