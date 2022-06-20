@@ -166,12 +166,15 @@ export default {
         latest: undefined,
       },
       itemData: {
-        itemName: "第五届东信杯",
-        startTime: "2022-11-1 12:00",
-        endTime: "2022-11-12 13:00",
-        status: "报名中",
-        itemDate: "2022-12-11",
-        itemTime: "13:00 -- 17:00",
+        itemName: undefined,
+        // YYYY-MM-DD HH:MM:SS
+        startTime: undefined,
+        endTime: undefined,
+        status: undefined,
+        // YYYY-MM-DD
+        itemDate: undefined,
+        // HH:MM -- HH:MM
+        itemTime: undefined,
       },
       formData: {
         userName: undefined,

@@ -26,36 +26,18 @@
     </div>
 
     <div class="time-line">
-      <el-progress
-        :text-inside="true"
-        :percentage="Board.per"
-        :duration="5"
-        stroke-width="30"
-        :status="Board.sym"
-      >
+      <el-progress :text-inside="true" :percentage="Board.per" :duration="5" stroke-width="30" :status="Board.sym">
       </el-progress>
     </div>
     <div class="downloadTable">
-      <el-button type="primary" icon="Download" round @click="download()"
-        >下载榜单</el-button
-      >
+      <el-button type="primary" icon="Download" round @click="download()">下载榜单</el-button>
     </div>
     <div class="tableForm">
-      <el-table
-        id="out-table"
-        style="width: 100%"
-        border
-        :data="tableData"
-        :header-cell-style="{ 'text-align': 'center' }"
-        :cell-style="cellStyle"
-      >
+      <el-table id="out-table" style="width: 100%" border :data="tableData"
+        :header-cell-style="{ 'text-align': 'center' }" :cell-style="cellStyle">
         <template v-for="(item, index) in tableHead">
-          <el-table-column
-            :prop="item.column_name"
-            :label="item.column_comment"
-            :key="index"
-            v-if="true"
-          ></el-table-column>
+          <el-table-column :prop="item.column_name" :label="item.column_comment" :key="index" v-if="true">
+          </el-table-column>
         </template>
       </el-table>
     </div>
@@ -72,93 +54,17 @@ export default {
       startTag: false,
       Board: {
         title: "不存在该比赛",
-        startTime: "2022-6-19 12:00:00",
-        endTime: "2022-6-19 18:25:00",
+        // YYYY-MM-DD HH:MM:SS
+        startTime: undefined,
+        endTime: undefined,
         status: "UNSTART",
         per: 0,
         sym: "exception",
       },
-      tableHead: [
-        {
-          column_name: "place",
-          column_comment: "Place",
-        },
-        {
-          column_name: "school",
-          column_comment: "School",
-        },
-        {
-          column_name: "name",
-          column_comment: "Name",
-        },
-        {
-          column_name: "solved",
-          column_comment: "Solved",
-        },
-        {
-          column_name: "time",
-          column_comment: "Time",
-        },
-        {
-          column_name: "A",
-          column_comment: "A",
-        },
-        {
-          column_name: "B",
-          column_comment: "B",
-        },
-        {
-          column_name: "C",
-          column_comment: "C",
-        },
-        {
-          column_name: "D",
-          column_comment: "D",
-        },
-        {
-          column_name: "E",
-          column_comment: "E",
-        },
-        {
-          column_name: "F",
-          column_comment: "F",
-        },
-        {
-          column_name: "G",
-          column_comment: "G",
-        },
-        {
-          column_name: "H",
-          column_comment: "H",
-        },
-        {
-          column_name: "I",
-          column_comment: "I",
-        },
-        {
-          column_name: "J",
-          column_comment: "J",
-        },
-      ],
-      tableData: [
-        {
-          place: 1,
-          school: "aa",
-          name: "bbb",
-          solved: 12,
-          time: 122,
-          A: "+\n3/133",
-          B: "+",
-          C: "+",
-          D: "+",
-          E: "+",
-          F: "+",
-          G: "-",
-          H: "?",
-          I: "·",
-          J: "+",
-        },
-      ],
+      // column_name: prop
+      // column_comment: 展示文字
+      tableHead: [],
+      tableData: [],
     };
   },
   mounted() {
@@ -206,7 +112,7 @@ export default {
               this.startTag = true;
               this.updateData();
             }
-          } else if(res.statusCode === 50001) {
+          } else if (res.statusCode === 50001) {
             this.$router.push("/")
             this.$message.error(res.message)
           } else {

@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import { defineAsyncComponent } from "vue";
+import { defineAsyncComponent } from "vue"
+import request from "../request/request.js"
 
 const router = createRouter({
     history: createWebHistory(),  // history 模式
@@ -27,34 +28,45 @@ const router = createRouter({
         {
             path: '/admin',
             name: 'Admin',
-            // children: [
-            //     {
-            //     }
-            // ],
-            beforeEnter: (to, from, next) => {
-                let token = localStorage.getItem('token')
-                let logindto = {}
-                logindto.token = token
-                logindto.urlpath = to.path
-                if (token != null) { //登录过
-                    //验证token
-                    request.post("/user/checkToken", token).then(res => {
-                        //成功
-                        if (res.statusCode == '200') {
-                            next()
-                        } else {
-                            next({ path: '/login' })
-                        }
-
-                    }).catch(() => {
-                        next({ path: '/login' })
-                    })
-
-                } else { //没有登录
-                    next({ path: '/login' })
+            component: defineAsyncComponent(() => import('../views/Admin.vue')),
+            children: [
+                {
+                    path: '',
+                    name: 'Dashboard',
+                    component: defineAsyncComponent(() => import('../views/Dashboard.vue'))
+                },
+                {
+                    path: 'user',
+                    name: 'User',
+                    // component: defineAsyncComponent(() => import('../views/Login.vue'))
                 }
+            ],
+            // token验证
 
-            }
+            // beforeEnter: (to, from, next) => {
+            //     let token = localStorage.getItem('token')
+            //     let logindto = {}
+            //     logindto.token = token
+            //     logindto.urlpath = to.path
+            //     if (token != null) { //登录过
+            //         //验证token
+            //         request.post("/user/checkToken", token).then(res => {
+            //             //成功
+            //             if (res.statusCode == '50000') {
+            //                 next()
+            //             } else {
+            //                 next({ path: '/login' })
+            //             }
+
+            //         }).catch(() => {
+            //             next({ path: '/login' })
+            //         })
+
+            //     } else { //没有登录
+            //         next({ path: '/login' })
+            //     }
+
+            // }
         }
     ]
 })
