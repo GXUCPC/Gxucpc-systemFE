@@ -72,6 +72,9 @@ export default {
           .then((res) => {
             if (res.statusCode === 50000) {
               localStorage.setItem("token", res.data.token);
+              localStorage.setItem("Username", this.user.username);
+              localStorage.setItem("Power", res.data.power);
+
               this.$router.push({ path: "/admin" });
             } else {
               this.$message.error(res.msg);

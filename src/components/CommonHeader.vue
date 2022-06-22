@@ -20,7 +20,7 @@
 export default {
     data() {
         return {
-            userName: 'root'
+            userName: undefined
         }
     },
     methods: {
@@ -32,6 +32,9 @@ export default {
                 this.$router.push('/')
                 this.$message.success("退出成功")
             }
+        },
+        getUserInfo() {
+            this.userName = localStorage.getItem('Username')
         }
     }
 }

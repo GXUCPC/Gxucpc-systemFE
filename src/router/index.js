@@ -38,7 +38,7 @@ const router = createRouter({
                 {
                     path: 'user',
                     name: 'User',
-                    // component: defineAsyncComponent(() => import('../views/Login.vue'))
+                    component: defineAsyncComponent(() => import('../views/User.vue'))
                 }
             ],
             // token验证
