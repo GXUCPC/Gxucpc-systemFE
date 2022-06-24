@@ -133,7 +133,6 @@
   <div class="info">
     <h3>比赛信息</h3>
     <p>竞赛名称: {{ itemData.itemName }}</p>
-    <p>参赛时间: {{ itemData.itemDate }} {{ itemData.itemTime }}</p>
     <p>主办单位: 广西大学教务处 广西大学计算机与电子信息学院</p>
     <p>
       感谢广西大学计算机与电子信息学院计算机协会、广西大学ICPC/CCPC集训队的技术支持
@@ -172,9 +171,7 @@ export default {
         endTime: undefined,
         status: undefined,
         // YYYY-MM-DD
-        itemDate: undefined,
-        // HH:MM -- HH:MM
-        itemTime: undefined,
+        itemDate: undefined
       },
       formData: {
         userName: undefined,

@@ -13,7 +13,7 @@
                 <el-icon><UserFilled /></el-icon>
                 <span>用户管理</span>
             </el-menu-item>
-            <el-menu-item index="/admin/content">
+            <el-menu-item index="/admin/contest">
                 <el-icon><Trophy /></el-icon>
                 <span>比赛管理</span>
             </el-menu-item>

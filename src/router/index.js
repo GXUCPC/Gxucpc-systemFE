@@ -11,9 +11,9 @@ const router = createRouter({
             component: defineAsyncComponent(() => import('../views/Download.vue')),
         },
         {
-            path: '/enroll/:itemID',
-            name: '报名信息',
-            component: defineAsyncComponent(()=>import('../views/Enroll.vue'))
+            path: '/signup/:itemID',
+            name: 'SignUp',
+            component: defineAsyncComponent(()=>import('../views/SignUp.vue'))
         },
         {
             path: '/login',
@@ -39,6 +39,16 @@ const router = createRouter({
                     path: 'user',
                     name: 'User',
                     component: defineAsyncComponent(() => import('../views/User.vue'))
+                },
+                {
+                    path: 'contest',
+                    name: 'Contest',
+                    component: defineAsyncComponent(() => import('../views/Contest.vue'))
+                },
+                {
+                    path: 'form',
+                    name: 'Form',
+                    component: defineAsyncComponent(() => import('../views/Form.vue'))
                 }
             ],
             // token验证
