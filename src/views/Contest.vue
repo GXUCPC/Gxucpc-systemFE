@@ -121,54 +121,62 @@ export default {
             dialogTableVisible: false,
             dialogAddTableVisible: false,
             tableData: [
-                {
-                    name: '“东信杯”广西大学第五届程序设计竞赛',
-                    signUpBeginTime: '2022-6-21 12:00:00',
-                    signUpEndTime: '2022-6-22 12:00:00',
-                    email: 'gxucpc@163.com',
-                    smtpPassword: '12345',
-                    contestBeginTime: '2022-6-22 12:00:00',
-                    contestEndTime: '2022-6-22 12:00:00'
-                },
+                // {
+                //     name: '“东信杯”广西大学第五届程序设计竞赛',
+                //     signUpBeginTime: '2022-6-21 12:00:00',
+                //     signUpEndTime: '2022-6-22 12:00:00',
+                //     email: 'gxucpc@163.com',
+                //     smtpPassword: '12345',
+                //     contestBeginTime: '2022-6-22 12:00:00',
+                //     contestEndTime: '2022-6-22 12:00:00'
+                // },
             ],
             rules: {
-                name: [{required: true, trigger: 'blur'}],
-                signUpBeginTime: [{required: true, trigger: 'blur'}],
-                signUpEndTime: [{required: true, trigger: 'blur'}],
-                email: [{required: true, trigger: 'blur'}],
-                smtpPassword: [{required: true, trigger: 'blur'}],
-                contestBeginTime: [{required: true, trigger: 'blur'}],
-                contestEndTime: [{required: true, trigger: 'blur'}],
+                name: [{ required: true, trigger: 'blur' }],
+                signUpBeginTime: [{ required: true, trigger: 'blur' }],
+                signUpEndTime: [{ required: true, trigger: 'blur' }],
+                email: [{ required: true, trigger: 'blur' }],
+                smtpPassword: [{ required: true, trigger: 'blur' }],
+                contestBeginTime: [{ required: true, trigger: 'blur' }],
+                contestEndTime: [{ required: true, trigger: 'blur' }],
             },
             editData: {
-                name: undefined,
-                signUpBeginTime: undefined,
-                signUpEndTime: undefined,
-                email: undefined,
-                smtpPassword: undefined,
-                contestBeginTime: undefined,
-                contestEndTime: undefined
+                // name: undefined,
+                // signUpBeginTime: undefined,
+                // signUpEndTime: undefined,
+                // email: undefined,
+                // smtpPassword: undefined,
+                // contestBeginTime: undefined,
+                // contestEndTime: undefined
             },
             addData: {
-                name: undefined,
-                signUpBeginTime: undefined,
-                signUpEndTime: undefined,
-                email: undefined,
-                smtpPassword: undefined,
-                contestBeginTime: undefined,
-                contestEndTime: undefined
+                // name: undefined,
+                // signUpBeginTime: undefined,
+                // signUpEndTime: undefined,
+                // email: undefined,
+                // smtpPassword: undefined,
+                // contestBeginTime: undefined,
+                // contestEndTime: undefined
             },
         }
     },
     methods: {
+        //Author: cityTS
+        //Date: 2022年6月22日
+        //JavaScript深复制
         jsonClone(obj) {
-            // js深复制
             return JSON.parse(JSON.stringify(obj));
         },
+        //Author: cityTS
+        //Date: 2022年6月22日
+        //打开修改对话框
         handleEdit(index, row) {
             this.showContestDialog()
             this.editData = this.jsonClone(row)
         },
+        //Author: cityTS
+        //Date: 2022年6月22日
+        //删除对应信息
         handleDelete(index, row) {
             this.$http.delete('/admin/contest', row).then((res) => {
                 if (res.statusCode === 50000) {
@@ -181,15 +189,24 @@ export default {
             })
             this.getContestInfo()
         },
+        //Author: cityTS
+        //Date: 2022年6月22日
+        //打开修改对话框
         showContestDialog() {
             this.dialogTableVisible = !this.dialogTableVisible
         },
+        //Author: cityTS
+        //Date: 2022年6月22日
+        //打开新建对话框
         showAddContestDialog() {
             this.dialogAddTableVisible = !this.dialogAddTableVisible
             for (var index in this.addData) {
                 this.addData[index] = undefined
             }
         },
+        //Author: cityTS
+        //Date: 2022年6月22日
+        //保存修改
         saveContest() {
             for (index in this.editData) {
                 if (!this.editData[index]) {
@@ -209,6 +226,9 @@ export default {
                 this.$message.error('网络故障或系统故障')
             })
         },
+        //Author: cityTS
+        //Date: 2022年6月22日
+        //添加新比赛
         addContest() {
             for (var index in this.addData) {
                 if (!this.addData[index]) {
@@ -228,6 +248,9 @@ export default {
                 this.$message.error('网络故障或系统故障')
             })
         },
+        //Author: cityTS
+        //Date: 2022年6月22日
+        //获取所有已有比赛信息
         getContestInfo() {
             this.$http.get('/admin/contest').then((res) => {
                 if (res.statusCode === 50000) {

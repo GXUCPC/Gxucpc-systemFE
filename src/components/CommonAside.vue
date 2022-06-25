@@ -1,25 +1,39 @@
 <template>
     <div class="aside-admin">
 
-        <el-menu default-active="/admin" class="el-menu-vertical-demo" router="true" @open="handleOpen" @close="handleClose">
+        <el-menu :default-active="defaultActive" class="el-menu-vertical-demo" router="true">
             <div class="image-admin">
                 <img class="image-logo" src="@/assets/images/logo.png" alt="">
             </div>
             <el-menu-item index="/admin">
-                <el-icon><Grape /></el-icon>
+                <el-icon>
+                    <Grape />
+                </el-icon>
                 <span>仪表盘</span>
             </el-menu-item>
             <el-menu-item index="/admin/user">
-                <el-icon><UserFilled /></el-icon>
+                <el-icon>
+                    <UserFilled />
+                </el-icon>
                 <span>用户管理</span>
             </el-menu-item>
             <el-menu-item index="/admin/contest">
-                <el-icon><Trophy /></el-icon>
+                <el-icon>
+                    <Trophy />
+                </el-icon>
                 <span>比赛管理</span>
             </el-menu-item>
             <el-menu-item index="/admin/form">
-                <el-icon><Tickets /></el-icon>
+                <el-icon>
+                    <Tickets />
+                </el-icon>
                 <span>表单管理</span>
+            </el-menu-item>
+            <el-menu-item index="/admin/email">
+                <el-icon>
+                    <Position />
+                </el-icon>
+                <span>邮件管理</span>
             </el-menu-item>
         </el-menu>
     </div>
@@ -29,17 +43,26 @@
 export default {
     data() {
         return {
-
+            defaultActive: undefined
         }
     },
     methods: {
-        handleOpen(key, keyPath) {
 
-        },
-        handleClose(key, keyPath) {
+        // 更具当前的路由path榜单活跃菜单
 
+        setCurrentRoute() {
+            this.defaultActive = this.$route.path //通过他就可以监听到当前路由状态并激活当前菜单
         }
+    },
+    watch: {
+        $route() {
+            this.setCurrentRoute()
+        }
+    },
+    created() {
+        this.setCurrentRoute()
     }
+
 }
 </script>
 

@@ -23,6 +23,7 @@ request.interceptors.request.use(config => {
 request.interceptors.response.use(
     response => {
         let res = response.data;
+        // token失效
         if(res.statusCode === 50002) {
             router.replace('/login')
             this.$message.error(res.message)
@@ -39,7 +40,6 @@ request.interceptors.response.use(
         // return response;
     },
     error => {
-        // console.log('err' + error) // for debug
         return Promise.reject(error)
     }
 )

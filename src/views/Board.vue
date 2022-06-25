@@ -46,20 +46,21 @@
 
 <script>
 import * as XLSX from "xlsx"
-import FileSaver from "../components/FileSaver.js"
+// 修改后的FileSaver组件
+import FileSaver from "@/assets/js/FileSaver.js"
 export default {
   name: "Board",
   data() {
     return {
       startTag: false,
       Board: {
-        title: "不存在该比赛",
+        title: undefined,
         // YYYY-MM-DD HH:MM:SS
         startTime: undefined,
         endTime: undefined,
-        status: "UNSTART",
-        per: 0,
-        sym: "exception",
+        status: undefined,
+        per: undefined,
+        sym: undefined,
       },
       // column_name: prop
       // column_comment: 展示文字
@@ -71,9 +72,13 @@ export default {
     this.getItem();
   },
   methods: {
-    // 一秒更新一次表头数据
+    //Author: cityTS
+    //Date: 2022年6月19日
+    // 创建计时器1： 每秒更新比赛时间轴
+    // 创建计时器2：十秒更新一次数据
     updateData() {
       const that = this;
+      // 创建计时器1
       setInterval(() => {
         if (Date.parse(that.Board.startTime) > new Date()) {
           that.Board.status = "UNSTART";
@@ -93,12 +98,14 @@ export default {
           that.Board.sym = "exception";
         }
       }, 1000);
-      // 十秒更新一次数据
+      // 创建计时器2
       setInterval(() => {
         that.getItem(); // 更新数据
       }, 10000);
     },
-
+    //Author: cityTS
+    //Date: 2022年6月19日
+    //获取比赛数据
     getItem() {
       this.$http
         .get("/public/board/" + this.$route.params.itemID)
@@ -106,6 +113,10 @@ export default {
           if (res.statusCode === 50000) {
             this.tableData = res.tableData;
             this.tableHead = res.tableHead;
+            this.Board.title = res.title
+            // YYYY-MM-DD HH:MM:SS
+            this.Board.startTime = res.startTime
+            this.Board.endTime = res.endTime
             this.Board = res.Board;
             if (!this.startTag) {
               // 防止不断生成计时器
@@ -113,6 +124,7 @@ export default {
               this.updateData();
             }
           } else if (res.statusCode === 50001) {
+            // 无效itemID
             this.$router.push("/")
             this.$message.error(res.message)
           } else {
@@ -142,6 +154,9 @@ export default {
       }
       return style;
     },
+    //Author: cityTS
+    //Date: 2022年6月19日
+    //下载表格内容到excel 
     download() {
       var fix = document.querySelector(".el-table_fixed");
       var wb;

@@ -291,7 +291,7 @@ export default {
     getItemData() {
       // TODO 获取 itemID对应的比赛信息
       this.$http
-        .get("/public/enroll/" + this.$route.params.itemID, this.formData)
+        .get("/public/signup/" + this.$route.params.itemID, this.formData)
         .then(() => {
           if (res.statusCode === 50000) {
             res.itemData = res.itemData;
@@ -313,7 +313,7 @@ export default {
             }
       }
       this.$http
-        .post("/public/enroll/" + this.$route.params.itemID, this.formData)
+        .post("/public/signup/" + this.$route.params.itemID, this.formData)
         .then((res) => {
           if (res.statusCode === 50000) {
             this.submitInfo(res.message)

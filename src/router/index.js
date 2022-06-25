@@ -49,6 +49,11 @@ const router = createRouter({
                     path: 'form',
                     name: 'Form',
                     component: defineAsyncComponent(() => import('../views/Form.vue'))
+                },
+                {
+                    path: 'email',
+                    name: 'Email',
+                    component: defineAsyncComponent(() => import('../views/Email.vue'))
                 }
             ],
             // token验证

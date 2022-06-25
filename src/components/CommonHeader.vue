@@ -33,9 +33,13 @@ export default {
                 this.$message.success("退出成功")
             }
         },
+        // 获取登录的用户名
         getUserInfo() {
-            this.userName = localStorage.getItem('Username')
+            this.userName = localStorage.getItem('username')
         }
+    },
+    mounted() {
+        this.getUserInfo()
     }
 }
 </script>
