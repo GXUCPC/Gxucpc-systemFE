@@ -86,26 +86,7 @@ export default {
             //         ]
             // },
 
-            releases: [
-                {
-                    new_version: true,
-                    title: '2020-11-8',
-                    level: 'imiort',
-                    details: [
-                        '更新1',
-                        '更新2'
-                    ]
-                },
-                {
-                    new_version: true,
-                    title: '2021-11-8',
-                    level: 'imio22rt',
-                    details: [
-                        '更新3',
-                        '更新4'
-                    ]
-                }
-            ]
+            releases: []
         }
     },
     mounted() {
@@ -114,8 +95,8 @@ export default {
     },
     methods: {
         getUserInfo() {
-            this.user.Username = localStorage.getItem('Username')
-            this.user.Power = localStorage.getItem('Power')
+            this.user.Username = localStorage.getItem('username')
+            this.user.Power = localStorage.getItem('power')
             var now = new Date()
             var time = now.getFullYear() + "-" + ((now.getMonth() + 1) < 10 ? "0" : "") + (now.getMonth() + 1) + "-" + (now.getDate() < 10 ? "0" : "") + now.getDate() + " " + (now.getHours() < 10 ? "0" : "") + now.getHours() + ":" + (now.getMinutes() < 10 ? "0" : "") + now.getMinutes() + ":" + (now.getSeconds() < 10 ? "0" : "") + now.getSeconds()
             this.formLastInfo.Time = time

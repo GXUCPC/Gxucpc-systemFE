@@ -116,13 +116,13 @@ export default {
             },
             tableData: [
                 {
-                    username: 'yukino',
-                    createTime: '2022-6-21 12:00:10',
-                    lastLogin: '2022-6-21 12:11:11',
-                    realName: '洪越',
-                    email: '22@qq.com',
-                    userType: 'Super Admin',
-                    password: 'undefined'
+                    username: undefined,
+                    createTime: undefined,
+                    lastLogin: undefined,
+                    realName: undefined,
+                    email: undefined,
+                    userType: undefined,
+                    password: undefined
                 },
             ],
             editData: {

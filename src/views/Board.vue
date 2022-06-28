@@ -36,7 +36,7 @@
       <el-table id="out-table" style="width: 100%" border :data="tableData"
         :header-cell-style="{ 'text-align': 'center' }" :cell-style="cellStyle">
         <template v-for="(item, index) in tableHead">
-          <el-table-column :prop="item.column_name" :label="item.column_comment" :key="index" v-if="true">
+          <el-table-column :prop="item.columnName" :label="item.columnComment" :key="index" v-if="true">
           </el-table-column>
         </template>
       </el-table>
@@ -48,6 +48,7 @@
 import * as XLSX from "xlsx"
 // 修改后的FileSaver组件
 import FileSaver from "@/assets/js/FileSaver.js"
+import {getFormtTime} from "@/assets/js/DateUtils.js"
 export default {
   name: "Board",
   data() {
@@ -62,8 +63,8 @@ export default {
         per: undefined,
         sym: undefined,
       },
-      // column_name: prop
-      // column_comment: 展示文字
+      // columnName: prop
+      // columnComment: 展示文字
       tableHead: [],
       tableData: [],
     };
@@ -116,8 +117,9 @@ export default {
             this.Board.title = res.title
             // YYYY-MM-DD HH:MM:SS
             this.Board.startTime = res.startTime
+            this.Board.startTime = getFormtTime(this.Board.startTime, true)
             this.Board.endTime = res.endTime
-            this.Board = res.Board;
+            this.Board.endTime = getFormtTime(this.Board.endTime, true)
             if (!this.startTag) {
               // 防止不断生成计时器
               this.startTag = true;

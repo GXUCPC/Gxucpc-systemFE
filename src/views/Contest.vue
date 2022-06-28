@@ -19,6 +19,8 @@
             </template>
         </el-table-column>
     </el-table>
+    <!-- 分页 -->
+    <el-pagination background layout="prev, pager, next" :total="pagingComponent.total" />
     <!-- 编辑 -->
     <el-dialog v-model="dialogTableVisible" title="比赛信息">
         <el-form :model="editData" :rules="rules" label-width="120px" label-position="left">
@@ -30,12 +32,12 @@
                 </el-col>
                 <el-col :span="12">
                     <el-form-item label="报名开始时间" prop="signUpBeginTime">
-                        <el-input v-model="editData.signUpBeginTime"></el-input>
+                        <el-date-picker v-model="editData.signUpBeginTime" type="datetime" placeholder="Pick a Date" format="YYYY-MM-DD hh:mm:ss" value-format="x"/>
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">
                     <el-form-item label="报名结束时间" prop="signUpEndTime">
-                        <el-input v-model="editData.signUpEndTime"></el-input>
+                        <el-date-picker v-model="editData.signUpEndTime" type="datetime" placeholder="Pick a Date" format="YYYY-MM-DD hh:mm:ss" value-format="x"/>
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">
@@ -50,12 +52,12 @@
                 </el-col>
                 <el-col :span="12">
                     <el-form-item label="比赛开始时间" prop="contestBeginTime">
-                        <el-input v-model="editData.contestBeginTime"></el-input>
+                        <el-date-picker v-model="editData.contestBeginTime" type="datetime" placeholder="Pick a Date" format="YYYY-MM-DD hh:mm:ss" value-format="x"/>
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">
                     <el-form-item label="比赛结束时间" prop="contestEndTime">
-                        <el-input v-model="editData.contestEndTime"></el-input>
+                        <el-date-picker v-model="editData.contestEndTime" type="datetime" placeholder="Pick a Date" format="YYYY-MM-DD hh:mm:ss" value-format="x"/>
                     </el-form-item>
                 </el-col>
             </el-row>
@@ -76,12 +78,12 @@
                 </el-col>
                 <el-col :span="12">
                     <el-form-item label="报名开始时间" prop="signUpBeginTime">
-                        <el-input v-model="addData.signUpBeginTime"></el-input>
+                        <el-date-picker v-model="addData.signUpBeginTime" type="datetime" placeholder="Pick a Date" format="YYYY-MM-DD hh:mm:ss" value-format="x"/>
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">
                     <el-form-item label="报名结束时间" prop="signUpEndTime">
-                        <el-input v-model="addData.signUpEndTime"></el-input>
+                        <el-date-picker v-model="addData.signUpEndTime" type="datetime" placeholder="Pick a Date" format="YYYY-MM-DD hh:mm:ss" value-format="x"/>
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">
@@ -96,12 +98,12 @@
                 </el-col>
                 <el-col :span="12">
                     <el-form-item label="比赛开始时间" prop="contestBeginTime">
-                        <el-input v-model="addData.contestBeginTime"></el-input>
+                        <el-date-picker v-model="addData.contestBeginTime" type="datetime" placeholder="Pick a Date" format="YYYY-MM-DD hh:mm:ss" value-format="x"/>
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">
                     <el-form-item label="比赛结束时间" prop="contestEndTime">
-                        <el-input v-model="addData.contestEndTime"></el-input>
+                        <el-date-picker v-model="addData.contestEndTime" type="datetime" placeholder="Pick a Date" format="YYYY-MM-DD hh:mm:ss" value-format="x"/>
                     </el-form-item>
                 </el-col>
             </el-row>
@@ -114,7 +116,7 @@
 </template>
 
 <script>
-
+import { getFormtTime } from "@/assets/js/DateUtils.js"
 export default {
     data() {
         return {
@@ -122,6 +124,7 @@ export default {
             dialogAddTableVisible: false,
             tableData: [
                 // {
+                //     id: 1,
                 //     name: '“东信杯”广西大学第五届程序设计竞赛',
                 //     signUpBeginTime: '2022-6-21 12:00:00',
                 //     signUpEndTime: '2022-6-22 12:00:00',
@@ -141,23 +144,29 @@ export default {
                 contestEndTime: [{ required: true, trigger: 'blur' }],
             },
             editData: {
-                // name: undefined,
-                // signUpBeginTime: undefined,
-                // signUpEndTime: undefined,
-                // email: undefined,
-                // smtpPassword: undefined,
-                // contestBeginTime: undefined,
-                // contestEndTime: undefined
+                id: undefined,
+                name: undefined,
+                signUpBeginTime: undefined,
+                signUpEndTime: undefined,
+                email: undefined,
+                smtpPassword: undefined,
+                contestBeginTime: undefined,
+                contestEndTime: undefined
             },
             addData: {
-                // name: undefined,
-                // signUpBeginTime: undefined,
-                // signUpEndTime: undefined,
-                // email: undefined,
-                // smtpPassword: undefined,
-                // contestBeginTime: undefined,
-                // contestEndTime: undefined
+                name: undefined,
+                signUpBeginTime: undefined,
+                signUpEndTime: undefined,
+                email: undefined,
+                smtpPassword: undefined,
+                contestBeginTime: undefined,
+                contestEndTime: undefined
             },
+            pagingComponent: {
+                currentPage: 1,
+                numberPerPage: 10,
+                total: 0
+            }
         }
     },
     methods: {
@@ -173,12 +182,21 @@ export default {
         handleEdit(index, row) {
             this.showContestDialog()
             this.editData = this.jsonClone(row)
+            this.editData.contestBeginTime = new Date(this.editData.contestBeginTime)
+            this.editData.contestEndTime = new Date(this.editData.contestEndTime)
+            this.editData.signUpBeginTime = new Date(this.editData.signUpBeginTime)
+            this.editData.signUpEndTime = new Date(this.editData.signUpEndTime)
         },
         //Author: cityTS
         //Date: 2022年6月22日
         //删除对应信息
         handleDelete(index, row) {
-            this.$http.delete('/admin/contest', row).then((res) => {
+            var response = this.jsonClone(row)
+            response.contestBeginTime = new Date(response.contestBeginTime)
+            response.contestEndTime = new Date(response.contestEndTime)
+            response.signUpBeginTime = new Date(response.signUpBeginTime)
+            response.signUpEndTime = new Date(response.signUpEndTime)
+            this.$http.delete('/admin/contest', response).then((res) => {
                 if (res.statusCode === 50000) {
                     this.$message.success('删除成功')
                 } else {
@@ -236,11 +254,11 @@ export default {
                     return
                 }
             }
-            this.$http.post('/admin/contest', this.editData).then((res) => {
+            this.$http.post('/admin/contest', this.addData).then((res) => {
                 if (res.statusCode === 50000) {
                     this.$message.success('修改成功')
                     this.getContestInfo()
-                    this.showContestDialog()
+                    this.showAddContestDialog()
                 } else {
                     this.$message.error(res.message)
                 }
@@ -252,9 +270,11 @@ export default {
         //Date: 2022年6月22日
         //获取所有已有比赛信息
         getContestInfo() {
-            this.$http.get('/admin/contest').then((res) => {
+            var ask = "?currentPage=" + this.pagingComponent.currentPage + "&numberPerPage=" + this.pagingComponent.numberPerPage
+            this.$http.get('/admin/contest' + ask).then((res) => {
                 if (res.statusCode === 50000) {
-                    this.tableData = res.data
+                    this.tableData = res.data.tableData
+                    this.pagingComponent.total = res.data.total
                 } else {
                     this.$message.error(res.message)
                 }

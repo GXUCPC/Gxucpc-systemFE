@@ -26,13 +26,14 @@ export default {
             },
             options: [
                 {
-                    id: 12333,
-                    name: '东信杯第五届广西大学程序设计竞赛'
+                    id: undefined,
+                    name: undefined
                 }
             ]
         }
     },
     methods: {
+        // 提交群发请求
         submitEmail() {
             if(!emailTable.id) {
                 this.$message.error('没有选择比赛项目')
@@ -53,6 +54,7 @@ export default {
                 this.$message.error('网络故障或系统故障')
             })
         },
+        // 获得已存在的比赛信息
         getContestInfo() {
             this.$http.get('/admin/contest').then((res) => {
                 if (res.statusCode === 50000) {

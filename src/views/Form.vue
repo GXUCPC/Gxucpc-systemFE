@@ -117,15 +117,15 @@ export default {
             queryInfo: undefined,
             tableData: [
                 {
-                    contestName: "111",
-                    userName: '111',
-                    userId: '111',
-                    userAcademy: '111',
-                    userClass: '111',
-                    userQQ: '111',
-                    userEmail: '111',
-                    userGroup: '正式组',
-                    userStar: '打星'
+                    contestName: undefined,
+                    userName: undefined,
+                    userId: undefined,
+                    userAcademy: undefined,
+                    userClass: undefined,
+                    userQQ: undefined,
+                    userEmail: undefined,
+                    userGroup: undefined,
+                    userStar: undefined
                 }
             ],
             formData: {},
