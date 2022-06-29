@@ -11,7 +11,11 @@
         <el-table-column label="SMTP密钥" width="180" prop="smtpPassword" />
         <el-table-column label="比赛开始时间" width="180" prop="contestBeginTime" />
         <el-table-column label="比赛结束时间" width="180" prop="contestEndTime" />
-
+        <el-table-column label="上传奖状" width="150">
+            <template #default="scope">
+                <el-button size="small" @click="showUploadDialog(scope.row.id)" type="success">Upload</el-button>
+            </template>
+        </el-table-column>
         <el-table-column label="Operations" width="200">
             <template #default="scope">
                 <el-button size="small" @click="handleEdit(scope.$index, scope.row)">Edit</el-button>
@@ -32,12 +36,14 @@
                 </el-col>
                 <el-col :span="12">
                     <el-form-item label="报名开始时间" prop="signUpBeginTime">
-                        <el-date-picker v-model="editData.signUpBeginTime" type="datetime" placeholder="Pick a Date" format="YYYY-MM-DD hh:mm:ss" value-format="x"/>
+                        <el-date-picker v-model="editData.signUpBeginTime" type="datetime" placeholder="Pick a Date"
+                            format="YYYY-MM-DD hh:mm:ss" value-format="x" />
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">
                     <el-form-item label="报名结束时间" prop="signUpEndTime">
-                        <el-date-picker v-model="editData.signUpEndTime" type="datetime" placeholder="Pick a Date" format="YYYY-MM-DD hh:mm:ss" value-format="x"/>
+                        <el-date-picker v-model="editData.signUpEndTime" type="datetime" placeholder="Pick a Date"
+                            format="YYYY-MM-DD hh:mm:ss" value-format="x" />
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">
@@ -52,12 +58,14 @@
                 </el-col>
                 <el-col :span="12">
                     <el-form-item label="比赛开始时间" prop="contestBeginTime">
-                        <el-date-picker v-model="editData.contestBeginTime" type="datetime" placeholder="Pick a Date" format="YYYY-MM-DD hh:mm:ss" value-format="x"/>
+                        <el-date-picker v-model="editData.contestBeginTime" type="datetime" placeholder="Pick a Date"
+                            format="YYYY-MM-DD hh:mm:ss" value-format="x" />
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">
                     <el-form-item label="比赛结束时间" prop="contestEndTime">
-                        <el-date-picker v-model="editData.contestEndTime" type="datetime" placeholder="Pick a Date" format="YYYY-MM-DD hh:mm:ss" value-format="x"/>
+                        <el-date-picker v-model="editData.contestEndTime" type="datetime" placeholder="Pick a Date"
+                            format="YYYY-MM-DD hh:mm:ss" value-format="x" />
                     </el-form-item>
                 </el-col>
             </el-row>
@@ -78,12 +86,14 @@
                 </el-col>
                 <el-col :span="12">
                     <el-form-item label="报名开始时间" prop="signUpBeginTime">
-                        <el-date-picker v-model="addData.signUpBeginTime" type="datetime" placeholder="Pick a Date" format="YYYY-MM-DD hh:mm:ss" value-format="x"/>
+                        <el-date-picker v-model="addData.signUpBeginTime" type="datetime" placeholder="Pick a Date"
+                            format="YYYY-MM-DD hh:mm:ss" value-format="x" />
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">
                     <el-form-item label="报名结束时间" prop="signUpEndTime">
-                        <el-date-picker v-model="addData.signUpEndTime" type="datetime" placeholder="Pick a Date" format="YYYY-MM-DD hh:mm:ss" value-format="x"/>
+                        <el-date-picker v-model="addData.signUpEndTime" type="datetime" placeholder="Pick a Date"
+                            format="YYYY-MM-DD hh:mm:ss" value-format="x" />
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">
@@ -98,12 +108,14 @@
                 </el-col>
                 <el-col :span="12">
                     <el-form-item label="比赛开始时间" prop="contestBeginTime">
-                        <el-date-picker v-model="addData.contestBeginTime" type="datetime" placeholder="Pick a Date" format="YYYY-MM-DD hh:mm:ss" value-format="x"/>
+                        <el-date-picker v-model="addData.contestBeginTime" type="datetime" placeholder="Pick a Date"
+                            format="YYYY-MM-DD hh:mm:ss" value-format="x" />
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">
                     <el-form-item label="比赛结束时间" prop="contestEndTime">
-                        <el-date-picker v-model="addData.contestEndTime" type="datetime" placeholder="Pick a Date" format="YYYY-MM-DD hh:mm:ss" value-format="x"/>
+                        <el-date-picker v-model="addData.contestEndTime" type="datetime" placeholder="Pick a Date"
+                            format="YYYY-MM-DD hh:mm:ss" value-format="x" />
                     </el-form-item>
                 </el-col>
             </el-row>
@@ -113,6 +125,46 @@
             <el-button type="primary" @click="addContest()">Confirm</el-button>
         </span>
     </el-dialog>
+    <!-- 上传 -->
+    <template>
+        <el-dialog title="奖状上传" v-model="dialogUploadVisible" width="800px" :close-on-click-modal="false"
+            @close="cancel">
+            <div class="upload-file">
+                <el-upload :action="action" :before-upload="handleBeforeUpload" :file-list="fileList" multiple
+                    :accept="accept" :on-error="handleUploadError" :on-exceed="handleExceed"
+                    :on-success="handleUploadSuccess" :on-change="handChange" :show-file-list="true"
+                    :auto-upload="false" class="upload-file-uploader" ref="upload">
+                    <!-- 上传按钮 -->
+                    <el-button size="mini" type="primary">选取文件</el-button>
+                    <el-button style="margin-left: 10px;" :disabled="fileList.length < 1" size="small" type="success"
+                        @click="submitUpload">上传到服务器</el-button>
+                    <!-- 上传提示 -->
+                    <div class="el-upload__tip" v-if="true">
+                        请上传
+                        <template v-if="fileSize"> 大小不超过 <b style="color: #f56c6c">{{ fileSize }}MB</b> </template>
+                        <template v-if="fileType"> 格式为 <b style="color: #f56c6c">{{ fileType.join("/") }}</b>
+                        </template>
+                        的文件
+                    </div>
+                </el-upload>
+
+                <!-- 文件列表 -->
+                <transition-group class="upload-file-list el-upload-list el-upload-list--text" name="el-fade-in-linear"
+                    tag="ul">
+                    <li :key="file.uid" class="el-upload-list__item ele-upload-list__item-content"
+                        v-for="(file, index) in list">
+                        <el-link :href="file.url" :underline="false" target="_blank">
+                            <span class="el-icon-document"> {{ getFileName(file.name) }} </span>
+                        </el-link>
+                        <div class="ele-upload-list__item-content-action">
+                            <el-link :underline="false" @click="handleDelete(index)" type="danger">删除</el-link>
+                        </div>
+                    </li>
+                </transition-group>
+            </div>
+        </el-dialog>
+    </template>
+
 </template>
 
 <script>
@@ -120,19 +172,27 @@ import { getFormtTime } from "@/assets/js/DateUtils.js"
 export default {
     data() {
         return {
+            // 已选择文件列表
+            fileList: [],
+            // 是否显示文件上传弹窗
+            visible: false,
+            // 可上传的文件类型
+            accept: '',
+            action: 'action',
             dialogTableVisible: false,
             dialogAddTableVisible: false,
+            dialogUploadVisible: false,
             tableData: [
-                // {
-                //     id: 1,
-                //     name: '“东信杯”广西大学第五届程序设计竞赛',
-                //     signUpBeginTime: '2022-6-21 12:00:00',
-                //     signUpEndTime: '2022-6-22 12:00:00',
-                //     email: 'gxucpc@163.com',
-                //     smtpPassword: '12345',
-                //     contestBeginTime: '2022-6-22 12:00:00',
-                //     contestEndTime: '2022-6-22 12:00:00'
-                // },
+                {
+                    id: 1,
+                    name: '“东信杯”广西大学第五届程序设计竞赛',
+                    signUpBeginTime: '2022-6-21 12:00:00',
+                    signUpEndTime: '2022-6-22 12:00:00',
+                    email: 'gxucpc@163.com',
+                    smtpPassword: '12345',
+                    contestBeginTime: '2022-6-22 12:00:00',
+                    contestEndTime: '2022-6-22 12:00:00'
+                },
             ],
             rules: {
                 name: [{ required: true, trigger: 'blur' }],
@@ -170,6 +230,12 @@ export default {
         }
     },
     methods: {
+        //Author: cityTS
+        //Date: 2022年6月22日
+        //打开上传对话框
+        showUploadDialog(itemId) {
+            this.dialogUploadVisible = true
+        },
         //Author: cityTS
         //Date: 2022年6月22日
         //JavaScript深复制
@@ -275,6 +341,9 @@ export default {
                 if (res.statusCode === 50000) {
                     this.tableData = res.data.tableData
                     this.pagingComponent.total = res.data.total
+                    for(var index in this.tableData) {
+                        
+                    }
                 } else {
                     this.$message.error(res.message)
                 }
