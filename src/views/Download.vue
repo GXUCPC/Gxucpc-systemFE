@@ -116,6 +116,8 @@ export default {
                     } else {
                         this.$message.error(res.message);
                     }
+                }).catch(() => {
+                    this.$message.error('网络故障或系统故障')
                 })
             }
         }

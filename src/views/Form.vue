@@ -117,6 +117,7 @@ export default {
             queryInfo: undefined,
             tableData: [
                 {
+                    id: undefined,
                     contestName: undefined,
                     userName: undefined,
                     userId: undefined,
@@ -204,6 +205,7 @@ export default {
         showDialog() {
             this.dialogTableVisible = !this.dialogTableVisible
         },
+        // 搜索表单
         getFormInfo() {
             if (!this.queryInfo) {
                 this.$message.error("缺少搜索信息")
@@ -219,6 +221,7 @@ export default {
                 this.$message.error('网络故障或系统故障')
             })
         },
+        // 删除表单
         handleDelete(index, row) {
             this.$http.delete('/admin/form', row).then((res) => {
                 if (res.statusCode === 50000) {
@@ -228,6 +231,7 @@ export default {
                 }
             })
         },
+        // 保存表单
         submitForm() {
             for (var index in this.formData) {
                 if (!this.formData[index]) {

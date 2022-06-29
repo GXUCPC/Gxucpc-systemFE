@@ -68,7 +68,7 @@ export default {
       } else {
         //校验用户名和密码是否正确;
         this.$http
-          .post("public/login/", this.user)
+          .post("/public/login", this.user)
           .then((res) => {
             if (res.statusCode === 50000) {
               localStorage.setItem("token", res.data.token);

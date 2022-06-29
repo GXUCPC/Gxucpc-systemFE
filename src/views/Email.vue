@@ -56,10 +56,11 @@ export default {
         },
         // 获得已存在的比赛信息
         getContestInfo() {
-            this.$http.get('/admin/contest').then((res) => {
+            var ask = "?currentPage=1&numberPerPage=99999999"
+            this.$http.get('/admin/contest' + ask).then((res) => {
                 if (res.statusCode === 50000) {
                     // 只需要id和name
-                    this.options = res.data
+                    this.options = res.data.tableData
                 } else {
                     this.$message.error(res.message)
                 }
