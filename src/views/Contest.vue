@@ -342,7 +342,10 @@ export default {
                     this.tableData = res.data.tableData
                     this.pagingComponent.total = res.data.total
                     for(var index in this.tableData) {
-                        
+                        this.tableData[index].signUpEndTime = getFormtTime(this.tableData[index].signUpEndTime, true)
+                        this.tableData[index].signUpBeginTime = getFormtTime(this.tableData[index].signUpBeginTime, true)
+                        this.tableData[index].contestBeginTime = getFormtTime(this.tableData[index].contestBeginTime, true)
+                        this.tableData[index].contestEndTime = getFormtTime(this.tableData[index].contestEndTime, true)
                     }
                 } else {
                     this.$message.error(res.message)
