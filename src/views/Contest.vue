@@ -126,59 +126,33 @@
         </span>
     </el-dialog>
     <!-- 上传 -->
-    <template>
-        <el-dialog title="奖状上传" v-model="dialogUploadVisible" width="800px" :close-on-click-modal="false"
-            @close="cancel">
-            <div class="upload-file">
-                <el-upload :action="action" :before-upload="handleBeforeUpload" :file-list="fileList" multiple
-                    :accept="accept" :on-error="handleUploadError" :on-exceed="handleExceed"
-                    :on-success="handleUploadSuccess" :on-change="handChange" :show-file-list="true"
-                    :auto-upload="false" class="upload-file-uploader" ref="upload">
-                    <!-- 上传按钮 -->
-                    <el-button size="mini" type="primary">选取文件</el-button>
-                    <el-button style="margin-left: 10px;" :disabled="fileList.length < 1" size="small" type="success"
-                        @click="submitUpload">上传到服务器</el-button>
-                    <!-- 上传提示 -->
-                    <div class="el-upload__tip" v-if="true">
-                        请上传
-                        <template v-if="fileSize"> 大小不超过 <b style="color: #f56c6c">{{ fileSize }}MB</b> </template>
-                        <template v-if="fileType"> 格式为 <b style="color: #f56c6c">{{ fileType.join("/") }}</b>
-                        </template>
-                        的文件
-                    </div>
-                </el-upload>
+    <el-dialog title="奖状上传" v-model="dialogUploadVisible" width="800px" :close-on-click-modal="false" @close="cancel">
+        <div class="upload-file">
+            <el-upload :action="action" :file-list="fileList" multiple :show-file-list="true" :auto-upload="true"
+                class="upload-file-uploader" ref="upload">
+                <!-- 上传按钮 -->
+                <el-button size="small" type="primary">选取文件</el-button>
 
-                <!-- 文件列表 -->
-                <transition-group class="upload-file-list el-upload-list el-upload-list--text" name="el-fade-in-linear"
-                    tag="ul">
-                    <li :key="file.uid" class="el-upload-list__item ele-upload-list__item-content"
-                        v-for="(file, index) in list">
-                        <el-link :href="file.url" :underline="false" target="_blank">
-                            <span class="el-icon-document"> {{ getFileName(file.name) }} </span>
-                        </el-link>
-                        <div class="ele-upload-list__item-content-action">
-                            <el-link :underline="false" @click="handleDelete(index)" type="danger">删除</el-link>
-                        </div>
-                    </li>
-                </transition-group>
-            </div>
-        </el-dialog>
-    </template>
+
+            </el-upload>
+
+
+        </div>
+    </el-dialog>
 
 </template>
 
 <script>
 import { getFormtTime } from "@/assets/js/DateUtils.js"
+import store from "@/store/index.js"
 export default {
     data() {
         return {
+            action: '',
             // 已选择文件列表
             fileList: [],
-            // 是否显示文件上传弹窗
-            visible: false,
             // 可上传的文件类型
             accept: '',
-            action: 'action',
             dialogTableVisible: false,
             dialogAddTableVisible: false,
             dialogUploadVisible: false,
@@ -341,7 +315,7 @@ export default {
                 if (res.statusCode === 50000) {
                     this.tableData = res.data.tableData
                     this.pagingComponent.total = res.data.total
-                    for(var index in this.tableData) {
+                    for (var index in this.tableData) {
                         this.tableData[index].signUpEndTime = getFormtTime(this.tableData[index].signUpEndTime, true)
                         this.tableData[index].signUpBeginTime = getFormtTime(this.tableData[index].signUpBeginTime, true)
                         this.tableData[index].contestBeginTime = getFormtTime(this.tableData[index].contestBeginTime, true)
@@ -351,10 +325,18 @@ export default {
                     this.$message.error(res.message)
                 }
             })
+        },
+        showUploadDialog(id) {
+            console.log(store.state.backURL)
+            this.dialogUploadVisible = true
+        },
+        cancel() {
+            this.dialogUploadVisible = false
         }
     },
     mounted() {
         this.getContestInfo()
+        
     }
 
 }
