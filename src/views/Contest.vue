@@ -11,9 +11,10 @@
         <el-table-column label="SMTP密钥" width="180" prop="smtpPassword" />
         <el-table-column label="比赛开始时间" width="180" prop="contestBeginTime" />
         <el-table-column label="比赛结束时间" width="180" prop="contestEndTime" />
-        <el-table-column label="上传奖状" width="150">
+        <el-table-column label="上传奖状" width="200">
             <template #default="scope">
                 <el-button size="small" @click="showUploadDialog(scope.row.id)" type="success">Upload</el-button>
+                <el-button size="small" @click="showDeleteDialog(scope.row.id)" type="danger">Delete</el-button>
             </template>
         </el-table-column>
         <el-table-column label="Operations" width="200">
@@ -128,15 +129,29 @@
     <!-- 上传 -->
     <el-dialog title="奖状上传" v-model="dialogUploadVisible" width="800px" :close-on-click-modal="false" @close="cancel">
         <div class="upload-file">
-            <el-upload :action="action" :file-list="fileList" multiple :show-file-list="true" :auto-upload="true"
-                class="upload-file-uploader" ref="upload">
+            <el-upload :action="action" :before-upload="beforeUpload" :headers="header" :file-list="fileList" multiple
+                :show-file-list="true" :auto-upload="true" class="upload-file-uploader" ref="upload">
                 <!-- 上传按钮 -->
                 <el-button size="small" type="primary">选取文件</el-button>
 
 
             </el-upload>
-
-
+        </div>
+    </el-dialog>
+    <!-- 删除 -->
+    <el-dialog title="删除奖状" v-model="dialogDeleteVisible" width="800px" @close="closeDelete">
+        <div class="delete-file">
+            <el-form inline="true" :model="formDeleteData">
+                <el-form-item label="学号">
+                    <el-input v-model="formDeleteData.userId"></el-input>
+                </el-form-item>
+                <el-form-item label="姓名">
+                    <el-input v-model="formDeleteData.name"></el-input>
+                </el-form-item>
+                <el-form-item>
+                    <el-button type="danger" @click="deleteFile">Delete</el-button>
+                </el-form-item>
+            </el-form>
         </div>
     </el-dialog>
 
@@ -148,6 +163,7 @@ import store from "@/store/index.js"
 export default {
     data() {
         return {
+            contestUploadId: undefined,
             action: '',
             // 已选择文件列表
             fileList: [],
@@ -156,6 +172,13 @@ export default {
             dialogTableVisible: false,
             dialogAddTableVisible: false,
             dialogUploadVisible: false,
+            dialogDeleteVisible: false,
+            header: {
+                token: localStorage.getItem('token')
+            },
+            formDeleteData: {
+
+            },
             tableData: [
                 {
                     id: 1,
@@ -327,16 +350,57 @@ export default {
             })
         },
         showUploadDialog(id) {
-            console.log(store.state.backURL)
+            this.contestUploadId = id
+            this.getBackURL()
             this.dialogUploadVisible = true
+        },
+        showDeleteDialog(id) {
+            this.contestUploadId = id
+            this.dialogDeleteVisible = true
         },
         cancel() {
             this.dialogUploadVisible = false
+        },
+        closeDelete() {
+            this.dialogDeleteVisible = false
+        },
+        getBackURL() {
+            this.action = store.state.backURL + "/admin/contest/file/" + this.contestUploadId
+        },
+        beforeUpload(file) {
+            let fileName = file.name
+            let endIndex = fileName.indexOf(".")
+            let newFileName = fileName.substring(0, endIndex)
+            let arr = newFileName.split("-")
+            if (arr.length !== 2) {
+                this.$message.error("文件格式错误，请按照以下格式命名:学号-姓名.pdf")
+                return false
+            }
+            return true
+        },
+        deleteFile() {
+            for (var idx in this.formDeleteData) {
+                if (!this.formDeleteData[idx]) {
+                    this.$message.error("缺少必填项")
+                    return
+                }
+            }
+            this.$http.delete("/admin/contest/file/" + this.contestUploadId, this.formDeleteData).then((res) => {
+                if (res.statusCode === 50000) {
+                    this.$message.success("删除成功")
+                    for (var idx in this.formDeleteData) {
+                        this.formDeleteData[idx] = undefined
+                    }
+                } else {
+                    this.$message.error(res.message)
+                }
+            }).catch(() => {
+                this.$message.error('网络错误或系统故障')
+            })
         }
     },
     mounted() {
         this.getContestInfo()
-        
     }
 
 }
@@ -353,5 +417,10 @@ export default {
     text-align: right;
     margin-right: 5%;
     background-color: #ffffff;
+}
+
+.delete-file {
+    width: 75%;
+    margin: 0 auto;
 }
 </style>

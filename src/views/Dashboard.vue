@@ -39,19 +39,14 @@
         <el-col :span="14">
             <div class="info-container">
                 <span>
-                    Release Notes
+                   Operation Log
                 </span>
                 <hr>
                 <el-collapse accordion="true" v-model="activeNames" v-for="(release, index) of releases"
                     :key="'release' + index">
-                    <el-collapse-item :name="index + 1" :title="release.title">
-                        <p>Level: {{ release.level }}</p>
+                    <el-collapse-item :name="index + 1" :title="release.user">
                         <p>Details: </p>
-                        <div class="release-body">
-                            <ul v-for="detail in release.details" :key="detail">
-                                <li v-html="detail"></li>
-                            </ul>
-                        </div>
+                        {{release.details}}
                     </el-collapse-item>
                 </el-collapse>
             </div>
@@ -78,12 +73,8 @@ export default {
             activeNames: [1],
 
             // {
-            //         title: '2020-11-8',
-            //         level: 'imiort',
-            //         details: [
-            //             '更新1',
-            //             '更新2'
-            //         ]
+            //         user: 'root',
+            //         details: "添加"
             // },
 
             releases: []
@@ -109,7 +100,7 @@ export default {
             })
         },
         getRelese() {
-            this.$http.get('/admin/relese').then((res) => {
+            this.$http.get('/admin/operationlog').then((res) => {
                 releases = res.data
             }).catch(() => {
                 this.$message.error('网络故障或系统故障')
