@@ -11,7 +11,7 @@
                 </el-icon>
                 <span>仪表盘</span>
             </el-menu-item>
-            <el-menu-item index="/admin/user" :disabled="disable">
+            <el-menu-item index="/admin/user" :disabled="false">
                 <el-icon>
                     <UserFilled />
                 </el-icon>

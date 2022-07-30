@@ -2,7 +2,8 @@ import axios from 'axios'
 import store from '@/store/index.js'
 
 const request = axios.create({
-    baseURL: store.state.backURL,
+    // baseURL: store.state.backURL,
+    baseURL: 'http://localhost:80/api',
     timeout: 10000
 })
 
@@ -13,8 +14,12 @@ request.interceptors.request.use(config => {
     // let usertoken = localStorage.getItem("token")?JSON.parse(localStorage.getItem("token")):null
 
     let usertoken = localStorage.getItem("token")
+    let username = localStorage.getItem("username")
+    let userType = localStorage.getItem("userType")
 
     config.headers['token'] = usertoken;  // 设置请求头
+    config.headers['username'] = username
+    config.headers['userType'] = userType
     return config
 }, error => {
     return Promise.reject(error)

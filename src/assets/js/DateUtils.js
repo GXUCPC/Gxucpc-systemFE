@@ -32,3 +32,11 @@ export function getFormtTime(dateTime, flag) {
         return "";
     }
 }
+
+//字符串转时间戳
+export function dateStr2TimeTamp(dateStr){
+   dateStr = dateStr.substring(0,19);
+   dateStr = dateStr.replace(/-/g,'/');
+   var timeTamp = new Date(dateStr).getTime();
+   return timeTamp
+}
