@@ -2,8 +2,8 @@ import axios from 'axios'
 import store from '@/store/index.js'
 
 const request = axios.create({
-    // baseURL: store.state.backURL,
-    baseURL: 'http://localhost:80/api',
+    baseURL: store.state.backURL,
+    // baseURL: 'http://localhost:80/api',
     timeout: 10000
 })
 
@@ -16,10 +16,13 @@ request.interceptors.request.use(config => {
     let usertoken = localStorage.getItem("token")
     let username = localStorage.getItem("username")
     let userType = localStorage.getItem("userType")
+    let password = localStorage.getItem("password")
 
     config.headers['token'] = usertoken;  // 设置请求头
     config.headers['username'] = username
     config.headers['userType'] = userType
+    config.headers['password'] = password
+
     return config
 }, error => {
     return Promise.reject(error)
@@ -33,6 +36,11 @@ request.interceptors.response.use(
         if(res.statusCode === 50002) {
             router.replace('/login')
             this.$message.error(res.message)
+        }
+        
+        // token续租
+        if(response.headers['token'] !== null) {
+            localStorage.setItem('token', response.headers['token'])
         }
         // 如果是返回的文件
         if (response.config.responseType === 'blob') {

@@ -29,7 +29,7 @@ export default {
         handleCommand(obj) {
             if (obj === 'signOut') {
                 localStorage.setItem("token", null)
-                this.$router.push('/')
+                this.$router.push('/login')
                 this.$message.success("退出成功")
             }
         },

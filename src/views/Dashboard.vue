@@ -11,8 +11,8 @@
                     </el-col>
                     <el-col :span="14">
                         <div class="user-info">
-                            <p class="admin-info-name">{{user.Username}}</p>
-                            <p>{{user.Power}}</p>
+                            <p class="admin-info-name">{{ user.Username }}</p>
+                            <p>{{ user.Power }}</p>
                         </div>
                     </el-col>
                     <el-divider></el-divider>
@@ -39,16 +39,12 @@
         <el-col :span="14">
             <div class="info-container">
                 <span>
-                   Operation Log
+                    Operation Log
                 </span>
                 <hr>
-                <el-collapse accordion="true" v-model="activeNames" v-for="(release, index) of releases"
-                    :key="'release' + index">
-                    <el-collapse-item :name="index + 1" :title="release.user">
-                        <p>Details: </p>
-                        {{release.details}}
-                    </el-collapse-item>
-                </el-collapse>
+                <ul v-infinite-scroll="load" class="infinite-list" style="overflow: auto">
+                    <li v-for="i in log.logs" :key="i" class="infinite-list-item">{{ i }}</li>
+                </ul>
             </div>
         </el-col>
     </el-row>
@@ -71,7 +67,10 @@ export default {
                 Browser: undefined
             },
             activeNames: [1],
-
+            log: {
+                cout: 10,
+                logs: []
+            },
             // {
             //         user: 'root',
             //         details: "添加"
@@ -82,9 +81,13 @@ export default {
     },
     mounted() {
         this.getUserInfo()
-        this.getRelese()
+        this.getRelese(this.log.cout)
     },
     methods: {
+        load() {
+            this.log.cout += 2
+            this.getRelese(this.log.cout)
+        },
         getUserInfo() {
             this.user.Username = localStorage.getItem('username')
             this.user.Power = localStorage.getItem('power')
@@ -99,9 +102,9 @@ export default {
                 this.$message.error('网络故障或系统故障')
             })
         },
-        getRelese() {
-            this.$http.get('/admin/operationlog').then((res) => {
-                releases = res.data
+        getRelese(num) {
+            this.$http.get('/admin/dashboard/operationlog?num=' + num).then((res) => {
+                this.log.logs = res.data
             }).catch(() => {
                 this.$message.error('网络故障或系统故障')
             })
@@ -131,5 +134,23 @@ export default {
 .user-info {
     margin-left: 20%;
     margin-top: 20;
+}
+.infinite-list {
+  height: 600px;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+.infinite-list .infinite-list-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 50px;
+  background: var(--el-color-primary-light-9);
+  margin: 10px;
+  color: var(--el-color-primary);
+}
+.infinite-list .infinite-list-item + .list-item {
+  margin-top: 10px;
 }
 </style>

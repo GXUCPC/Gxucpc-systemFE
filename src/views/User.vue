@@ -19,7 +19,7 @@
     </el-table-column>
   </el-table>
   <!-- 分页 -->
-  <el-pagination background layout="prev, pager, next"  v-model:currentPage="pagingComponent.currentPage" :total="pagingComponent.total" @current-change="currentChange" />
+  <el-pagination background layout="total, prev, pager, next"  v-model:currentPage="pagingComponent.currentPage" :total="pagingComponent.total" @current-change="currentChange" />
   <!-- 编辑 -->
   <el-dialog v-model="dialogTableVisible" title="用户信息">
     <el-form :model="editData" :rules="rules" label-width="120px" label-position="left">
@@ -123,16 +123,16 @@ export default {
         password: [{ required: true, validator: "必填项", trigger: "blur" }],
       },
       tableData: [
-        {
-          id: "undefined",
-          username: "undefined",
-          createTime: "undefined",
-          lastLogin: "undefined",
-          realName: "undefined",
-          email: "undefined",
-          userType: "undefined",
-          password: "undefined",
-        },
+        // {
+        //   id: "undefined",
+        //   username: "undefined",
+        //   createTime: "undefined",
+        //   lastLogin: "undefined",
+        //   realName: "undefined",
+        //   email: "undefined",
+        //   userType: "undefined",
+        //   password: "undefined",
+        // },
       ],
       editData: {
         username: undefined,
@@ -170,7 +170,7 @@ export default {
     },
     handleDelete(index, row) {
       this.$http
-        .delete("/admin/user" + "?id=" + row.id)
+        .delete("/admin/user" + "?id=" + row.id + "&name=" + row.username)
         .then((res) => {
           if (res.statusCode === 50000) {
             this.$message.success("删除成功");
@@ -255,7 +255,6 @@ export default {
         if (res.statusCode === 50000) {
           this.pagingComponent.total = res.data.total;
           this.tableData = res.data.tableData;
-
           // 格式化时间
           for (var index in this.tableData) {
             this.tableData[index].createTime = getFormtTime(this.tableData[index].createTime, true)

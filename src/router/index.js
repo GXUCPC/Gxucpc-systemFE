@@ -58,30 +58,30 @@ const router = createRouter({
             ],
             // token验证
 
-            // beforeEnter: (to, from, next) => {
-            //     let token = localStorage.getItem('token')
-            //     let logindto = {}
-            //     logindto.token = token
-            //     logindto.urlpath = to.path
-            //     if (token != null) { //登录过
-            //         //验证token
-            //         request.post("/user/checkToken", token).then(res => {
-            //             //成功
-            //             if (res.statusCode == '50000') {
-            //                 next()
-            //             } else {
-            //                 next({ path: '/login' })
-            //             }
+            beforeEnter: (to, from, next) => {
+                let token = localStorage.getItem('token')
+                let logindto = {}
+                logindto.token = token
+                logindto.urlpath = to.path
+                if (token != null) { //登录过
+                    //验证token
+                    request.get("/admin/checkToken").then(res => {
+                        //成功
+                        if (res.statusCode == '50000') {
+                            next()
+                        } else {
+                            next({ path: '/login' })
+                        }
 
-            //         }).catch(() => {
-            //             next({ path: '/login' })
-            //         })
+                    }).catch(() => {
+                        next({ path: '/login' })
+                    })
 
-            //     } else { //没有登录
-            //         next({ path: '/login' })
-            //     }
+                } else { //没有登录
+                    next({ path: '/login' })
+                }
 
-            // }
+            }
         }
     ]
 })

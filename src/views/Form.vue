@@ -33,6 +33,9 @@
                 </el-table-column>
             </el-table>
         </div>
+        <!-- 分页 -->
+        <el-pagination background layout="total, prev, pager, next" v-model:currentPage="pagingComponent.currentPage"
+            :total="pagingComponent.total" @current-change="currentChange" />
     </el-card>
     <!-- 编辑 -->
     <el-dialog v-model="dialogTableVisible" title="修改表单">
@@ -191,9 +194,20 @@ export default {
                     value: "正式组",
                 },
             ],
+            pagingComponent: {
+                total: 0,
+                currentPage: 1,
+                numberPerPage: 10,
+            },
         }
     },
     methods: {
+
+        // 换页
+        currentChange(number) {
+            this.pagingComponent.currentPage = number;
+            this.getFormInfo();
+        },
         jsonClone(obj) {
             // js深复制
             return JSON.parse(JSON.stringify(obj));
@@ -207,13 +221,10 @@ export default {
         },
         // 搜索表单
         getFormInfo() {
-            if (!this.queryInfo) {
-                this.$message.error("缺少搜索信息")
-                return
-            }
-            this.$http.get('/admin/form/' + this.queryInfo).then((res) => {
+            this.$http.get('/admin/form?q=' + this.queryInfo).then((res) => {
                 if (res.statusCode === 50000) {
-                    this.tableData = res.data
+                    this.tableData = res.data.tableData;
+                    this.pagingComponent.total = res.data.total;
                 } else {
                     this.$message.error(res.message)
                 }
@@ -253,7 +264,7 @@ export default {
             })
         },
         resetForm() {
-            for(var index in this.formData) {
+            for (var index in this.formData) {
                 this.formData[index] = undefined
             }
         }

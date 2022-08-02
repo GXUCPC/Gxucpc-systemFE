@@ -17,6 +17,13 @@
                 <el-button size="small" @click="showDeleteDialog(scope.row.id)" type="danger">Delete</el-button>
             </template>
         </el-table-column>
+        <el-table-column label="开放奖状下载" width="180">
+            <template #default="scope">
+                <el-switch v-model="scope.row.isDownload"
+                    @change="setDownloadStatus(scope.row.id, scope.row.name, scope.row.isDownload)" inline-prompt size="large"
+                    active-text="开放" inactive-text="关闭" />
+            </template>
+        </el-table-column>
         <el-table-column label="Operations" width="200">
             <template #default="scope">
                 <el-button size="small" @click="handleEdit(scope.$index, scope.row)">Edit</el-button>
@@ -25,7 +32,8 @@
         </el-table-column>
     </el-table>
     <!-- 分页 -->
-    <el-pagination background layout="prev, pager, next" :total="pagingComponent.total" />
+    <el-pagination background layout="total, prev, pager, next" v-model:currentPage="pagingComponent.currentPage"
+        :total="pagingComponent.total" @current-change="currentChange" />
     <!-- 编辑 -->
     <el-dialog v-model="dialogTableVisible" title="比赛信息">
         <el-form :model="editData" :rules="rules" label-width="120px" label-position="left">
@@ -158,7 +166,7 @@
 </template>
 
 <script>
-import { getFormtTime } from "@/assets/js/DateUtils.js"
+import { getFormtTime, dateStr2TimeTamp } from "@/assets/js/DateUtils.js"
 import store from "@/store/index.js"
 export default {
     data() {
@@ -180,16 +188,17 @@ export default {
 
             },
             tableData: [
-                {
-                    id: 1,
-                    name: '“东信杯”广西大学第五届程序设计竞赛',
-                    signUpBeginTime: '2022-6-21 12:00:00',
-                    signUpEndTime: '2022-6-22 12:00:00',
-                    email: 'gxucpc@163.com',
-                    smtpPassword: '12345',
-                    contestBeginTime: '2022-6-22 12:00:00',
-                    contestEndTime: '2022-6-22 12:00:00'
-                },
+                // {
+                //     id: 1,
+                //     name: '“东信杯”广西大学第五届程序设计竞赛',
+                //     signUpBeginTime: '2022-6-21 12:00:00',
+                //     signUpEndTime: '2022-6-22 12:00:00',
+                //     email: 'gxucpc@163.com',
+                //     smtpPassword: '12345',
+                //     contestBeginTime: '2022-6-22 12:00:00',
+                //     contestEndTime: '2022-6-22 12:00:00',
+                //     isDownload: true
+                // },
             ],
             rules: {
                 name: [{ required: true, trigger: 'blur' }],
@@ -227,6 +236,30 @@ export default {
         }
     },
     methods: {
+        // 换页
+        currentChange(number) {
+            this.pagingComponent.currentPage = number;
+            this.getContestInfo();
+        },
+
+        //Author: cityTS
+        //Date: 2022年7月31日
+        //改变下载状态
+        setDownloadStatus(id, name, isDownload) {
+            let ask = { id: id, name: name, isDownload: isDownload };
+            this.$http.put("/admin/contest/download", ask).then((res) => {
+                if (res.statusCode === 50000) {
+                    if (isDownload === true)
+                        this.$message.success("已开放下载")
+                    else this.$message.success("已关闭下载")
+                } else {
+                    this.$message.error(res.message);
+                }
+            }).catch(() => {
+                this.$message.error("系统故障或网络故障")
+            })
+        },
+
         //Author: cityTS
         //Date: 2022年6月22日
         //打开上传对话框
@@ -245,30 +278,25 @@ export default {
         handleEdit(index, row) {
             this.showContestDialog()
             this.editData = this.jsonClone(row)
-            this.editData.contestBeginTime = new Date(this.editData.contestBeginTime)
-            this.editData.contestEndTime = new Date(this.editData.contestEndTime)
-            this.editData.signUpBeginTime = new Date(this.editData.signUpBeginTime)
-            this.editData.signUpEndTime = new Date(this.editData.signUpEndTime)
+            this.editData.contestBeginTime = parseInt(new Date(this.editData.contestBeginTime).getTime())
+            this.editData.contestEndTime = parseInt(new Date(this.editData.contestEndTime).getTime())
+            this.editData.signUpBeginTime = parseInt(new Date(this.editData.signUpBeginTime).getTime())
+            this.editData.signUpEndTime = parseInt(new Date(this.editData.signUpEndTime).getTime())
         },
         //Author: cityTS
         //Date: 2022年6月22日
         //删除对应信息
         handleDelete(index, row) {
-            var response = this.jsonClone(row)
-            response.contestBeginTime = new Date(response.contestBeginTime)
-            response.contestEndTime = new Date(response.contestEndTime)
-            response.signUpBeginTime = new Date(response.signUpBeginTime)
-            response.signUpEndTime = new Date(response.signUpEndTime)
-            this.$http.delete('/admin/contest', response).then((res) => {
+            this.$http.delete('/admin/contest?id=' + row.id + "&name=" + row.name).then((res) => {
                 if (res.statusCode === 50000) {
                     this.$message.success('删除成功')
                 } else {
                     this.$message.error(res.message)
                 }
+                this.getContestInfo()
             }).catch(() => {
                 this.$message.error('网络故障或系统故障')
             })
-            this.getContestInfo()
         },
         //Author: cityTS
         //Date: 2022年6月22日
@@ -289,10 +317,13 @@ export default {
         //Date: 2022年6月22日
         //保存修改
         saveContest() {
-            for (index in this.editData) {
-                if (!this.editData[index]) {
+            for (var index in this.editData) {
+                if (!this.editData[index] && index != "isDownload") {
                     this.$message.error('缺少必填项')
                     return
+                }
+                if (index.includes("Time")) {
+                    this.editData[index] = parseInt(new Date(this.editData[index]).getTime());
                 }
             }
             this.$http.put('/admin/contest', this.editData).then((res) => {
@@ -319,7 +350,7 @@ export default {
             }
             this.$http.post('/admin/contest', this.addData).then((res) => {
                 if (res.statusCode === 50000) {
-                    this.$message.success('修改成功')
+                    this.$message.success('添加成功')
                     this.getContestInfo()
                     this.showAddContestDialog()
                 } else {
