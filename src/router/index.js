@@ -6,25 +6,37 @@ const router = createRouter({
     history: createWebHistory(),  // history 模式
     routes: [
         {
-            path: '/download',
-            name: 'Download',
-            component: defineAsyncComponent(() => import('../views/Download.vue')),
-        },
-        {
-            path: '/signup/:itemID',
-            name: 'SignUp',
-            component: defineAsyncComponent(()=>import('../views/SignUp.vue'))
-        },
-        {
-            path: '/login',
-            name: 'Name',
-            component: defineAsyncComponent(() => import('../views/Login.vue')),
-        },
-        {
-            path: '/board/:itemID',
-            name: 'Board',
-            component: defineAsyncComponent(() => import('../views/Board.vue')),
-        },
+            path: '/',
+            name: 'Public',
+            component: defineAsyncComponent(() => import('../views/Public.vue')),
+            children: [
+                {
+                    path: '',
+                    name: 'Home',
+                    component: defineAsyncComponent(() => import('../views/Home.vue'))
+                },
+                {
+                    path: 'download',
+                    name: 'Download',
+                    component: defineAsyncComponent(() => import('../views/Download.vue')),
+                },
+                {
+                    path: 'signup/:itemID',
+                    name: 'SignUp',
+                    component: defineAsyncComponent(()=>import('../views/SignUp.vue'))
+                },
+                {
+                    path: 'login',
+                    name: 'Name',
+                    component: defineAsyncComponent(() => import('../views/Login.vue')),
+                },
+                {
+                    path: 'board/:itemID',
+                    name: 'Board',
+                    component: defineAsyncComponent(() => import('../views/Board.vue')),
+                },
+            ]
+        },  
         {
             path: '/admin',
             name: 'Admin',

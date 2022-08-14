@@ -263,7 +263,16 @@ export default {
     },
     submitForm() {
       // TODO 提交表单
-      if (this.itemData.status !== "报名进行中") return
+      if (this.itemData.status !== "报名进行中") {
+        if(this.itemData.status === "报名未开始") {
+          this.$message.info("报名未开始，请耐心等待")
+        } else if(this.itemData.status === "报名已结束") {
+          this.$message.info("报名已结束")
+        } else {
+          this.$message.error("请勿修改网站文件")
+        }
+        return
+      }
       for (let value in this.formData) {
         if (!this.formData[value]) {
           this.$message.error('缺少必填信息')
@@ -291,9 +300,9 @@ export default {
 };
 </script>
 <style>
-#app {
+.el-main {
   width: 80%;
-  margin: 30px auto;
+  margin: 0 auto;
 }
 
 .formTable {
