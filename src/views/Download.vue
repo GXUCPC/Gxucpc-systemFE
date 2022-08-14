@@ -14,7 +14,7 @@
                         <el-input v-model="formLabelAlign.number" type="number"></el-input>
                     </el-form-item>
                     <el-form-item label="比赛编号" prop="itemNumber">
-                        <el-input v-model="formLabelAlign.itemNumber" type="itemNumber"></el-input>
+                        <el-input v-model="formLabelAlign.itemNumber" type="number"></el-input>
                     </el-form-item>
                     <el-form-item>
                         <el-button type="primary" @click="submitForm(formLabelAlign)">
@@ -35,7 +35,6 @@
 </template>
 
 <script>
-import axios from 'axios'
 export default {
     name: "downloadSystem",
     data() {
@@ -126,17 +125,19 @@ export default {
 
 </script>
 <style>
+.card {
+    padding: 20px;
+}
+
 .front {
-    z-index: 1;
-    position: absolute;
-    left: 0;
-    right: 0;
-    top: 0;
-    bottom: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color: #ffffff;
+    text-align: center;
+	background-color: #fff;
+	border-radius: 20px;
+	width: 480px;
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	transform: translate(-50%,-50%);
 }
 
 .title {

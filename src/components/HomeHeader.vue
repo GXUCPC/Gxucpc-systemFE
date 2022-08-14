@@ -1,20 +1,20 @@
 <template>
-    <el-menu default-active="1" class="el-menu-demo" mode="horizontal" :ellipsis="false" @select="handleSelect">
+    <el-menu default-active="/" class="el-menu-demo" mode="horizontal" :router="true" :ellipsis="false" @select="handleSelect">
         <div class="flex-grow" />
         <div class="logo-container">
             <img class="image-logo" src="@/assets/images/logo(small).png" alt="">
         </div>
-        <el-menu-item index="1">东信杯</el-menu-item>
+        <el-menu-item index="/">东信杯</el-menu-item>
         <el-sub-menu index="2">
             <template #title>关于竞赛</template>
-            <el-menu-item index="2-1">竞赛通知</el-menu-item>
+            <el-menu-item index="/list/notice">竞赛通知</el-menu-item>
             <el-menu-item index="2-2">奖项设置</el-menu-item>
-            <el-menu-item index="2-3">获奖名单</el-menu-item>
-            <el-menu-item index="2-4">赛事新闻</el-menu-item>
-            <el-menu-item index="2-5">历届榜单</el-menu-item>
+            <el-menu-item index="/list/winners">获奖名单</el-menu-item>
+            <el-menu-item index="/list/news">赛事新闻</el-menu-item>
+            <el-menu-item index="/list/board">历届榜单</el-menu-item>
         </el-sub-menu>
-        <el-menu-item index="3">证书下载</el-menu-item>
-        <el-menu-item index="4">联系我们</el-menu-item>
+        <el-menu-item index="/download">证书下载</el-menu-item>
+        <el-menu-item index="/contactus">联系我们</el-menu-item>
     </el-menu>
 </template>
 

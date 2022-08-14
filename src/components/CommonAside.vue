@@ -29,6 +29,12 @@
                 </el-icon>
                 <span>表单管理</span>
             </el-menu-item>
+            <el-menu-item index="/admin/text">
+                <el-icon>
+                    <Edit />
+                </el-icon>
+                <span>文章管理</span>
+            </el-menu-item>
             <el-menu-item index="/admin/email">
                 <el-icon>
                     <Position />

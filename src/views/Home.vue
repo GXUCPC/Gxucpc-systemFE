@@ -16,9 +16,9 @@
                 </template>
                 <div class="text item">
                     <el-table :show-header="false" :data="noticeData" style="width: 100%">
-                        <el-table-column prop="tital" width="470">
+                        <el-table-column prop="title" width="470">
                         <template #default="scope">
-                            <a :href="scope.row.linkUrl" target="_blank">{{scope.row.tital}}</a>
+                            <a :href="scope.row.linkUrl" target="_blank">{{scope.row.title}}</a>
                         </template>
                     </el-table-column>
                     <el-table-column prop="time" width="110" />
@@ -37,9 +37,9 @@
                     </div>
                 </template>
                 <el-table :show-header="false" :data="newsData" style="width: 100%">
-                    <el-table-column prop="tital" width="470">
+                    <el-table-column prop="title" width="470">
                         <template #default="scope">
-                            <a :href="scope.row.linkUrl" target="_blank">{{scope.row.tital}}</a>
+                            <a :href="scope.row.linkUrl" target="_blank">{{scope.row.title}}</a>
                         </template>
                     </el-table-column>
                     <el-table-column prop="time" width="110" />
@@ -55,8 +55,8 @@
 export default {
     data() {
         return {
-            noticeData: [{tital: "关于举办蓝桥杯（软件类、电子类、设计赛）宁波暑期教师", time: "2022-10-11", linkUrl: "/admin"}],
-            newsData: [{tital: "关于举办蓝桥杯（软件类、电子类、设计赛）宁波暑期教师", time: "2022-8-14", linkUrl: "/admin"}],
+            noticeData: [{title: "关于举办蓝桥杯（软件类、电子类、设计赛）宁波暑期教师", time: "2022-10-11", linkUrl: "/admin"}],
+            newsData: [{title: "关于举办蓝桥杯（软件类、电子类、设计赛）宁波暑期教师", time: "2022-8-14", linkUrl: "/admin"}],
             screenwidth: undefined,
             imageUrlList: [require("@/assets/images/pmd.png"), require("@/assets/images/pmd.png"), require("@/assets/images/pmd.png"), require("@/assets/images/pmd.png")]
         }

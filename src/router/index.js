@@ -21,7 +21,7 @@ const router = createRouter({
                     component: defineAsyncComponent(() => import('../views/Download.vue')),
                 },
                 {
-                    path: 'signup/:itemID',
+                    path: 'signup/:itemID(\\d+)',
                     name: 'SignUp',
                     component: defineAsyncComponent(()=>import('../views/SignUp.vue'))
                 },
@@ -31,10 +31,20 @@ const router = createRouter({
                     component: defineAsyncComponent(() => import('../views/Login.vue')),
                 },
                 {
-                    path: 'board/:itemID',
+                    path: 'board/:itemID(\\d+)',
                     name: 'Board',
                     component: defineAsyncComponent(() => import('../views/Board.vue')),
                 },
+                {
+                    path: 'pages/:itemID(\\d+)',
+                    name: 'Page',
+                    component: defineAsyncComponent(() => import('../views/Page.vue'))
+                },
+                {
+                    path: 'list/:listType(notice|news|board|winners)',
+                    name: 'PageList',
+                    component: defineAsyncComponent(() => import('../views/PageList.vue'))
+                }
             ]
         },  
         {
@@ -66,6 +76,11 @@ const router = createRouter({
                     path: 'email',
                     name: 'Email',
                     component: defineAsyncComponent(() => import('../views/Email.vue'))
+                },
+                {
+                    path: 'text',
+                    name: 'Text',
+                    component: defineAsyncComponent(() => import('../views/Text.vue'))
                 }
             ],
             // token验证

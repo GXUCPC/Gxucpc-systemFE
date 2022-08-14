@@ -1,10 +1,10 @@
 <template>
   <div class="common-layout">
-    <el-container>
+    <el-container style="height:100%;" direction="vertical">
       <el-header>
         <HomeHeader></HomeHeader>
       </el-header>
-      <el-main><router-view></router-view></el-main>
+      <el-main style="overflow:visible"><router-view></router-view></el-main>
       <el-footer><HomeFooter></HomeFooter></el-footer>
     </el-container>
   </div>
@@ -24,5 +24,12 @@ export default {
 <style>
 .el-main {
   padding: 0;
+}
+
+html, body, #app, .common-layout, .el-container {
+  /* 铺屏 */
+  padding: 0px;
+  margin: 0px;
+  height: 100%;
 }
 </style>
