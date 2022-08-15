@@ -1,5 +1,5 @@
 <template>
-    <el-carousel indicator-position="outside" :height="screenwidth">
+    <el-carousel indicator-position="outside" :height="screenwidth" >
         <el-carousel-item v-for="item in this.imageUrlList" :key="item">
             <img class="home-img" :src="item" alt="">
         </el-carousel-item>
@@ -11,7 +11,7 @@
                 <template #header>
                     <div class="card-header">
                         <span>赛事通知</span>
-                        <a href="#"><span>查看更多</span></a>
+                        <a href="/list/notice"><span>查看更多</span></a>
                     </div>
                 </template>
                 <div class="text item">
@@ -33,9 +33,10 @@
                 <template #header>
                     <div class="card-header">
                         <span>赛事新闻</span>
-                        <a href="#"><span>查看更多</span></a>
+                        <a href="/list/news"><span>查看更多</span></a>
                     </div>
                 </template>
+                <div class="text item">
                 <el-table :show-header="false" :data="newsData" style="width: 100%">
                     <el-table-column prop="title" width="470">
                         <template #default="scope">
@@ -44,6 +45,7 @@
                     </el-table-column>
                     <el-table-column prop="time" width="110" />
                 </el-table>
+                </div>
             </el-card>
         </div>
 
@@ -52,6 +54,7 @@
 </template>
 
 <script>
+import { getFormtTime } from '@/assets/js/DateUtils';
 export default {
     data() {
         return {
@@ -68,17 +71,41 @@ export default {
             } else {
                 this.$message.info("本网站未作小页面适应，图片观感会受到影响")
             }
+        },
+        getNews() {
+            this.$http.get("/public/text/news?currentPage=1&numberPerPage=8").then((res) => {
+                if(res.statusCode === 50000) {
+                    this.newsData = res.data.tableData;
+                    for(let i = 0; i < this.newsData.length; i++) {
+                        this.newsData[i].time = getFormtTime(this.newsData[i].time, false)
+                        this.newsData[i].linkUrl = "/pages/" + this.newsData[i].id
+                    }
+                }
+            })
+        },
+        getNotice() {
+            this.$http.get("/public/text/notice?currentPage=1&numberPerPage=8").then((res) => {
+                if(res.statusCode === 50000) {
+                    this.noticeData = res.data.tableData;
+                    for(let i = 0; i < this.noticeData.length; i++) {
+                        this.noticeData[i].time = getFormtTime(this.noticeData[i].time, false)
+                        this.noticeData[i].linkUrl = "/pages/" + this.noticeData[i].id
+                    }
+                }
+            })
         }
     },
     mounted() {
         this.getImageSize();
-        window.onresize = () => {
-            return (() => {
-                if(document.documentElement.clientWidth > 960) {
-                    this.screenwidth = document.documentElement.clientWidth / 2.5 + "px";
-                }
-            })();
-        }
+        // window.onresize = () => {
+        //     return (() => {
+        //         if(document.documentElement.clientWidth > 960) {
+        //             this.screenwidth = document.documentElement.clientWidth / 2.5 + "px";
+        //         }
+        //     })();
+        // };
+        this.getNews();
+        this.getNotice();
     }
 }
 </script>

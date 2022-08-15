@@ -11,7 +11,7 @@
                         </div>
                         <div class="list-item-footer">
                             <p class="list-item-time">{{ scope.row.data.time }}</p>
-                            <a :href="scope.row.data.url">阅读全文</a>
+                            <a :href="scope.row.data.url">{{checkText}}</a>
                         </div>
                     </div>
                 </template>
@@ -26,32 +26,17 @@
 </template>
 
 <script>
+import {getFormtTime} from '@/assets/js/DateUtils.js'
 export default {
     data() {
         return {
-            tableData: [
-                {
-                    data: {
-                        title: "蓝桥杯获奖选手申领《工业和信息化人才岗位能力评价证书》的通知",
-                        author: "Admin",
-                        time: "2021-12-08",
-                        url: "#"
-                    }
-                },
-                {
-                    data: {
-                        title: "蓝桥杯获奖选手申领《工业和信息化人才岗位能力评价证书》的通知",
-                        author: "Admin",
-                        time: "2021-12-08",
-                        url: "#"
-                    }
-                }
-            ],
+            tableData: [],
             pagingComponent: {
                 currentPage: 1,
                 total: 0,
                 numberPerPage: 10,
-            }
+            },
+            checkText: '查看全文'
         }
     },
     methods: {
@@ -65,19 +50,46 @@ export default {
                 this.pagingComponent.currentPage +
                 "&numberPerPage=" +
                 this.pagingComponent.numberPerPage;
-            this.$http.get("/public/" + this.$route.params.listType + ask).then((res) => {
+            
+            this.$http.get("/public/text/" + this.$route.params.listType + ask).then((res) => {
                 if(res.statusCode !== 50000) {
                     this.$message.error(res.message)
                     return
                 }
                 this.pagingComponent.total = res.data.total
                 this.tableData.splice(0, this.tableData.length);
-                for(var i = 0; i < res.data.tableData.length; i++) {
-                    this.tableData.push({data: res[i]})
+                if(this.$route.params.listType === 'board') {
+                    this.checkText = '查看榜单'
+                    for(var i = 0; i < res.data.tableData.length; i++) {
+                        let temp = {data: res.data.tableData[i]}
+                        temp.data.url = "/board/" + res.data.tableData[i].id
+                        temp.data["title"] = temp.data.name
+                        temp.data["time"] = getFormtTime(temp.data.contestBeginTime)
+                        this.tableData.push(temp)
+                    }
+                } else {
+                    this.checkText = '查看全文'
+                    for(var i = 0; i < res.data.tableData.length; i++) {
+                        let temp = {data: res.data.tableData[i]};
+                        temp.data.url = "/pages/" + temp.data.id;
+                        temp.data.time = getFormtTime(temp.data.time, false);
+                        this.tableData.push(temp)
+                    }
                 }
             }).catch(() => {
                 this.$message.error("网络故障")
             })
+        }
+    },
+    mounted() {
+        this.getList();
+    },
+    watch: {
+        $route(to, from) {
+            if (to.path.includes("list")){
+                this.pagingComponent.currentPage = 1
+                this.getList()
+            }
         }
     }
 }

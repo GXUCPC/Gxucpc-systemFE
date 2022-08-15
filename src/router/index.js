@@ -41,7 +41,7 @@ const router = createRouter({
                     component: defineAsyncComponent(() => import('../views/Page.vue'))
                 },
                 {
-                    path: 'list/:listType(notice|news|board|winners)',
+                    path: 'list/:listType(notice|news|board|winners|prize)',
                     name: 'PageList',
                     component: defineAsyncComponent(() => import('../views/PageList.vue'))
                 }
@@ -81,6 +81,16 @@ const router = createRouter({
                     path: 'text',
                     name: 'Text',
                     component: defineAsyncComponent(() => import('../views/Text.vue'))
+                },
+                {
+                    path: "text/edit/:itemID",
+                    name: "EditText",
+                    component: defineAsyncComponent(() => import('../views/EditText.vue'))
+                },
+                {
+                    path: "text/add",
+                    name: "AddText",
+                    component: defineAsyncComponent(() => import('../views/EditText.vue'))
                 }
             ],
             // token验证

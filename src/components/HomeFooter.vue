@@ -31,8 +31,8 @@
                     <td>: gxucpc@163.com</td>
                 </tr>
                 <tr>
-                    <td>QQ</td>
-                    <td>: 3521738734</td>
+                    <td>QQ群</td>
+                    <td>: 676859593</td>
                 </tr>
                 <tr>
                     <td>Github</td>

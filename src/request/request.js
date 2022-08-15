@@ -39,7 +39,7 @@ request.interceptors.response.use(
         }
         
         // token续租
-        if(response.headers['token'] !== null) {
+        if(response.headers['token'] !== null && response.headers['token'] !== undefined) {
             localStorage.setItem('token', response.headers['token'])
         }
         // 如果是返回的文件

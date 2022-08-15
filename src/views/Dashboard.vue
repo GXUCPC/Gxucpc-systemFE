@@ -1,7 +1,7 @@
 <template>
     <el-row :gutter="24">
         <el-col :span="8">
-            <el-card shadow="always">
+            <el-card class="card-das" shadow="always">
                 <el-row>
                     <el-col :span="10">
 
@@ -114,6 +114,10 @@ export default {
 </script>
 
 <style>
+.card-das {
+    height: 600px;
+}
+
 .info-container {
     background-color: white;
     min-width: 100%;
@@ -136,7 +140,7 @@ export default {
     margin-top: 20;
 }
 .infinite-list {
-  height: 600px;
+  height: 520px;
   padding: 0;
   margin: 0;
   list-style: none;

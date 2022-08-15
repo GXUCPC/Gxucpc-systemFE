@@ -8,25 +8,28 @@
 </template>
 
 <script>
+import {getFormtTime} from '@/assets/js/DateUtils.js'
     export default{
         data() {
             return {
                 page: {
-                    title: "第十三届蓝桥杯全国软件和信息技术专业人才大赛（个人赛）",
-                    time: "2021-10-12",
-                    content: "- 金奖\n  排名第一\n- 银奖\n  排名第2、3、4"
+                    id: 0,
+                    title: "",
+                    time: "",
+                    content: "",
                 }
             }
         },
         methods: {
             getPage() {
-                this.$http.get("/public/pages/" + this.$route.params.itemID).then((res) => {
+                this.$http.get("/public/text" + "?id=" + this.$route.params.itemID).then((res) => {
                     if (res.statusCode !== 50000) {
                         this.$message.error(res.message)
                         return
                     }
 
                     this.page = res.data
+                    this.page.time = getFormtTime(this.page.time, false);
                 }).catch(() => {
                     this.$message.error("网络故障")
                 })
@@ -53,6 +56,10 @@
     font-size: 13px;
     color: #a0a0a0;
     padding: 15px 0 40px 0;
+}
+img {
+    margin: 0 auto;
+    display: block;
 }
 
 

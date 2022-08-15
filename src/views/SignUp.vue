@@ -209,7 +209,6 @@ export default {
   },
   methods: {
     submitInfo(msg) {
-      console.log(msg)
       ElMessageBox({
         title: "通知",
         message: h("p", null, [
