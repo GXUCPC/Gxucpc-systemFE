@@ -58,10 +58,10 @@ import { getFormtTime } from '@/assets/js/DateUtils';
 export default {
     data() {
         return {
-            noticeData: [{title: "关于举办蓝桥杯（软件类、电子类、设计赛）宁波暑期教师", time: "2022-10-11", linkUrl: "/admin"}],
-            newsData: [{title: "关于举办蓝桥杯（软件类、电子类、设计赛）宁波暑期教师", time: "2022-8-14", linkUrl: "/admin"}],
+            noticeData: [],
+            newsData: [],
             screenwidth: undefined,
-            imageUrlList: [require("@/assets/images/pmd.png"), require("@/assets/images/pmd.png"), require("@/assets/images/pmd.png"), require("@/assets/images/pmd.png")]
+            imageUrlList: []
         }
     },
     methods: {
@@ -93,19 +93,30 @@ export default {
                     }
                 }
             })
+        },
+        getImagesURL() {
+            this.$http.get("/public/images").then((res) => {
+                if(res.statusCode === 50000) {
+                    this.imageUrlList.splice(0, this.imageUrlList.length)
+                    for(let i = 0; i < res.data.length; i++) {
+                        this.imageUrlList.push(res.data[i].value)
+                    }
+                }
+            })
         }
     },
     mounted() {
         this.getImageSize();
-        // window.onresize = () => {
-        //     return (() => {
-        //         if(document.documentElement.clientWidth > 960) {
-        //             this.screenwidth = document.documentElement.clientWidth / 2.5 + "px";
-        //         }
-        //     })();
-        // };
+        window.onresize = () => {
+            return (() => {
+                if(document.documentElement.clientWidth > 960) {
+                    this.screenwidth = document.documentElement.clientWidth / 2.5 + "px";
+                }
+            })();
+        };
         this.getNews();
         this.getNotice();
+        this.getImagesURL();
     }
 }
 </script>

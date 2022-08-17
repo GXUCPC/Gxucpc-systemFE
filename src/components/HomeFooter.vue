@@ -49,7 +49,7 @@
         <div class="flex-lr"></div>
     </div>
     <div class="bg2">
-        <p class="p3">Copyright ©2022-{{nowYear}} {{ICP}}</p>
+        <p class="p3">Copyright ©2022-{{nowYear}} <a class="p3" href="https://beian.miit.gov.cn/">{{ICP}}</a></p>
     </div>
 </template>
 
@@ -57,7 +57,7 @@
 export default {
     data() {
         return {
-            ICP: '桂ICP备2021007107号-1',
+            ICP: '',
             nowYear: undefined
         }
     },
@@ -65,10 +65,18 @@ export default {
         getYear() {
             var date = new Date()
             this.nowYear = date.getFullYear()
+        },
+        getICP() {
+            this.$http.get("/public/icp").then((res) => {
+                if(res.statusCode === 50000) {
+                    this.ICP = res.data.value
+                }
+            })
         }
     },
     mounted() {
         this.getYear()
+        this.getICP()
     }
 }
 </script>

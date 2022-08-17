@@ -13,8 +13,8 @@
             <el-menu-item index="news">赛事新闻</el-menu-item>
             <el-menu-item index="board">历届榜单</el-menu-item>
         </el-sub-menu>
+        <el-menu-item index="signup">赛事报名</el-menu-item>
         <el-menu-item index="download">证书下载</el-menu-item>
-        <el-menu-item index="contactus">联系我们</el-menu-item>
     </el-menu>
 </template>
 
@@ -36,8 +36,8 @@ export default {
                 this.$router.push({path: "/list/board"})
             } else if(key === "download") {
                 this.$router.push({path: "/download"})
-            } else if(key === "contactus") {
-                this.$router.push({path: "/contact"})
+            } else if(key === 'signup') {
+                this.$router.push({path: "/list/signup"})
             }
         }
     }

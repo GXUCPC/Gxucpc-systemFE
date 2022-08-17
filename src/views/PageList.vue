@@ -58,11 +58,11 @@ export default {
                 }
                 this.pagingComponent.total = res.data.total
                 this.tableData.splice(0, this.tableData.length);
-                if(this.$route.params.listType === 'board') {
-                    this.checkText = '查看榜单'
+                if(this.$route.params.listType === 'board' || this.$route.params.listType === 'signup') {
+                    this.checkText = this.$route.params.listType === 'board'? '查看榜单' : '立即报名';
                     for(var i = 0; i < res.data.tableData.length; i++) {
                         let temp = {data: res.data.tableData[i]}
-                        temp.data.url = "/board/" + res.data.tableData[i].id
+                        temp.data.url = "/" +  this.$route.params.listType + "/" + res.data.tableData[i].id
                         temp.data["title"] = temp.data.name
                         temp.data["time"] = getFormtTime(temp.data.contestBeginTime)
                         this.tableData.push(temp)

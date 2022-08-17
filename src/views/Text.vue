@@ -8,12 +8,14 @@
                 <template #default="scope">
                     <div class="list-item-body">
                         <div class="list-item-title">
-                            <a :href="scope.row.data.url">{{ scope.row.data.title }}</a>
+                            <a :href="scope.row.data.readURL" target="_blank">{{ scope.row.data.title }}</a>
                             <p class="list-item-author"> <el-tag :type="getType(scope.row.data.type)">{{scope.row.data.type}}</el-tag></p>
                         </div>
                         <div class="list-item-footer">
                             <p class="list-item-time">{{ scope.row.data.time }}</p>
-                            <a :href="scope.row.data.url">修改文章</a>
+                            
+                            
+                            <div class="jiange"><el-button type="danger" link @click="deleteItem(scope.row.data.id)"> 删除文章 </el-button> <a :href="scope.row.data.url"> 修改文章</a></div>
                         </div>
                     </div>
                 </template>
@@ -42,6 +44,16 @@ export default {
         }
     },
     methods: {
+        deleteItem(id) {
+            this.$http.delete("/admin/text?id=" + id).then((res) => {
+                if(res.statusCode === 50000) {
+                    this.$message.success("删除成功")
+                    this.getList()
+                } else {
+                    this.$message.error(res.message)
+                }
+            })
+        },
         currentChange(number) {
             this.pagingComponent.currentPage = number
             this.getList()
@@ -62,6 +74,7 @@ export default {
                 for(var i = 0; i < res.data.tableData.length; i++) {
                     let temp = {data: res.data.tableData[i]};
                     temp.data["url"] = "/admin/text/edit/" + temp.data.id;
+                    temp.data["readURL"] = "/pages/" + temp.data.id;
                     temp.data.type = temp.data.type === 'news'? '赛事新闻': temp.data.type === 'notice'? '赛事通知' : temp.data.type === 'winners' ? '获奖名单': '奖项设置';
                     temp.data.time = getFormtTime(temp.data.time, false)
                     this.tableData.push(temp)
@@ -87,7 +100,10 @@ export default {
 </script>
 
 <style>
-
+.jiange {
+    display: inline-block;
+    float: right;
+}
 .page-list-body {
     width: 90%;
     margin: 0 auto;
@@ -137,9 +153,9 @@ export default {
 
 .list-item-footer a {
     text-decoration: none;
-    float: right;
+    /* float: right; */
     color: #4ea2e3;
-    font-size: 12px;
+    font-size: 14px;
     line-height: 13px;
 }
 .add-text {

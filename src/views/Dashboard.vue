@@ -48,7 +48,39 @@
             </div>
         </el-col>
     </el-row>
+    <div class="icp-row">
+        <el-row :gutter="24">
+            <el-col :span="8">
+                <el-card>
+                    <div class="icp-input icp">
+                        <el-input v-model="ICP">
+                            <template #prepend>ICP备案编号</template>
+                        </el-input>
+                    </div>
+                    <div class="icp-save icp">
+                        <el-button type="success" @click="addICP">保存</el-button>
+                    </div>
+                </el-card>
+            </el-col>
+            <el-col :span="14">
+                <el-card >
+                   <div class="icp-input icp">
+                        <el-input ref="saveTagInput" v-model="inputValue"
+                        @keyup.enter="handleInputConfirm" @blur="handleInputConfirm">
+                            <template #prepend>新增网站首页图片</template>
+                        </el-input>
+                    </div>
+                    <el-tag v-for="tag in dynamicTags" :key="tag" class="mx-1" closable :disable-transitions="false"
+                        @close="handleClose(tag)">
+                        <img class="img-tag" :src="tag" alt="" tabindex="0">
+                        <img class="img-big" :src="tag" alt="">
+                    </el-tag>
+                </el-card>
 
+            </el-col>
+        </el-row>
+
+    </div>
 </template>
 
 <script>
@@ -56,6 +88,9 @@ import { GetOs, GetCurrentBrowser } from '@/assets/js/userInfoUtils.js'
 export default {
     data() {
         return {
+            dynamicTags: [],
+            inputVisible: false,
+            inputValue: '',
             user: {
                 Username: undefined,
                 Power: undefined
@@ -76,14 +111,72 @@ export default {
             //         details: "添加"
             // },
 
-            releases: []
+            releases: [],
+            ICP: '',
         }
     },
     mounted() {
         this.getUserInfo()
         this.getRelese(this.log.cout)
+        this.getImages()
     },
     methods: {
+        addICP() {
+            if(this.ICP === '' || this.ICP === undefined || this.ICP === null) {
+                this.$message.error("请输入需要添加的ICP备案编号!")
+                return
+            }
+            this.$http.post("/admin/dashboard/icp?icp=" + this.ICP).then((res) => {
+                if(res.statusCode === 50000) {
+                    this.ICP = ''
+                    this.$message.success("添加成功")
+                } else {
+                    this.$message.success(res.message)
+                }
+            })
+        },
+        addImagesURL(url) {
+            if(url === '' || url === undefined || url === null) {
+                return
+            }
+            this.$http.post("/admin/dashboard/images?url=" + url).then((res) => {
+                if(res.statusCode === 50000) {
+                    this.$message.success("添加成功")
+                    this.getImages()
+                } else {
+                    this.$message.error(res.message)
+                }
+            })
+        },
+        handleClose(tag) {
+            this.$http.delete("/admin/dashboard/images?url=" + tag).then((res) => {
+                if(res.statusCode === 50000) {
+                    this.$message.success("删除成功")
+                    this.getImages()
+                }
+            })
+        },
+        getImages() {
+            this.$http.get("/admin/dashboard/images").then((res) => {
+                if(res.statusCode === 50000) {
+                    this.dynamicTags.splice(0, this.dynamicTags.length)
+                    for(let i = 0; i < res.data.length; i++) {
+                        this.dynamicTags.push(res.data[i].value)
+                    }
+                }
+            })
+        },
+        handleInputConfirm() {
+            this.addImagesURL(this.inputValue);
+            this.inputVisible = false;
+            this.inputValue = '';
+        },
+        showInput() {
+            this.inputVisible = true
+            this.$nextTick(_ => {
+                this.$refs.saveTagInput.$refs.input.focus();
+            });
+        },
         load() {
             this.log.cout += 2
             this.getRelese(this.log.cout)
@@ -114,6 +207,37 @@ export default {
 </script>
 
 <style>
+.img-tag {
+    width: 20px;
+    height: 20px;
+    vertical-align: middle;
+}
+
+.img-big {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-55%,-85%);
+    display: none;
+    box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+:focus+.img-big {
+    display: flex;
+}
+
+.icp-row {
+    margin-top: 20px;
+}
+
+.icp {
+    display: inline-block;
+}
+
+.icp-save {
+    margin-left: 20px;
+}
+
 .card-das {
     height: 600px;
 }
@@ -139,22 +263,25 @@ export default {
     margin-left: 20%;
     margin-top: 20;
 }
+
 .infinite-list {
-  height: 520px;
-  padding: 0;
-  margin: 0;
-  list-style: none;
+    height: 520px;
+    padding: 0;
+    margin: 0;
+    list-style: none;
 }
+
 .infinite-list .infinite-list-item {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 50px;
-  background: var(--el-color-primary-light-9);
-  margin: 10px;
-  color: var(--el-color-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 50px;
+    background: var(--el-color-primary-light-9);
+    margin: 10px;
+    color: var(--el-color-primary);
 }
-.infinite-list .infinite-list-item + .list-item {
-  margin-top: 10px;
+
+.infinite-list .infinite-list-item+.list-item {
+    margin-top: 10px;
 }
 </style>

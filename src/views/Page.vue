@@ -25,6 +25,7 @@ import {getFormtTime} from '@/assets/js/DateUtils.js'
                 this.$http.get("/public/text" + "?id=" + this.$route.params.itemID).then((res) => {
                     if (res.statusCode !== 50000) {
                         this.$message.error(res.message)
+                        this.$router.push({path: "/"})
                         return
                     }
 
