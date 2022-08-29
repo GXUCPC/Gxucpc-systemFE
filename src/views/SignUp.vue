@@ -12,7 +12,7 @@
 
   <div class="formTable">
     <el-card>
-      <el-form ref="elForm" :model="formData" :rules="rules" size="medium" label-width="100px" label-position="top">
+      <el-form ref="elForm" :model="formData" :rules="rules" size="default" label-width="100px" label-position="top">
         <el-row :gutter="200">
           <el-col :span="12">
             <el-form-item label="姓名" prop="userName">
@@ -21,16 +21,17 @@
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="学号" prop="userID">
-              <el-input v-model="formData.userID" placeholder="请输入学号" :maxlength="10" clearable
+            <el-form-item label="学号" prop="userId">
+              <el-input v-model="formData.userId" placeholder="请输入学号" :maxlength="10" clearable
                 :style="{ width: '100%' }"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row :gutter="200">
           <el-col :span="12">
-            <el-form-item label="学院" prop="userAcademy">
-              <el-select v-model="formData.userAcademy" placeholder="请选择学院" clearable :style="{ width: '100%' }">
+            <el-form-item label="学院" prop="userCourse">
+              <el-select v-model="formData.userCourse" placeholder="请选择学院" clearable :style="{ width: '100%' }">
+                <el-option v-for="item in courseOptions" :key="item" :label="item" :value="item" />
               </el-select>
             </el-form-item>
           </el-col>
@@ -49,25 +50,33 @@
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="电子邮箱" prop="userEmail">
-              <el-input v-model="formData.userEmail" placeholder="请输入电子邮箱" clearable :style="{ width: '100%' }">
+            <el-form-item label="电子邮箱" prop="userMail">
+              <el-input v-model="formData.userMail" placeholder="请输入电子邮箱" clearable :style="{ width: '100%' }">
               </el-input>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row :gutter="200">
-          <el-col :span="12">
-            <el-form-item label="参赛组" prop="userGroup">
-              <el-radio-group v-model="formData.userGroup" size="medium">
-                <el-radio-button v-for="(item, index) in userGroupOptions" :key="index" :label="item.value"
+          <el-col :span="8">
+            <el-form-item label="参赛组" prop="group">
+              <el-radio-group v-model="formData.group" size="default">
+                <el-radio-button v-for="(item, index) in groupOptions" :key="index" :label="item.value"
                   :disabled="item.disabled">{{ item.label }}</el-radio-button>
               </el-radio-group>
             </el-form-item>
           </el-col>
-          <el-col :span="12">
-            <el-form-item label="是否打星" prop="userStar" required>
-              <el-switch v-model="formData.userStar" active-text="打星参加" inactive-text="正常参加" :active-value="'打星'"
-                :inactive-value="'正常'"></el-switch>
+          <el-col :span="8">
+            <el-form-item label="性别" prop="userSex" required>
+              <el-radio-group v-model="formData.userSex" size="default">
+                <el-radio-button v-for="(item, index) in userSexOptions" :key="index" :label="item.value"
+                  :disabled="item.disabled">{{ item.label }}</el-radio-button>
+              </el-radio-group>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="是否打星" prop="star" required>
+              <el-switch v-model="formData.star" active-text="打星参加" inactive-text="正常参加" :active-value="1"
+                :inactive-value="0"></el-switch>
             </el-form-item>
           </el-col>
         </el-row>
@@ -100,7 +109,7 @@
           range.latest
       }}级本科生和 {{ range.latest }} 级硕士研究生
     </p>
-    <p>&emsp;2.新生组: 经过校内报名的广西大学 2021 级本科生</p>
+    <p>&emsp;2.新生组: 经过校内报名的广西大学 {{ range.latest }} 级本科生</p>
     <h5>
       *打星:
       因年级限制、其它学校同学、自愿选择等因素限制但是想要参加线下赛的同学可以选择打星参赛。该部分参赛成员的成绩不计入最后终榜。
@@ -110,7 +119,7 @@
 <script>
 import { getFormtTime } from "@/assets/js/DateUtils.js"
 import { h } from "vue";
-import { ElMessage, ElMessageBox } from "element-plus";
+import { ElMessageBox } from "element-plus";
 export default {
   components: {},
   props: [],
@@ -129,14 +138,45 @@ export default {
       },
       formData: {
         userName: undefined,
-        userID: undefined,
-        userAcademy: undefined,
+        userId: undefined,
+        userCourse: undefined,
         userClass: undefined,
         userQQ: undefined,
-        userEmail: undefined,
-        userGroup: undefined,
-        userStar: "正常",
+        userMail: undefined,
+        group: undefined,
+        star: 0,
+        userSex: undefined,
       },
+      courseOptions:[
+        "机械工程学院",
+        "电气工程学院",
+        "土木建筑工程学院",
+        "化学化工学院",
+        "资源环境与材料学院",
+        "轻工与食品工程学院",
+        "计算机与电子信息学院",
+        "海洋学院",
+        "生命科学与技术学院",
+        "农学院",
+        "动物科学技术学院",
+        "林学院",
+        "数学与信息科学学院",
+        "物理科学与工程技术学院",
+        "文学院",
+        "新闻与传播学院",
+        "外国语学院",
+        "艺术学院",
+        "公共管理学院",
+        "工商管理学院",
+        "法学院",
+        "马克思主义学院",
+        "体育学院",
+        "医学院",
+        "继续教育学院",
+        "国际学院",
+        "经济学院/中国—东盟金融合作学院",
+        "非本校生"
+      ],
       rules: {
         userName: [
           {
@@ -145,14 +185,14 @@ export default {
             trigger: "blur",
           },
         ],
-        userID: [
+        userId: [
           {
             required: true,
             message: "请输入学号",
             trigger: "blur",
           },
         ],
-        userAcademy: [
+        userCourse: [
           {
             required: true,
             message: "请选择学院",
@@ -173,39 +213,56 @@ export default {
             trigger: "blur",
           },
         ],
-        userEmail: [
+        userMail: [
           {
             required: true,
             message: "请输入电子邮箱",
             trigger: "blur",
           },
         ],
-        userGroup: [
+        group: [
           {
             required: true,
             message: "参赛组不能为空",
             trigger: "change",
           },
         ],
+        userSex: [
+          {
+            required: true,
+            message: "性别不能为空",
+            trigger: "change",
+          },
+        ],
       },
-      userGroupOptions: [
+      groupOptions: [
         {
           label: "新生组",
-          value: "新生组",
+          value: 0,
         },
         {
           label: "正式组",
-          value: "正式组",
+          value: 1,
         },
       ],
+      userSexOptions: [
+        {
+          label: "男",
+          value: "男",
+        },
+        {
+          label: "女",
+          value: "女",
+        }
+      ]
     };
   },
   computed: {},
   watch: {},
   created() { },
   mounted() {
-    this.getYear();
     this.getItemData();
+    this.checkStatus();
   },
   methods: {
     submitInfo(msg) {
@@ -245,13 +302,14 @@ export default {
       // TODO 获取 itemID对应的比赛信息
       this.$http
         .get("/public/signup/" + this.$route.params.itemID)
-        .then(() => {
+        .then((res) => {
           if (res.statusCode === 50000) {
-            this.itemData = res.itemData;
+            this.itemData.itemName = res.data.name;
             // 格式化时间戳
-            this.itemData.startTime = getFormtTime(this.itemData.startTime, true)
-            this.itemData.endTime = getFormtTime(this.itemData.endTime, true)
-          } else if (res.statusCode === 50001) {
+            this.itemData.startTime = getFormtTime(res.data.signUpBeginTime, true)
+            this.itemData.endTime = getFormtTime(res.data.signUpEndTime, true)
+            this.getYear()
+          } else {
             this.$message.error(res.message);
             this.$router.push("/");
           }
@@ -261,11 +319,12 @@ export default {
         });
     },
     submitForm() {
+      console.log(this.formData.userCourse)
       // TODO 提交表单
       if (this.itemData.status !== "报名进行中") {
-        if(this.itemData.status === "报名未开始") {
+        if (this.itemData.status === "报名未开始") {
           this.$message.info("报名未开始，请耐心等待")
-        } else if(this.itemData.status === "报名已结束") {
+        } else if (this.itemData.status === "报名已结束") {
           this.$message.info("报名已结束")
         } else {
           this.$message.error("请勿修改网站文件")
@@ -273,7 +332,7 @@ export default {
         return
       }
       for (let value in this.formData) {
-        if (!this.formData[value]) {
+        if (this.formData[value] === undefined || this.formData[value] === "") {
           this.$message.error('缺少必填信息')
           return
         }
@@ -307,7 +366,7 @@ export default {
 .formTable {
   width: 80%;
   margin: 0 auto;
-  /* margin-top: 10%; */
+  margin-top: 50px;
 }
 
 .pageHead {

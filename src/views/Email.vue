@@ -52,6 +52,7 @@ export default {
                     this.$message.success(res.message)
                     this.emailTable.id = undefined
                     this.emailTable.emailData = undefined
+                    this.emailTable.emailSubject = undefined
                 } else {
                     this.$message.error(res.message)
                 }
