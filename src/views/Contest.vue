@@ -24,6 +24,11 @@
                     active-text="开放" inactive-text="关闭" />
             </template>
         </el-table-column>
+        <el-table-column label="下载报名表单" width="180">
+            <template #default="scope">
+                <el-button size="small" type="success" @click="downloadForm(scope.row)">下载</el-button>
+            </template>
+        </el-table-column>
         <el-table-column label="Operations" width="200">
             <template #default="scope">
                 <el-button size="small" @click="handleEdit(scope.$index, scope.row)">Edit</el-button>
@@ -182,7 +187,10 @@ export default {
             dialogUploadVisible: false,
             dialogDeleteVisible: false,
             header: {
-                token: localStorage.getItem('token')
+                token: localStorage.getItem('token'),
+                username: localStorage.getItem('username'),
+                password: localStorage.getItem('password'),
+                userType: localStorage.getItem("userType")
             },
             formDeleteData: {
 
@@ -236,6 +244,35 @@ export default {
         }
     },
     methods: {
+        downloadForm(row) {
+            this.$http.get("/admin/contest/download/" + row.id, { responseType: 'blob' }).then((res) => {
+                // const content = res;
+                // const blob = new Blob([content]);
+
+                // const elink = document.createElement('a');
+                // elink.download = row.name + '.pdf';
+                // elink.style.display = 'none';
+                // elink.href = URL.createObjectURL(blob);
+                // document.body.appendChild(elink);
+                // elink.click();
+                // // 释放URL对象
+                // URL.revokeObjectURL(elink.href);
+                // document.body.removeChild(elink);
+                let url = window.URL.createObjectURL(new Blob([res])) // 将获取的文件转化为blob格式
+            let a = document.createElement('a'); // 此处向下是打开一个储存位置
+            a.style.display = 'none';
+            a.href = url;
+            // 下面两行是自己项目需要的处理，总之就是得到下载的文件名（加后缀）即可
+            var fileName = row.name + ".pdf";
+            
+            a.setAttribute('download',fileName);
+            document.body.appendChild(a);
+            a.click();//点击下载
+            document.body.removeChild(a);// 下载完成移除元素
+            window.URL.revokeObjectURL(url);// 释放掉blob对象
+            this.$message.success("文件下载成功") //删除弹窗
+            })
+        },
         // 换页
         currentChange(number) {
             this.pagingComponent.currentPage = number;

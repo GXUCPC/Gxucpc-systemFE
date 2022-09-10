@@ -1,19 +1,23 @@
 <template>
     <el-card>
-
-        <div class="search-frame">
-            <el-input placeholder="可按照姓名、学号、邮箱等信息查询" v-model="queryInfo" clearable>
-                <template #append>
-                    <el-button @click="getFormInfo">
-                        <el-icon>
-                            <search></search>
-                        </el-icon>
-                    </el-button>
-                </template>
-            </el-input>
-            <el-select v-model="contestID" placeholder="请选择比赛" clearable :style="{ width: '100%' }">
-                <el-option v-for="item in contestOptions" :key="item.id" :label="item.name" :value="item.id" />
-            </el-select>
+        <div class="head">
+            <div class="search-frame">
+                <el-input placeholder="可按照姓名、学号、邮箱等信息查询" v-model="queryInfo" clearable>
+                    <template #append>
+                        <el-button @click="getFormInfo">
+                            <el-icon>
+                                <search></search>
+                            </el-icon>
+                        </el-button>
+                    </template>
+                </el-input>
+            </div>
+            <div class="download">
+                <el-select class="select-contest" v-model="contestID" placeholder="请选择比赛" clearable
+                    :style="{ width: '100%' }">
+                    <el-option v-for="item in contestOptions" :key="item.id" :label="item.name" :value="item.id" />
+                </el-select>
+            </div>
         </div>
         <div>
             <el-table :data="tableData" style="width: 100%">
@@ -120,6 +124,7 @@
 export default {
     data() {
         return {
+            donloadContestID: '',
             contestID: undefined,
             dialogTableVisible: false,
             queryInfo: "",
@@ -336,8 +341,20 @@ export default {
 </script>
 
 <style>
+.head {
+    width: 100%;
+    height: 50px;
+}
+
 .search-frame {
-    /* text-align: center; */
-    width: 40%;
+    width: 45%;
+    height: 50px;
+    float: left;
+}
+
+.download {
+    width: 45%;
+    height: 50px;
+    float: left;
 }
 </style>
