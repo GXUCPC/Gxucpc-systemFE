@@ -2,6 +2,12 @@
     <el-card>
         <div class="head">
             <div class="search-frame">
+                <el-select class="select-contest" v-model="contestID" placeholder="请选择比赛" clearable
+                    :style="{ width: '100%' }">
+                    <el-option v-for="item in contestOptions" :key="item.id" :label="item.name" :value="item.id" />
+                </el-select>
+            </div>
+            <div class="download">
                 <el-input placeholder="可按照姓名、学号、邮箱等信息查询" v-model="queryInfo" clearable>
                     <template #append>
                         <el-button @click="getFormInfo">
@@ -12,16 +18,10 @@
                     </template>
                 </el-input>
             </div>
-            <div class="download">
-                <el-select class="select-contest" v-model="contestID" placeholder="请选择比赛" clearable
-                    :style="{ width: '100%' }">
-                    <el-option v-for="item in contestOptions" :key="item.id" :label="item.name" :value="item.id" />
-                </el-select>
-            </div>
         </div>
         <div>
             <el-table :data="tableData" style="width: 100%">
-                <el-table-column label="Contest" width="180" prop="contestName" fixed="left" />
+                <el-table-column label="Contest" width="300" prop="contestName" fixed="left" />
                 <el-table-column label="Name" width="180" prop="userName" />
                 <el-table-column label="Student ID" width="180" prop="userId" />
                 <el-table-column label="Academy" width="180" prop="userCourse" />

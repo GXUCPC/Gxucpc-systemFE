@@ -263,7 +263,7 @@ export default {
             a.style.display = 'none';
             a.href = url;
             // 下面两行是自己项目需要的处理，总之就是得到下载的文件名（加后缀）即可
-            var fileName = row.name + ".pdf";
+            var fileName = row.name + "-报名表.xls";
             
             a.setAttribute('download',fileName);
             document.body.appendChild(a);
