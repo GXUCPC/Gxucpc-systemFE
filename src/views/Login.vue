@@ -76,7 +76,7 @@ export default {
               localStorage.setItem("password", res.data.password);
               this.$router.push({ path: "/admin" });
             } else {
-              this.$message.error(res.msg);
+              this.$message.error(res.message);
             }
           })
           .catch(() => {
