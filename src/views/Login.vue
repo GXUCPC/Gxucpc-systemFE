@@ -1,7 +1,7 @@
 <template>
   <div class="login" clearfix>
     <div class="login-wrap">
-      <el-card>
+      <el-card >
         <el-row type="flex" justify="center">
           <el-form
             ref="loginForm"
@@ -91,10 +91,10 @@ export default {
 <style scoped>
 
 .login {
-  background: url("../assets/images/bg.jpg") no-repeat;
+  /* background: url("../assets/images/bg.jpg") no-repeat; */
   width: 100%;
   height: 100%;
-  position: fixed;
+  /* position: fixed; */
   background-size: 100% 100%;
 
 }

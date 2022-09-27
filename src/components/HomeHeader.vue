@@ -15,6 +15,7 @@
         </el-sub-menu>
         <el-menu-item index="signup">赛事报名</el-menu-item>
         <el-menu-item index="download">证书下载</el-menu-item>
+        <el-menu-item index="login" class="user-login">登录</el-menu-item>
     </el-menu>
 </template>
 
@@ -38,6 +39,8 @@ export default {
                 this.$router.push({path: "/download"})
             } else if(key === 'signup') {
                 this.$router.push({path: "/list/signup"})
+            } else if(key === 'login') {
+                this.$router.push({path: '/login'})
             }
         }
     }
@@ -64,4 +67,5 @@ export default {
 .el-header {
     padding: 0;
 }
+
 </style>
