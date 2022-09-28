@@ -28,6 +28,7 @@
                 <el-table-column label="Class" width="180" prop="userClass" />
                 <el-table-column label="QQ" width="180" prop="userQQ" />
                 <el-table-column label="Email" width="180" prop="userMail" />
+                <el-table-column label="Sex" width="180" prop="userSex" />
                 <el-table-column label="Group" width="180" prop="group" />
                 <el-table-column label="Star" width="180" prop="star" />
 
@@ -92,16 +93,24 @@
                     </el-form-item>
                 </el-col>
             </el-row>
-            <el-row :gutter="200">
-                <el-col :span="12">
+            <el-row :gutter="200" style="margin-left: 0px; margin-right: 0px;">
+                <el-col :span="8" style="padding-left: 0px; padding-right: 0px">
                     <el-form-item label="参赛组" prop="group">
-                        <el-radio-group v-model="formData.group" size="medium">
+                        <el-radio-group v-model="formData.group" size="small">
                             <el-radio-button v-for="(item, index) in userGroupOptions" :key="index" :label="item.value"
                                 :disabled="item.disabled">{{ item.label }}</el-radio-button>
                         </el-radio-group>
                     </el-form-item>
                 </el-col>
-                <el-col :span="12">
+                <el-col :span="8" style="padding-left: 0px; padding-right: 0px">
+                  <el-form-item label="性别" prop="sex">
+                    <el-radio-group v-model="formData.userSex" size="small">
+                      <el-radio-button v-for="(item, index) in userSexOptions" :key="index" :label="item.value"
+                                       :disabled="item.disabled">{{ item.label }}</el-radio-button>
+                    </el-radio-group>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="8" style="padding-left: 0px; padding-right: 0px">
                     <el-form-item label="是否打星" prop="star" required>
                         <el-switch v-model="formData.star" active-text="打星参加" inactive-text="正常参加" :active-value="1"
                             :inactive-value="0"></el-switch>
@@ -224,6 +233,13 @@ export default {
                         trigger: "change",
                     },
                 ],
+                sex: [
+                  {
+                    required: true,
+                    message: "性别不能为空",
+                    trigger: "blur",
+                  },
+                ],
             },
             userGroupOptions: [
                 {
@@ -234,6 +250,16 @@ export default {
                     label: "正式组",
                     value: 1,
                 },
+            ],
+            userSexOptions: [
+              {
+                label: "男",
+                value: "男",
+              },
+              {
+                label: "女",
+                value: "女",
+              },
             ],
             pagingComponent: {
                 total: 0,
@@ -356,5 +382,9 @@ export default {
     width: 45%;
     height: 50px;
     float: left;
+}
+#sex-col {
+  padding-right: 50px;
+  padding-left: 50px;
 }
 </style>

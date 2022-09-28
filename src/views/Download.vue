@@ -14,7 +14,10 @@
                         <el-input v-model="formLabelAlign.number" type="number"></el-input>
                     </el-form-item>
                     <el-form-item label="比赛编号" prop="itemNumber">
-                        <el-input v-model="formLabelAlign.itemNumber" type="number"></el-input>
+<!--                        <el-input v-model="formLabelAlign.itemNumber" type="number"></el-input>-->
+                        <el-select v-model="formLabelAlign.itemNumber" filterable="true" remote="true" placeholder="输入并选择比赛名称" :remote-method="remoteMethod" :loading="loading">
+                          <el-option v-for="item in options" :key="item.id" :label="item.name" :value="item.id"></el-option>
+                        </el-select>
                     </el-form-item>
                     <el-form-item>
                         <el-button type="primary" @click="submitForm(formLabelAlign)">
@@ -56,13 +59,30 @@ export default {
                 itemNumber: [
                     { required: true, message: '请输入比赛编号', trigger: 'blur' }
                 ]
-            }
+            },
+            loading: false,
+            options: [],
         }
     },
     methods: {
-        //Author: cityTS 
+
+         async remoteMethod(query) {
+          if(query){
+            this.loading = true;
+            await this.$http.get("/public/download/contests?query=" + query).then((res) => {
+              if(res.statusCode === 50000) {
+                this.options = res.data
+              }
+            })
+            this.loading = false;
+          } else {
+            this.options.value = []
+          }
+        },
+
+        //Author: cityTS
         //Date: 2022年6月12日
-        //Description: 
+        //Description:
         //  @param: Form object corresponding to download information
         //  @return: null
         //  @function: clear form
@@ -71,9 +91,9 @@ export default {
             obj.name = obj.number = obj.itemNumber = '';
         },
 
-        //Author: cityTS 
+        //Author: cityTS
         //Date: 2022年6月12日
-        //Description: 
+        //Description:
         //  @param: Form object corresponding to download information
         //  @return: null
         //  @function: Submit a download request to the server. If there is no corresponding file, an error message will be given
@@ -145,5 +165,8 @@ export default {
     font-size: 24px;
     color: #000000;
     margin-bottom: 20px;
+}
+.el-form-item .el-select {
+  width: 100%;
 }
 </style>

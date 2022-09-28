@@ -1,5 +1,5 @@
 <template>
-    <el-carousel indicator-position="outside" :height="screenwidth" >
+    <el-carousel indicator-position="outside" :height="screenwidth" v-if="imageUrlList.length > 0">
         <el-carousel-item v-for="item in this.imageUrlList" :key="item">
             <img class="home-img" :src="item" alt="">
         </el-carousel-item>
