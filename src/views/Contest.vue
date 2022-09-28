@@ -51,13 +51,13 @@
                 <el-col :span="12">
                     <el-form-item label="报名开始时间" prop="signUpBeginTime">
                         <el-date-picker v-model="editData.signUpBeginTime" type="datetime" placeholder="Pick a Date"
-                            format="YYYY-MM-DD hh:mm:ss" value-format="x" />
+                            format="YYYY-MM-DD HH:mm:ss" value-format="x" />
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">
                     <el-form-item label="报名结束时间" prop="signUpEndTime">
                         <el-date-picker v-model="editData.signUpEndTime" type="datetime" placeholder="Pick a Date"
-                            format="YYYY-MM-DD hh:mm:ss" value-format="x" />
+                            format="YYYY-MM-DD HH:mm:ss" value-format="x" />
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">
@@ -73,13 +73,13 @@
                 <el-col :span="12">
                     <el-form-item label="比赛开始时间" prop="contestBeginTime">
                         <el-date-picker v-model="editData.contestBeginTime" type="datetime" placeholder="Pick a Date"
-                            format="YYYY-MM-DD hh:mm:ss" value-format="x" />
+                            format="YYYY-MM-DD HH:mm:ss" value-format="x" />
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">
                     <el-form-item label="比赛结束时间" prop="contestEndTime">
                         <el-date-picker v-model="editData.contestEndTime" type="datetime" placeholder="Pick a Date"
-                            format="YYYY-MM-DD hh:mm:ss" value-format="x" />
+                            format="YYYY-MM-DD HH:mm:ss" value-format="x" />
                     </el-form-item>
                 </el-col>
             </el-row>
@@ -101,13 +101,13 @@
                 <el-col :span="12">
                     <el-form-item label="报名开始时间" prop="signUpBeginTime">
                         <el-date-picker v-model="addData.signUpBeginTime" type="datetime" placeholder="Pick a Date"
-                            format="YYYY-MM-DD hh:mm:ss" value-format="x" />
+                            format="YYYY-MM-DD HH:mm:ss" value-format="x" />
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">
                     <el-form-item label="报名结束时间" prop="signUpEndTime">
                         <el-date-picker v-model="addData.signUpEndTime" type="datetime" placeholder="Pick a Date"
-                            format="YYYY-MM-DD hh:mm:ss" value-format="x" />
+                            format="YYYY-MM-DD HH:mm:ss" value-format="x" />
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">
@@ -123,13 +123,13 @@
                 <el-col :span="12">
                     <el-form-item label="比赛开始时间" prop="contestBeginTime">
                         <el-date-picker v-model="addData.contestBeginTime" type="datetime" placeholder="Pick a Date"
-                            format="YYYY-MM-DD hh:mm:ss" value-format="x" />
+                            format="YYYY-MM-DD HH:mm:ss" value-format="x" />
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">
                     <el-form-item label="比赛结束时间" prop="contestEndTime">
                         <el-date-picker v-model="addData.contestEndTime" type="datetime" placeholder="Pick a Date"
-                            format="YYYY-MM-DD hh:mm:ss" value-format="x" />
+                            format="YYYY-MM-DD HH:mm:ss" value-format="x" />
                     </el-form-item>
                 </el-col>
             </el-row>
@@ -171,7 +171,7 @@
 </template>
 
 <script>
-import { getFormtTime, dateStr2TimeTamp } from "@/assets/js/DateUtils.js"
+import { getFormtTime } from "@/assets/js/DateUtils.js"
 import store from "@/store/index.js"
 export default {
     data() {
