@@ -357,7 +357,7 @@ export default {
   },
 };
 </script>
-<style>
+<style scoped>
 .el-main {
   width: 80%;
   margin: 0 auto;
