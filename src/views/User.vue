@@ -4,12 +4,12 @@
     <el-button type="success" @click="showAddUserDialog()" plain>添加用户</el-button>
   </div>
   <el-table :data="tableData" style="width: 100%">
-    <el-table-column label="Username" width="180" prop="username" />
-    <el-table-column label="Create Time" width="180" prop="createTime" />
-    <el-table-column label="Last Login" width="180" prop="lastLogin" />
-    <el-table-column label="Real Name" width="180" prop="realName" />
-    <el-table-column label="Email" width="180" prop="email" />
-    <el-table-column label="User Type" width="180" prop="userType" />
+    <el-table-column label="Username" width="180" prop="username"/>
+    <el-table-column label="Create Time" width="180" prop="createTime"/>
+    <el-table-column label="Last Login" width="180" prop="lastLogin"/>
+    <el-table-column label="Real Name" width="180" prop="realName"/>
+    <el-table-column label="Email" width="180" prop="email"/>
+    <el-table-column label="User Type" width="180" prop="userType"/>
 
     <el-table-column label="Operations">
       <template #default="scope">
@@ -19,10 +19,11 @@
     </el-table-column>
   </el-table>
   <!-- 分页 -->
-  <el-pagination background layout="total, prev, pager, next"  v-model:currentPage="pagingComponent.currentPage" :total="pagingComponent.total" @current-change="currentChange" />
+  <el-pagination background layout="total, prev, pager, next" v-model:currentPage="pagingComponent.currentPage"
+                 :total="pagingComponent.total" @current-change="currentChange"/>
   <!-- 编辑 -->
   <el-dialog v-model="dialogTableVisible" title="用户信息">
-    <el-form :model="editData" :rules="rules" label-width="120px" label-position="left">
+    <el-form ref="user-edit-form" :model="editData" :rules="rulesEdit" label-width="120px" label-position="left">
       <el-row :gutter="20">
         <el-col :span="12">
           <el-form disabled="true" label-width="120px" label-position="left">
@@ -63,7 +64,7 @@
   </el-dialog>
   <!-- 添加 -->
   <el-dialog v-model="dialogAddTableVisible" title="添加用户">
-    <el-form :model="addData" :rules="rules" label-width="120px" label-position="left">
+    <el-form ref="user-add-form" :model="addData" :rules="rules" label-width="120px" label-position="left">
       <el-row :gutter="20">
         <el-col :span="12">
           <el-form-item label="Username" prop="username">
@@ -103,7 +104,8 @@
 </template>
 
 <script>
-import { getFormtTime } from "@/assets/js/DateUtils.js";
+import {getFormtTime} from "@/assets/js/DateUtils.js";
+import {ElLoading} from "element-plus";
 
 export default {
   data() {
@@ -116,11 +118,17 @@ export default {
         numberPerPage: 10,
       },
       rules: {
-        username: [{ required: true, validator: "必填项", trigger: "blur" }],
-        realName: [{ required: true, validator: "必填项", trigger: "blur" }],
-        email: [{ required: true, validator: "必填项", trigger: "blur" }],
-        userType: [{ required: true, validator: "必填项", trigger: "blur" }],
-        password: [{ required: true, validator: "必填项", trigger: "blur" }],
+        username: [{required: true, validator: "必填项", trigger: "blur"}],
+        realName: [{required: true, validator: "必填项", trigger: "blur"}],
+        email: [{required: true, validator: "必填项", trigger: "blur"}],
+        userType: [{required: true, validator: "必填项", trigger: "blur"}],
+        password: [{required: true, validator: "必填项", trigger: "blur"}],
+      },
+      rulesEdit: {
+        username: [{required: true, validator: "必填项", trigger: "blur"}],
+        realName: [{required: true, validator: "必填项", trigger: "blur"}],
+        email: [{required: true, validator: "必填项", trigger: "blur"}],
+        userType: [{required: true, validator: "必填项", trigger: "blur"}],
       },
       tableData: [
         // {
@@ -168,22 +176,27 @@ export default {
       this.editData = this.jsonClone(row);
       this.editData.password = "";
     },
-    handleDelete(index, row) {
-      this.$http
-        .delete("/admin/user" + "?id=" + row.id + "&name=" + row.username)
-        .then((res) => {
-          if (res.statusCode === 50000) {
-            this.$message.success("删除成功");
-          } else {
-            this.$message.error(res.message);
-          }
-          this.getUserInfo();
-        })
-        .catch(() => {
-          this.$message.error("网络故障或系统故障");
-        });
-      
-      
+    async handleDelete(index, row) {
+      let loading = ElLoading.service({
+        lock: true,
+        text: '删除中，请稍后...',
+        background: 'rgba(0, 0, 0, 0.7)',
+      })
+      await this.$http
+          .delete("/admin/user" + "?id=" + row.id + "&name=" + row.username)
+          .then((res) => {
+            if (res.statusCode === 50000) {
+              this.$message.success("删除成功");
+            } else {
+              this.$message.error(res.message);
+            }
+            this.getUserInfo();
+          })
+          .catch(() => {
+            this.$message.error("网络故障或系统故障");
+          });
+      loading.close();
+
     },
     showUserDialog() {
       this.dialogTableVisible = !this.dialogTableVisible;
@@ -194,63 +207,67 @@ export default {
         this.addData[index] = undefined;
       }
     },
-    saveUser() {
-      for (var index in this.editData) {
-        if (!this.editData[index] && index != "password") {
-          this.$message.error("缺少必填项");
-          return;
-        }
-      }
+    async saveUser() {
+      let vis = this.$refs['user-edit-form'].validate();
+      if (!vis) return;
+      let loading = ElLoading.service({
+        lock: true,
+        text: '保存中，请稍后...',
+        background: 'rgba(0, 0, 0, 0.7)',
+      })
       var isChangePasswordItem = 1;
-      if (this.editData != "") {
+      if (this.editData.password !== "") {
         isChangePasswordItem = 2;
       }
       this.editData.createTime = null
       this.editData.lastLogin = null
-      this.$http
-        .put("/admin/user", this.editData, { headers: { isChangePassword: isChangePasswordItem } })
-        .then((res) => {
-          if (res.statusCode === 50000) {
-            this.$message.success("修改成功");
-            this.showUserDialog();
-            this.getUserInfo();
-          } else {
-            this.$message.error(res.message);
-          }
-        })
-        .catch(() => {
-          this.$message.error("网络故障或系统故障");
-        });
+      await this.$http
+          .put("/admin/user", this.editData, {headers: {isChangePassword: isChangePasswordItem}})
+          .then((res) => {
+            if (res.statusCode === 50000) {
+              this.$message.success("修改成功");
+              this.showUserDialog();
+              this.getUserInfo();
+            } else {
+              this.$message.error(res.message);
+            }
+          })
+          .catch(() => {
+            this.$message.error("网络故障或系统故障");
+          });
+      loading.close();
     },
-    addUser() {
-      for (var index in this.addData) {
-        if (!this.addData[index]) {
-          this.$message.error("缺少必填项");
-          return;
-        }
-      }
-      this.$http
-        .post("/admin/user", this.addData)
-        .then((res) => {
-          if (res.statusCode === 50000) {
-            this.$message.success("添加成功");
-            this.showAddUserDialog();
-            this.getUserInfo();
-          } else {
-            this.$message.error(res.message);
-          }
-        })
-        .catch(() => {
-          this.$message.error("网络故障或系统故障");
-        });
+    async addUser() {
+      let vis = this.$refs['user-add-form'].validate();
+      if (!vis) return;
+      let loading = ElLoading.service({
+        lock: true,
+        text: '添加中，请稍后...',
+        background: 'rgba(0, 0, 0, 0.7)',
+      })
+      await this.$http
+          .post("/admin/user", this.addData)
+          .then((res) => {
+            if (res.statusCode === 50000) {
+              this.$message.success("添加成功");
+              this.showAddUserDialog();
+              this.getUserInfo();
+            } else {
+              this.$message.error(res.message);
+            }
+          })
+          .catch(() => {
+            this.$message.error("网络故障或系统故障");
+          });
       this.addData = {};
+      loading.close();
     },
     getUserInfo() {
       var ask =
-        "?currentPage=" +
-        this.pagingComponent.currentPage +
-        "&numberPerPage=" +
-        this.pagingComponent.numberPerPage;
+          "?currentPage=" +
+          this.pagingComponent.currentPage +
+          "&numberPerPage=" +
+          this.pagingComponent.numberPerPage;
       this.$http.get("/admin/user" + ask).then((res) => {
         if (res.statusCode === 50000) {
           this.pagingComponent.total = res.data.total;

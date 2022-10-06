@@ -48,5 +48,6 @@ body {
 }
 .el-main {
     background-color: #edecec;
+  width: 100%;
 }
 </style>

@@ -64,12 +64,12 @@ export default {
                         let temp = {data: res.data.tableData[i]}
                         temp.data.url = "/" +  this.$route.params.listType + "/" + res.data.tableData[i].id
                         temp.data["title"] = temp.data.name
-                        temp.data["time"] = getFormtTime(temp.data.contestBeginTime)
+                        temp.data["time"] = getFormtTime(temp.data.createTime)
                         this.tableData.push(temp)
                     }
                 } else {
                     this.checkText = '查看全文'
-                    for(var i = 0; i < res.data.tableData.length; i++) {
+                    for(let i = 0; i < res.data.tableData.length; i++) {
                         let temp = {data: res.data.tableData[i]};
                         temp.data.url = "/pages/" + temp.data.id;
                         temp.data.time = getFormtTime(temp.data.time, false);

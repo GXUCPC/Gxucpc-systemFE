@@ -66,11 +66,7 @@ export default {
     },
     methods: {
         getImageSize() {
-            if(document.documentElement.clientWidth > 960) {
-                    this.screenwidth = document.documentElement.clientWidth / 2.5 + "px";
-            } else {
-                this.$message.info("本网站未作小页面适应，图片观感会受到影响")
-            }
+          this.screenwidth = document.documentElement.clientWidth / 2.5 + "px";
         },
         getNews() {
             this.$http.get("/public/text/news?currentPage=1&numberPerPage=8").then((res) => {

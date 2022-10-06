@@ -4,7 +4,7 @@
       <el-header>
         <HomeHeader></HomeHeader>
       </el-header>
-      <el-main style="overflow:visible"><router-view></router-view></el-main>
+      <el-main class="home-main" style="overflow:visible"><div class="main-body"><router-view></router-view></div></el-main>
       <el-footer><HomeFooter></HomeFooter></el-footer>
     </el-container>
   </div>
@@ -22,10 +22,16 @@ export default {
 </script>
 
 <style>
-.el-main {
+.home-main {
   padding: 0;
+  width: 100%;
+  margin: 0 auto;
+  background-color: #f5f7fa;
 }
-
+.main-body {
+  width: 80%;
+  margin: 0 auto;
+}
 html, body, #app, .common-layout, .el-container {
   /* 铺屏 */
   padding: 0px;

@@ -1,35 +1,36 @@
 <template>
   <div class="login" clearfix>
     <div class="login-wrap">
-      <el-card >
+      <el-card>
         <el-row type="flex" justify="center">
           <el-form
-            ref="loginForm"
-            :model="user"
-            :rules="rules"
-            status-icon
-            label-width="80px"
+              ref="loginForm"
+              :model="user"
+              :rules="rules"
+              status-icon
+              label-width="80px"
           >
             <h3>GXUCPC-登录</h3>
-            <hr />
+            <hr/>
             <el-form-item prop="username" label="用户名">
               <el-input
-                v-model="user.username"
-                placeholder="请输入用户名"
-                prefix-icon
+                  v-model="user.username"
+                  placeholder="请输入用户名"
+                  prefix-icon
               ></el-input>
             </el-form-item>
             <el-form-item id="password" prop="password" label="密码">
               <el-input
-                v-model="user.password"
-                show-password
-                placeholder="请输入密码"
+                  v-model="user.password"
+                  show-password
+                  placeholder="请输入密码"
               ></el-input>
             </el-form-item>
             <router-link to="/">回到首页</router-link>
             <el-form-item>
               <el-button type="primary" icon="el-icon-upload" @click="doLogin"
-                >登 录</el-button
+              >登 录
+              </el-button
               >
             </el-form-item>
           </el-form>
@@ -40,6 +41,8 @@
 </template>
 
 <script>
+import {ElLoading} from "element-plus";
+
 export default {
   name: "Login",
   data() {
@@ -50,15 +53,16 @@ export default {
       },
       rules: {
         username: [
-          { required: true, message: "请输入用户名", trigger: "blur" },
+          {required: true, message: "请输入用户名", trigger: "blur"},
         ],
-        password: [{ required: true, message: "请输入密码", trigger: "blur" }],
+        password: [{required: true, message: "请输入密码", trigger: "blur"}],
       },
     };
   },
-  created() {},
+  created() {
+  },
   methods: {
-    doLogin() {
+    async doLogin() {
       if (!this.user.username) {
         this.$message.error("请输入用户名！");
         return;
@@ -66,22 +70,28 @@ export default {
         this.$message.error("请输入密码！");
         return;
       } else {
+        let loading = ElLoading.service({
+          lock: true,
+          text: '登录中，请稍后...',
+          background: 'rgba(0, 0, 0, 0.7)',
+        })
         //校验用户名和密码是否正确;
-        this.$http
-          .post("/public/login", this.user)
-          .then((res) => {
-            if (res.statusCode === 50000) {
-              localStorage.setItem("username", this.user.username);
-              localStorage.setItem("userType", res.data.userType);
-              localStorage.setItem("password", res.data.password);
-              this.$router.push({ path: "/admin" });
-            } else {
-              this.$message.error(res.message);
-            }
-          })
-          .catch(() => {
-            this.$message.error("服务器故障或网络异常，请稍后重试");
-          });
+        await this.$http
+            .post("/public/login", this.user)
+            .then((res) => {
+              if (res.statusCode === 50000) {
+                localStorage.setItem("username", this.user.username);
+                localStorage.setItem("userType", res.data.userType);
+                localStorage.setItem("password", res.data.password);
+                this.$router.push({path: "/admin"});
+              } else {
+                this.$message.error(res.message);
+              }
+            })
+            .catch(() => {
+              this.$message.error("服务器故障或网络异常，请稍后重试");
+            });
+        loading.close();
       }
     },
   },

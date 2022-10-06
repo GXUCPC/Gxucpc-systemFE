@@ -31,6 +31,7 @@
 
 <script>
 import { getFormtTime } from '@/assets/js/DateUtils';
+import {ElLoading} from "element-plus";
 
 export default {
     data() {
@@ -44,8 +45,13 @@ export default {
         }
     },
     methods: {
-        deleteItem(id) {
-            this.$http.delete("/admin/text?id=" + id).then((res) => {
+        async deleteItem(id) {
+          let loading = ElLoading.service({
+            lock: true,
+            text: '删除中，请稍后...',
+            background: 'rgba(0, 0, 0, 0.7)',
+          })
+            await this.$http.delete("/admin/text?id=" + id).then((res) => {
                 if(res.statusCode === 50000) {
                     this.$message.success("删除成功")
                     this.getList()
@@ -53,6 +59,7 @@ export default {
                     this.$message.error(res.message)
                 }
             })
+          loading.close();
         },
         currentChange(number) {
             this.pagingComponent.currentPage = number

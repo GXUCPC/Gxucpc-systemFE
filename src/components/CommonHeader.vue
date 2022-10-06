@@ -29,6 +29,9 @@ export default {
         handleCommand(obj) {
             if (obj === 'signOut') {
                 localStorage.setItem("token", null)
+                localStorage.setItem("username", null)
+                localStorage.setItem("password", null)
+                localStorage.setItem("userType", null)
                 this.$router.push('/login')
                 this.$message.success("退出成功")
             }

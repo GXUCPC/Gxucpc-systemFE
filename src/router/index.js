@@ -44,8 +44,24 @@ const router = createRouter({
                     path: 'list/:listType(notice|news|board|winners|prize|signup)',
                     name: 'PageList',
                     component: defineAsyncComponent(() => import('../views/PageList.vue'))
+                },
+                {
+                    path: 'query',
+                    name: 'AccountQuery',
+                    component: defineAsyncComponent(() => import('../views/AccountQuery.vue'))
                 }
-            ]
+            ],
+            beforeEnter:(to, from, next) => {
+                let client = localStorage.getItem('client');
+                if(client === null || client === "null" || client === undefined) {
+                    request.get("/public/getClient").then((res) => {
+                        if(res.statusCode === 50000) {
+                            localStorage.setItem('client', res.data)
+                        }
+                    })
+                }
+                next()
+            }
         },  
         {
             path: '/admin',
@@ -104,7 +120,7 @@ const router = createRouter({
                     //验证token
                     request.get("/admin/checkToken").then(res => {
                         //成功
-                        if (res.statusCode == '50000') {
+                        if (res.statusCode === 50000) {
                             next()
                         } else {
                             next({ path: '/login' })
