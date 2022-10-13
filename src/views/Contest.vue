@@ -517,12 +517,18 @@ export default {
         this.$message.error("文件格式错误，请按照以下格式命名:学号-姓名.pdf")
         return false
       }
+      for(let i = 0; i < arr[0].length; i++) {
+        if(arr[0][i] < '0' || arr[0][i] > '9') {
+          this.$message.error("文件格式错误，请按照以下格式命名:学号-姓名.pdf")
+          return false
+        }
+      }
       return true
     },
     deleteFile() {
       let vis = this.$refs['file-delete-form'].validate();
       if (!vis) return;
-      this.$http.delete("/admin/contest/file/" + this.contestUploadId, this.formDeleteData).then((res) => {
+      this.$http.delete("/admin/contest/file/" + this.contestUploadId + "/" + this.formDeleteData.userId + "/" + this.formDeleteData.name).then((res) => {
         if (res.statusCode === 50000) {
           this.$message.success("删除成功")
           for (var idx in this.formDeleteData) {

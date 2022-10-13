@@ -205,7 +205,20 @@ export default {
         "非本校生"
       ],
       contestOptions: [],
-      formData: {},
+      formData: {
+        userName: undefined,
+        userId: undefined,
+        userCourse: undefined,
+        userClass: undefined,
+        userQQ: undefined,
+        userMail: undefined,
+        group: undefined,
+        star: 0,
+        userSex: undefined,
+        userPhone: undefined,
+        key: undefined,
+        remark: undefined
+      },
       rules: {
         userName: [
           {
@@ -260,7 +273,7 @@ export default {
           {
             required: true,
             message: "性别不能为空",
-            trigger: "blur",
+            trigger: "change",
           },
         ],
         userPhone: [

@@ -81,7 +81,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="性别" prop="userSex" required>
+            <el-form-item label="性别" prop="userSex">
               <el-radio-group v-model="formData.userSex" size="default">
                 <el-radio-button v-for="(item, index) in userSexOptions" :key="index" :label="item.value"
                                  :disabled="item.disabled">{{ item.label }}
@@ -90,7 +90,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="是否打星" prop="star" required>
+            <el-form-item label="是否打星" prop="star">
               <el-switch v-model="formData.star" active-text="打星参加" inactive-text="正常参加" :active-value="1"
                          :inactive-value="0"></el-switch>
             </el-form-item>

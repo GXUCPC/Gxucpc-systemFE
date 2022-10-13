@@ -47,18 +47,18 @@ export default {
                 return
             }
             this.$message.info("为防止运营商垃圾邮件拦截机制，群发邮件减速措施，群发结果稍后会发送至赛事邮箱")
-            this.$http.post('/admin/email', this.emailTable).then((res) => {
+            this.$http.post('/admin/email', this.emailTable, {timeout: 2000000}).then((res) => {
                 if(res.statusCode === 50000) {
                     this.$message.success(res.message)
-                    this.emailTable.id = undefined
-                    this.emailTable.emailData = undefined
-                    this.emailTable.emailSubject = undefined
                 } else {
                     this.$message.error(res.message)
                 }
             }).catch(() => {
                 this.$message.error('网络故障或系统故障')
             })
+          this.emailTable.id = undefined
+          this.emailTable.emailData = undefined
+          this.emailTable.emailSubject = undefined
         },
         // 获得已存在的比赛信息
         getContestInfo() {
