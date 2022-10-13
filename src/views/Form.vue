@@ -122,7 +122,7 @@
           </el-form-item>
         </el-col>
         <el-col :span="8" style="padding-left: 0px; padding-right: 0px">
-          <el-form-item label="性别" prop="sex">
+          <el-form-item label="性别" prop="userSex">
             <el-radio-group v-model="formData.userSex" size="small">
               <el-radio-button v-for="(item, index) in userSexOptions" :key="index" :label="item.value">{{
                   item.label
@@ -269,7 +269,7 @@ export default {
             trigger: "change",
           },
         ],
-        sex: [
+        userSex: [
           {
             required: true,
             message: "性别不能为空",
