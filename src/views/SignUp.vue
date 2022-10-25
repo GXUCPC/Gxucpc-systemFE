@@ -351,14 +351,26 @@ export default {
       this.formData = this.jsonClone(this.switchList[idx])
     },
     async handDelete(idx) {
+      if (this.itemData.status !== "报名进行中") {
+        if (this.itemData.status === "报名未开始") {
+          this.$message.info("报名未开始，请耐心等待")
+        } else if (this.itemData.status === "报名已结束") {
+          this.$message.info("报名已结束")
+        } else {
+          this.$message.error("请勿修改网站文件")
+        }
+        return
+      }
       let loading = ElLoading.service({
         lock: true,
         text: '取消报名中，请稍后...',
         background: 'rgba(0, 0, 0, 0.7)',
       })
-      await this.$http.delete("/public/signup/history?id=" + this.switchList[idx].informationId).then((res) => {
+      await this.$http.delete("/public/signup/history?id=" + this.switchList[idx].informationId + "&itemID=" + this.$route.params.itemID).then((res) => {
         if (res.statusCode === 50000) {
           this.$message.success(res.message);
+        } else {
+          this.$message.error(res.message)
         }
         this.getIsSubmitted();
       })
