@@ -6,7 +6,7 @@ import router from "@/router";
 const request = axios.create({
     baseURL: store.state.backURL,
     // baseURL: 'http://localhost:80/api',
-    timeout: 10000
+    timeout: 100000
 })
 
 // request 拦截器

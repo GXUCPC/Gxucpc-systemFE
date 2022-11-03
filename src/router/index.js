@@ -107,6 +107,11 @@ const router = createRouter({
                     path: "text/add",
                     name: "AddText",
                     component: defineAsyncComponent(() => import('../views/EditText.vue'))
+                },
+                {
+                    path: "reptile",
+                    name: "Reptile",
+                    component: defineAsyncComponent(() => import('../views/Python.vue'))
                 }
             ],
             // token验证

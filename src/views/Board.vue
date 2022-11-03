@@ -1,7 +1,7 @@
 <template>
   <div class="Board">
-    <div class="title">
-      {{ Board.title }}
+    <div class="name">
+      {{ Board.name }}
     </div>
     <div class="start-end-time">
       <div class="start-time">
@@ -36,7 +36,7 @@
       <el-table id="out-table" style="width: 100%" border :data="tableData"
         :header-cell-style="{ 'text-align': 'center' }" :cell-style="cellStyle">
         <template v-for="(item, index) in tableHead">
-          <el-table-column :prop="item.columnName" :label="item.columnComment" :key="index" v-if="true">
+          <el-table-column :prop="item" :label="item" :key="index" v-if="true">
           </el-table-column>
         </template>
       </el-table>
@@ -55,7 +55,7 @@ export default {
     return {
       startTag: false,
       Board: {
-        title: undefined,
+        name: undefined,
         // YYYY-MM-DD HH:MM:SS
         startTime: undefined,
         endTime: undefined,
@@ -83,7 +83,7 @@ export default {
       setInterval(() => {
         if (Date.parse(that.Board.startTime) > new Date()) {
           that.Board.status = "UNSTART";
-          that.Board.per = 0;
+          that.Board.pe = 0;
         } else if (Date.parse(that.Board.endTime) > new Date()) {
           that.Board.status = "RUNING";
           that.Board.per = (
@@ -102,7 +102,7 @@ export default {
       // 创建计时器2
       setInterval(() => {
         that.getItem(); // 更新数据
-      }, 10000);
+      }, 100000);
     },
     //Author: cityTS
     //Date: 2022年6月19日
@@ -112,17 +112,17 @@ export default {
         .get("/public/board/" + this.$route.params.itemID)
         .then((res) => {
           if (res.statusCode === 50000) {
-            this.tableData = res.tableData;
-            this.tableHead = res.tableHead;
-            this.Board.title = res.title
+            this.Board.name = res.data.name
             // YYYY-MM-DD HH:MM:SS
-            this.Board.startTime = res.startTime
+            this.Board.startTime = res.data.contestBeginTime
             this.Board.startTime = getFormtTime(this.Board.startTime, true)
-            this.Board.endTime = res.endTime
+            this.Board.endTime = res.data.contestEndTime
             this.Board.endTime = getFormtTime(this.Board.endTime, true)
+            this.getBoardData();
             if (!this.startTag) {
               // 防止不断生成计时器
               this.startTag = true;
+              // console.log(this.startTag);
               this.updateData();
             }
           } else if (res.statusCode === 50001) {
@@ -137,21 +137,59 @@ export default {
           this.$message.error("网络错误或系统错误");
         });
     },
+    async getBoardData() {
+      this.$http.get("/public/board/data/" + this.$route.params.itemID).then((res) => {
+        if(res.statusCode === 50000) {
+          if(res.data.length > 0) {
+            this.tableData.length = 0;
+            this.tableHead.length = 0;
+            let len = res.data[0].acMessages.length;
+            this.tableHead.push("Rank", "Name", "Solved", "Time")
+            for(let i = 0; i < len; i++) {
+              this.tableHead.push(String.fromCharCode('A'.charCodeAt(0) + i));
+            }
+            for(let i = 0; i < res.data.length; i++) {
+              let tmp = {"Rank": res.data[i].rank, "Name": res.data[i].name, "Solved": res.data[i].numSolved, "Time": res.data[i].totalTime}
+              for(let j = 0; j < len; j++) {
+                tmp[String.fromCharCode('A'.charCodeAt(0) + j)] = this.getMsg(res.data[i].acMessages[j]);
+              }
+              this.tableData.push(tmp)
+            }
+          }
+        }
+      })
+    },
     //Author: cityTS
     //Date: 2022年6月19日
     //@prame row 该行所有的数据
     //@prame column 该列所有的属性
     //return 返回单元格的样式JSON
-
+    getMsg(item) {
+      if(item.numJudge === 0 && item.numPending === 0) {
+        return "·";
+      }
+      if(item.numPending !== 0) {
+        return "?\n" + item.numJudge + "+" + item.numPending + "?";
+      }
+      if(item.solved === false) {
+        return "-\n" + (item.numPending + item.numJudge);
+      }
+      if(item.firstToSolve === true) {
+        return "*\n" + (item.numJudge + item.numPending) + "/" + item.time;
+      }
+      return "+\n" + (item.numJudge + item.numPending) + "/" + item.time;
+    },
     cellStyle({ row, column }) {
       let style = { "text-align": "center" };
-      if (column.property >= "A" && column.property <= "Z") {
-        if (row[`${column.property}`].includes("+")) {
+      if (column.property.length === 1 && column.property >= "A" && column.property <= "Z") {
+        if (row[`${column.property}`].includes("?")) {
+          style.background = "#ae9f3a";
+        } else if (row[`${column.property}`].includes("*")) {
+          style.background = "#3db03d";
+        } else if (row[`${column.property}`].includes("+")) {
           style.background = "#e1ffb5";
         } else if (row[`${column.property}`].includes("-")) {
           style.background = "#ffd0d0";
-        } else if (row[`${column.property}`].includes("?")) {
-          style.background = "#ae3a65";
         }
       }
       return style;
@@ -160,8 +198,8 @@ export default {
     //Date: 2022年6月19日
     //下载表格内容到excel 
     download() {
-      var fix = document.querySelector(".el-table_fixed");
-      var wb;
+      let fix = document.querySelector(".el-table_fixed");
+      let wb;
       if (fix) {
         wb = XLSX.utils.table_to_book(
           document.querySelector("#out-table").removeChild(fix)
@@ -170,7 +208,7 @@ export default {
       } else {
         wb = XLSX.utils.table_to_book(document.querySelector("#out-table"));
       }
-      var wbout = XLSX.write(wb, {
+      let wbout = XLSX.write(wb, {
         bookType: "xlsx",
         bookSST: true,
         type: "array",
@@ -181,7 +219,7 @@ export default {
             type: "application/octet-stream",
           }),
           // 导出的文件名称
-          this.Board.title + ".xlsx"
+          this.Board.name + ".xlsx"
         )
       } catch (e) {
         this.$message.error("出现错误：" + e);
@@ -211,7 +249,7 @@ export default {
   margin: auto;
 }
 
-.title {
+.name {
   --scroll-bar: 0;
   font-feature-settings: "tnum";
   font-variant: tabular-nums;

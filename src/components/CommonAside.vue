@@ -41,6 +41,10 @@
                 </el-icon>
                 <span>邮件管理</span>
             </el-menu-item>
+          <el-menu-item index="/admin/reptile">
+            <el-icon><ChromeFilled /></el-icon>
+            <span>爬虫管理</span>
+          </el-menu-item>
         </el-menu>
     </div>
 </template>
