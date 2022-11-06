@@ -104,7 +104,7 @@
   </el-dialog>
   <!-- 添加 -->
   <el-dialog v-model="dialogAddTableVisible" title="添加比赛">
-    <el-form ref="contest-edit-form" :model="addData" :rules="rules" label-width="120px" label-position="left">
+    <el-form ref="contest-add-form" :model="addData" :rules="rules" label-width="120px" label-position="left">
       <el-row :gutter="20">
         <el-col :span="12">
           <el-form-item label="比赛名称" prop="name">
@@ -425,15 +425,18 @@ export default {
     //Date: 2022年6月22日
     //保存修改
     saveContest() {
+      let vis = this.$refs['contest-edit-form'].validate();
+      if (!vis) return;
       for (var index in this.editData) {
-        if (!this.editData[index] && index != "isDownload") {
-          this.$message.error('缺少必填项')
-          return
-        }
         if (index.includes("Time")) {
           this.editData[index] = parseInt(new Date(this.editData[index]).getTime());
         }
       }
+      let loading = ElLoading.service({
+        lock: true,
+        text: '修改中，请稍后...',
+        background: 'rgba(0, 0, 0, 0.7)',
+      })
       this.$http.put('/admin/contest', this.editData).then((res) => {
         if (res.statusCode === 50000) {
           this.$message.success('修改成功')
@@ -445,12 +448,13 @@ export default {
       }).catch(() => {
         this.$message.error('网络故障或系统故障')
       })
+      loading.close();
     },
     //Author: cityTS
     //Date: 2022年6月22日
     //添加新比赛
     addContest() {
-      let vis = this.$refs['contest-edit-form'].validate();
+      let vis = this.$refs['contest-add-form'].validate();
       if (!vis) return;
       let loading = ElLoading.service({
         lock: true,

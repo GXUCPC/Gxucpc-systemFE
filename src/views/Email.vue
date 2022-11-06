@@ -38,7 +38,7 @@ export default {
     },
     methods: {
         // 提交群发请求
-        submitEmail() {
+        async submitEmail() {
             if(!this.emailTable.id) {
                 this.$message.error('没有选择比赛项目')
                 return
@@ -53,8 +53,6 @@ export default {
                 } else {
                     this.$message.error(res.message)
                 }
-            }).catch(() => {
-                this.$message.error('网络故障或系统故障')
             })
           this.emailTable.id = undefined
           this.emailTable.emailData = undefined
