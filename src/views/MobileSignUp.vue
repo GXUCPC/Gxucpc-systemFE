@@ -1,77 +1,95 @@
 <template>
-  <div class="pageHead">
-    <div class="itemName">
-      {{ itemData.itemName }}
-    </div>
-    <div class="startEndTime">
-      <div class="startTime">报名开始时间：{{ itemData.startTime }}</div>
-      <div class="status">{{ itemData.status }}</div>
-      <div class="endTime">报名结束时间：{{ itemData.endTime }}</div>
-    </div>
-  </div>
+<!--  <div class="pageHead">-->
+<!--    <div class="itemName">-->
+<!--      {{ itemData.itemName }}-->
+<!--    </div>-->
+<!--    <div class="startEndTime">-->
+<!--      <div class="startTime">报名开始时间：{{ itemData.startTime }}</div>-->
+<!--      <div class="status">{{ itemData.status }}</div>-->
+<!--      <div class="endTime">报名结束时间：{{ itemData.endTime }}</div>-->
+<!--    </div>-->
+<!--  </div>-->
 
-  <div class="formTable">
+  <div class="mo-formTable">
     <el-card>
+      <div class="mo-itemName">
+        {{ itemData.itemName }}
+      </div>
+      <div class="mo-startTime">报名开始时间：{{ itemData.startTime }}</div>
+      <div class="mo-endTime">报名结束时间：{{ itemData.endTime }}</div>
+      <div class="mo-status">报名状态:
+        <el-tag type="success" v-if="itemData.status === '报名进行中'">{{ itemData.status }}</el-tag>
+        <el-tag type="danger" v-else-if="itemData.status === '报名已结束'">{{ itemData.status }}</el-tag>
+        <el-tag v-else>{{ itemData.status }}</el-tag>
+      </div>
       <el-form ref="elForm" :model="formData" :rules="rules" size="default" label-width="100px" label-position="top">
-        <el-row :gutter="200">
-          <el-col :span="12">
+        <el-row>
+          <el-col>
             <el-form-item label="姓名" prop="userName">
               <el-input v-model="formData.userName" placeholder="请输入姓名" clearable :style="{ width: '100%' }">
               </el-input>
             </el-form-item>
           </el-col>
-          <el-col :span="12">
+        </el-row>
+        <el-row>
+          <el-col>
             <el-form-item label="学号" prop="userId">
               <el-input v-model="formData.userId" placeholder="请输入学号" :maxlength="10" clearable
                         :style="{ width: '100%' }"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
-        <el-row :gutter="200">
-          <el-col :span="12">
+        <el-row>
+          <el-col>
             <el-form-item label="学院" prop="userCourse">
               <el-select v-model="formData.userCourse" placeholder="请选择学院" clearable :style="{ width: '100%' }">
                 <el-option v-for="item in courseOptions" :key="item" :label="item" :value="item"/>
               </el-select>
             </el-form-item>
           </el-col>
-          <el-col :span="12">
+        </el-row>
+        <el-row>
+          <el-col>
             <el-form-item label="班级" prop="userClass">
               <el-input v-model="formData.userClass" placeholder="请输入班级" clearable :style="{ width: '100%' }">
               </el-input>
             </el-form-item>
           </el-col>
         </el-row>
-        <el-row :gutter="200">
-          <el-col :span="12">
+        <el-row>
+          <el-col>
             <el-form-item label="QQ号码" prop="userQQ">
               <el-input v-model="formData.userQQ" placeholder="请输入QQ号码" clearable :style="{ width: '100%' }">
               </el-input>
             </el-form-item>
           </el-col>
-          <el-col :span="12">
+        </el-row>
+        <el-row>
+          <el-col>
             <el-form-item label="电子邮箱" prop="userMail">
               <el-input v-model="formData.userMail" placeholder="请输入电子邮箱" clearable :style="{ width: '100%' }">
               </el-input>
             </el-form-item>
           </el-col>
         </el-row>
-        <el-row :gutter="200">
-          <el-col :span="12">
+        <el-row>
+          <el-col>
             <el-form-item label="手机号" prop="userPhone">
               <el-input v-model="formData.userPhone" placeholder="请输入手机号" clearable :style="{ width: '100%' }">
               </el-input>
             </el-form-item>
           </el-col>
-          <el-col :span="12">
+        </el-row>
+        <el-row>
+          <el-col>
             <el-form-item class="signup-key" label="密钥(用于查询比赛账号和密码,请牢记！)" prop="key">
               <el-input v-model="formData.key" placeholder="请输入密钥" clearable :style="{ width: '100%' }">
               </el-input>
             </el-form-item>
           </el-col>
         </el-row>
-        <el-row :gutter="200">
-          <el-col :span="8">
+        <el-row>
+          <el-col>
             <el-form-item label="参赛组" prop="group">
               <el-radio-group v-model="formData.group" size="default">
                 <el-radio-button v-for="(item, index) in groupOptions" :key="index" :label="item.value"
@@ -80,7 +98,9 @@
               </el-radio-group>
             </el-form-item>
           </el-col>
-          <el-col :span="8">
+        </el-row>
+        <el-row>
+          <el-col>
             <el-form-item label="性别" prop="userSex">
               <el-radio-group v-model="formData.userSex" size="default">
                 <el-radio-button v-for="(item, index) in userSexOptions" :key="index" :label="item.value"
@@ -89,14 +109,16 @@
               </el-radio-group>
             </el-form-item>
           </el-col>
-          <el-col :span="8">
+        </el-row>
+        <el-row>
+          <el-col>
             <el-form-item label="是否打星" prop="star">
               <el-switch v-model="formData.star" active-text="打星参加" inactive-text="正常参加" :active-value="1"
                          :inactive-value="0"></el-switch>
             </el-form-item>
           </el-col>
         </el-row>
-        <el-row :gutter="200">
+        <el-row>
           <el-col>
             <el-form-item label="备注" prop="remark">
               <el-input v-model="formData.remark" maxlength="500" placeholder="可以写一些你想说的话" show-word-limit
@@ -150,10 +172,10 @@
     <el-dialog v-model="dialogTableVisible" title="选择修改的报名记录">
       <el-table :data="switchList">
         <el-table-column prop="userName" label="姓名"/>
-        <el-table-column label="操作">
+        <el-table-column label="操作" width="200%">
           <template #default="scope">
-            <el-button type="primary" @click="handUpdate(scope.$index)">修改信息</el-button>
-            <el-button type="warning" @click="handDelete(scope.$index)">取消报名</el-button>
+            <el-button type="primary" size="small" @click="handUpdate(scope.$index)">修改信息</el-button>
+            <el-button type="warning" size="small" @click="handDelete(scope.$index)">取消报名</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -329,17 +351,17 @@ export default {
     this.getItemData();
     this.checkStatus();
     this.getIsSubmitted();
-    this.routerToMobile();
+    this.routerToPC();
     window.onresize = () => {
       return (() => {
-        this.routerToMobile();
+        this.routerToPC();
       })();
     };
   },
   methods: {
-    routerToMobile() {
-      if(document.body.clientWidth < 960) {
-        let path = "/mobile/signup/" +this.$route.params.itemID;
+    routerToPC() {
+      if(document.body.clientWidth > 960) {
+        let path = "/signup/" + this.$route.params.itemID;
         this.$router.push({path: path})
       }
     },
@@ -466,6 +488,7 @@ export default {
             .post("/public/signup/" + this.$route.params.itemID, this.formData)
             .then((res) => {
               if (res.statusCode === 50000) {
+                // this.$message.success(res.message)
                 this.$message({
                   message: res.message,
                   duration: 6000,
@@ -501,10 +524,16 @@ export default {
     resetForm() {
       this.$refs["elForm"].resetFields();
     },
-  }
+  },
 };
 </script>
 <style>
+.info {
+  margin: 0 10px;
+}
+.el-dialog {
+  --el-dialog-width: 90%;
+}
 .signup-key .el-form-item__label {
   color: red;
 }
@@ -514,10 +543,7 @@ export default {
   text-align: center;
 }
 
-.formTable {
-  width: 80%;
-  margin: 0 auto;
-  margin-top: 50px;
+.mo-formTable {
 }
 
 .pageHead {
@@ -530,19 +556,27 @@ export default {
   margin: 1% 0;
 }
 
-.startTime {
-  display: inline;
-  float: left;
-  margin-left: 5%;
+.mo-startTime {
+  /*display: inline;*/
+  /*float: left;*/
+  /*margin-left: 5%;*/
 }
 
-.endTime {
-  display: inline;
-  float: right;
-  margin-right: 5%;
+.mo-endTime {
+  /*display: inline;*/
+  /*float: right;*/
+  /*margin-right: 5%;*/
 }
 
-.status {
-  display: inline;
+.mo-status {
+  /*display: inline;*/
+}
+.mo-itemName {
+  text-align: center;
+  font-size: 22px;
+}
+.el-message {
+  min-width: 0px;
+  width: 90%;
 }
 </style>

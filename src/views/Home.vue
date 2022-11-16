@@ -187,7 +187,7 @@ a {
 .flex-mid {
     flex-grow: 0.1;
 }
-.el-card__body {
+.note > .el-card > .el-card__body {
     padding: 0;
 }
 </style>

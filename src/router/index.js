@@ -6,6 +6,11 @@ const router = createRouter({
     history: createWebHistory(),  // history 模式
     routes: [
         {
+            path: "/mobile/signup/:itemID(\\d+)",
+            name: 'MobileSignUp',
+            component: defineAsyncComponent(() => import('../views/MobileSignUp.vue'))
+        },
+        {
             path: '/',
             name: 'Public',
             component: defineAsyncComponent(() => import('../views/Public.vue')),
