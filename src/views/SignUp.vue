@@ -554,4 +554,8 @@ export default {
 .status {
   display: inline;
 }
+.info {
+  width: 80%;
+  margin: 0 auto;
+}
 </style>
