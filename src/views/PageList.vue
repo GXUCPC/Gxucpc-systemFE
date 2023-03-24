@@ -50,7 +50,7 @@ export default {
                 this.pagingComponent.currentPage +
                 "&numberPerPage=" +
                 this.pagingComponent.numberPerPage;
-            
+
             this.$http.get("/public/text/" + this.$route.params.listType + ask).then((res) => {
                 if(res.statusCode !== 50000) {
                     this.$message.error(res.message)
@@ -98,7 +98,7 @@ export default {
 <style>
 
 .page-list-body {
-    width: 90%;
+    width: 72%;
     margin: 0 auto;
     margin-top: 10px;
 }

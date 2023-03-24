@@ -37,7 +37,7 @@ export default {
 }
 
 .main-body {
-  width: 80%;
+  width: 100%;
   margin: 0 auto;
 }
 
