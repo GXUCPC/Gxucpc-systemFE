@@ -347,6 +347,10 @@ export default {
       return JSON.parse(JSON.stringify(obj));
     },
     async getIsSubmitted() {
+      let client = localStorage.getItem("client")
+      if(client.length !== 36) {
+        return
+      }
       await this.$http.get("/public/signup/history?id=" + this.$route.params.itemID).then((res) => {
         if (res.statusCode === 50000) {
           this.switchList = res.data;
@@ -405,8 +409,9 @@ export default {
     checkStatus() {
       // 每秒检查一次报名状态
       setInterval(() => {
-        let stTime = Date.parse(this.itemData.startTime);
-        let enTime = Date.parse(this.itemData.endTime);
+        // 兼容IOS
+        let stTime = Date.parse(this.itemData.startTime.replace(/-/g, '/'));
+        let enTime = Date.parse(this.itemData.endTime.replace(/-/g, '/'));
         let noTime = new Date().getTime();
         if (noTime < stTime) {
           this.itemData.status = "报名未开始";
@@ -438,7 +443,11 @@ export default {
           });
     },
     async submitForm() {
-      // TODO 提交表单
+      let client = localStorage.getItem("client")
+      if(client.length !== 36) {
+        this.$message.error("您的浏览器无法正常使用，建议使用最新版的Edge浏览器")
+        return
+      }
       if (this.itemData.status !== "报名进行中") {
         if (this.itemData.status === "报名未开始") {
           this.$message.info("报名未开始，请耐心等待")
