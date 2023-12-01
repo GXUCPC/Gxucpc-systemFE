@@ -95,7 +95,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .edit-body {
     height: 100%;
 }
@@ -112,10 +112,13 @@ export default {
     display: inline-block;
     margin-left: 20px;
 }
-.el-input {
-    display: inline-block;
-}
 .sava-canal {
     float: right;
+}
+</style>
+
+<style>
+.el-input {
+  display: inline-block;
 }
 </style>

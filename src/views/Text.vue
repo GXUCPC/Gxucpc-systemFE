@@ -106,7 +106,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .jiange {
     display: inline-block;
     float: right;

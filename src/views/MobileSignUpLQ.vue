@@ -71,25 +71,6 @@
         </el-row>
         <el-row>
           <el-col>
-            <el-form-item class="signup-key" label="密钥(用于查询比赛账号和密码,请牢记！)" prop="key">
-              <el-input v-model="formData.key" placeholder="请输入密钥" clearable :style="{ width: '100%' }">
-              </el-input>
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row>
-          <el-col>
-            <el-form-item label="参赛组" prop="group">
-              <el-radio-group v-model="formData.group" size="default">
-                <el-radio-button v-for="(item, index) in groupOptions" :key="index" :label="item.value"
-                                 :disabled="item.disabled">{{ item.label }}
-                </el-radio-button>
-              </el-radio-group>
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row>
-          <el-col>
             <el-form-item label="性别" prop="userSex">
               <el-radio-group v-model="formData.userSex" size="default">
                 <el-radio-button v-for="(item, index) in userSexOptions" :key="index" :label="item.value"
@@ -101,92 +82,58 @@
         </el-row>
         <el-row>
           <el-col>
-            <el-form-item label="是否打星" prop="star">
-              <el-switch v-model="formData.star" active-text="打星参加" inactive-text="正常参加" :active-value="1"
-                         :inactive-value="0"></el-switch>
+            <el-form-item label="折扣" prop="isDiscount">
+              <el-radio-group v-model="formData.isDiscount">
+                <el-radio label='1' size="large">无折扣</el-radio>
+                <el-radio label='2' size="large">九折</el-radio>
+              </el-radio-group>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col>
-            <el-form-item label="备注" prop="remark">
-              <el-input v-model="formData.remark" maxlength="500" placeholder="可以写一些你想说的话" show-word-limit
-                        type="textarea"></el-input>
+            <el-form-item label="交易记录" prop="imgURI">
+              <el-input disabled v-model="formData.imgURI" placeholder="请上传交易记录图片" clearable
+                        :style="{ width: '100%' }">
+              </el-input>
             </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col>
+            <el-upload
+                class="avatar-uploader"
+                :action="getBackURL()"
+                :show-file-list="false"
+                :on-success="handleAvatarSuccess"
+                :accept="'.jpg,.png'"
+            >
+              <img v-if="imgURL" :src="imgURL" class="avatar"/>
+              <el-icon v-else class="avatar-uploader-icon">
+                <Plus/>
+              </el-icon>
+            </el-upload>
           </el-col>
         </el-row>
         <el-col :span="24">
           <el-form-item size="large">
-            <el-button type="primary" @click="submitForm">{{ this.submitStatus === true ? "修改" : "报名" }}</el-button>
+            <el-button type="primary" @click="submitForm">报名</el-button>
             <el-button @click="resetForm">重置</el-button>
-            <el-button type="success" @click="backSignup" v-if="this.submitStatus">返回报名</el-button>
           </el-form-item>
         </el-col>
       </el-form>
     </el-card>
   </div>
-  <div class="update-button" v-if="this.switchList.length > 0">
-    您已提交本次比赛的报名信息，是否修改？
-    <el-tag @click="updateForm" type="success" style="cursor:pointer">修改</el-tag>
-  </div>
-  <el-divider>
-    <el-icon>
-      <star-filled/>
-    </el-icon>
-  </el-divider>
-  <div class="info">
-    <h3>比赛信息</h3>
-    <p>竞赛名称: {{ itemData.itemName }}</p>
-    <p>主办单位: 广西大学教务处</p>
-    <p>承办单位: 广西大学计算机与电子信息学院</p>
-    <p>赛事赞助: 中国—东盟信息港股份有限公司</p>
-    <p>
-      感谢广西大学计算机与电子信息学院计算机协会、广西大学ICPC/CCPC集训队的技术支持
-    </p>
-    <h3>参赛对象</h3>
-    <p>同步赛(线上赛): 对参赛者的学校、身份不做要求</p>
-    <p>校内赛(线下赛):</p>
-    <p>
-      &emsp;1.正式组: 经过校内报名的广西大学 {{ range.old }}-{{
-        range.latest
-      }}级本科生和 {{ range.latest }} 级硕士研究生
-    </p>
-    <p>&emsp;2.新生组: 经过校内报名的广西大学 {{ range.latest }} 级本科生</p>
-    <h5>
-      *打星:
-      因年级限制、其它学校同学、自愿选择等因素限制但是想要参加线下赛的同学可以选择打星参赛。该部分参赛成员的成绩不计入最后终榜。
-    </h5>
-  </div>
-  <div class="switch-update">
-    <el-dialog v-model="dialogTableVisible" title="选择修改的报名记录">
-      <el-table :data="switchList">
-        <el-table-column prop="userName" label="姓名"/>
-        <el-table-column label="操作" width="200%">
-          <template #default="scope">
-            <el-button type="primary" size="small" @click="handUpdate(scope.$index)">修改信息</el-button>
-            <el-button type="warning" size="small" @click="handDelete(scope.$index)">取消报名</el-button>
-          </template>
-        </el-table-column>
-      </el-table>
-    </el-dialog>
-  </div>
 </template>
 <script>
-import {getFormtTime} from "@/assets/js/DateUtils.js"
+import store from "@/store";
 import {ElLoading} from "element-plus";
+import {getFormtTime} from "@/assets/js/DateUtils";
 
 export default {
-  components: {},
-  props: [],
   data() {
     return {
-      submitStatus: false,
-      switchList: [],
-      dialogTableVisible: false,
-      range: {
-        old: undefined,
-        latest: undefined,
-      },
+      imgURL: undefined,
       itemData: {
         itemName: undefined,
         // YYYY-MM-DD HH:MM:SS
@@ -201,12 +148,10 @@ export default {
         userClass: undefined,
         userQQ: undefined,
         userMail: undefined,
-        group: undefined,
-        star: 0,
         userSex: undefined,
         userPhone: undefined,
-        key: undefined,
-        remark: undefined
+        isDiscount: '1',
+        imgURI: undefined
       },
       courseOptions: [
         "机械工程学院",
@@ -281,13 +226,6 @@ export default {
             trigger: "blur",
           },
         ],
-        group: [
-          {
-            required: true,
-            message: "参赛组不能为空",
-            trigger: "change",
-          },
-        ],
         userSex: [
           {
             required: true,
@@ -302,24 +240,21 @@ export default {
             trigger: "blur",
           },
         ],
-        key: [
+        isDiscount: [
           {
             required: true,
-            message: "密钥不能为空",
-            trigger: "blur",
-          },
+            message: "折扣选项不能为空",
+            trigger: "blur"
+          }
         ],
+        imgURI: [
+          {
+            required: true,
+            message: "交易记录不能为空",
+            trigger: "blur"
+          }
+        ]
       },
-      groupOptions: [
-        {
-          label: "新生组",
-          value: 0,
-        },
-        {
-          label: "正式组",
-          value: 1,
-        },
-      ],
       userSexOptions: [
         {
           label: "男",
@@ -332,86 +267,22 @@ export default {
       ]
     };
   },
-  computed: {},
-  watch: {},
-  created() {
-  },
-  mounted() {
-    this.getItemData();
-    this.checkStatus();
-    this.getIsSubmitted();
-    this.routerToPC();
-    window.onresize = () => {
-      return (() => {
-        this.routerToPC();
-      })();
-    };
-  },
   methods: {
+    handleAvatarSuccess(response, uploadFile) {
+      this.formData.imgURI = response.data
+      this.imgURL = this.getBackURL() + "/" + response.data
+    },
+    getBackURL() {
+      return store.state.backURL + "/public/image"
+    },
     routerToPC() {
-      if(document.body.clientWidth > 960) {
-        let path = "/signup/" + this.$route.params.itemID + "/1";
+      if (document.body.clientWidth > 960) {
+        let path = "/signup/" + this.$route.params.itemID + "/2";
         this.$router.push({path: path})
       }
     },
     jsonClone(obj) {
       return JSON.parse(JSON.stringify(obj));
-    },
-    async getIsSubmitted() {
-      await this.$http.get("/public/signup/history?id=" + this.$route.params.itemID).then((res) => {
-        let client = localStorage.getItem("client")
-        if(client.length !== 36) {
-          return
-        }
-        if (res.statusCode === 50000) {
-          this.switchList = res.data;
-          for(let idx = 0; idx < this.switchList.length; idx++) {
-            if(this.switchList[idx].group === true) {
-              this.switchList[idx].group = 1
-            } else if(this.switchList[idx].group === false) {
-              this.switchList[idx].group = 0;
-            }
-          }
-        }
-      })
-    },
-    backSignup() {
-      this.submitStatus = false;
-      this.resetForm();
-    },
-    handUpdate(idx) {
-      this.submitStatus = true;
-      this.dialogTableVisible = false;
-      this.formData = this.jsonClone(this.switchList[idx])
-    },
-    async handDelete(idx) {
-      if (this.itemData.status !== "报名进行中") {
-        if (this.itemData.status === "报名未开始") {
-          this.$message.info("报名未开始，请耐心等待")
-        } else if (this.itemData.status === "报名已结束") {
-          this.$message.info("报名已结束")
-        } else {
-          this.$message.error("请勿修改网站文件")
-        }
-        return
-      }
-      let loading = ElLoading.service({
-        lock: true,
-        text: '取消报名中，请稍后...',
-        background: 'rgba(0, 0, 0, 0.7)',
-      })
-      await this.$http.delete("/public/signup/history?id=" + this.switchList[idx].informationId + "&itemID=" + this.$route.params.itemID).then((res) => {
-        if (res.statusCode === 50000) {
-          this.$message.success(res.message);
-        } else {
-          this.$message.error(res.message)
-        }
-        this.getIsSubmitted();
-      })
-      loading.close();
-    },
-    updateForm() {
-      this.dialogTableVisible = true;
     },
     getYear() {
       this.range.latest = new Date(this.itemData.startTime).getFullYear();
@@ -434,7 +305,6 @@ export default {
       }, 1000);
     },
     getItemData() {
-      // TODO 获取 itemID对应的比赛信息
       this.$http
           .get("/public/signup/" + this.$route.params.itemID)
           .then((res) => {
@@ -454,12 +324,6 @@ export default {
           });
     },
     async submitForm() {
-      let client = localStorage.getItem("client")
-      if(client.length !== 36) {
-        this.$message.error("您的浏览器无法正常使用，建议使用最新版的Google浏览器")
-        return
-      }
-
       if (this.itemData.status !== "报名进行中") {
         if (this.itemData.status === "报名未开始") {
           this.$message.info("报名未开始，请耐心等待")
@@ -482,49 +346,42 @@ export default {
         text: status + '，请稍后...',
         background: 'rgba(0, 0, 0, 0.7)',
       })
-      if (this.submitStatus === false) {
-        await this.$http
-            .post("/public/signup/" + this.$route.params.itemID, this.formData)
-            .then((res) => {
-              if (res.statusCode === 50000) {
-                // this.$message.success(res.message)
-                this.$message({
-                  message: res.message,
-                  duration: 6000,
-                  type: "success"
-                })
-                this.resetForm();
-              } else {
-                this.$message.error(res.message)
-              }
-            })
-            .catch(() => {
-              this.$message.error("网络故障或系统故障");
-            });
-      } else {
-        await this.$http
-            .put("/public/signup/" + this.$route.params.itemID, this.formData)
-            .then((res) => {
-              if (res.statusCode === 50000) {
-                this.$message.success(res.message)
-                this.resetForm();
-                this.submitStatus = false;
-              } else {
-                this.$message.error(res.message)
-              }
-            })
-            .catch(() => {
-              this.$message.error("网络故障或系统故障");
-            });
-      }
+      await this.$http
+          .post("/public/signup/lq/" + this.$route.params.itemID, this.formData)
+          .then((res) => {
+            if (res.statusCode === 50000) {
+              this.$message({
+                message: res.message,
+                duration: 6000,
+                type: "success"
+              })
+              this.resetForm();
+            } else {
+              this.$message.error(res.message)
+            }
+          })
+          .catch(() => {
+            this.$message.error("网络故障或系统故障");
+          });
       loading.close();
       await this.getIsSubmitted();
     },
     resetForm() {
       this.$refs["elForm"].resetFields();
+      this.imgURL = undefined
     },
   },
-};
+  mounted() {
+    this.getItemData();
+    this.checkStatus();
+    this.routerToPC();
+    window.onresize = () => {
+      return (() => {
+        this.routerToPC();
+      })();
+    };
+  },
+}
 </script>
 <style scoped>
 .info {

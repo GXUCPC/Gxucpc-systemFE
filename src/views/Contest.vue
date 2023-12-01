@@ -5,6 +5,7 @@
   </div>
   <el-table :data="tableData" style="width: 100%">
     <el-table-column fixed="left" label="比赛名称" width="300" prop="name"/>
+    <el-table-column label="比赛类型" width="180" prop="type"/>
     <el-table-column label="报名开始时间" width="180" prop="signUpBeginTime"/>
     <el-table-column label="报名结束时间" width="180" prop="signUpEndTime"/>
     <el-table-column label="邮箱" width="180" prop="email"/>
@@ -13,13 +14,17 @@
     <el-table-column label="比赛结束时间" width="180" prop="contestEndTime"/>
     <el-table-column label="上传奖状" width="200">
       <template #default="scope">
-        <el-button size="small" @click="showUploadDialog(scope.row.id)" type="success">Upload</el-button>
-        <el-button size="small" @click="showDeleteDialog(scope.row.id)" type="danger">Delete</el-button>
+        <el-button :disabled="type2num(scope.row.type) !== 1" size="small" @click="showUploadDialog(scope.row.id)"
+                   type="success">Upload
+        </el-button>
+        <el-button :disabled="type2num(scope.row.type) !== 1" size="small" @click="showDeleteDialog(scope.row.id)"
+                   type="danger">Delete
+        </el-button>
       </template>
     </el-table-column>
     <el-table-column label="开放奖状下载" width="180">
       <template #default="scope">
-        <el-switch v-model="scope.row.isDownload"
+        <el-switch :disabled="type2num(scope.row.type) !== 1" v-model="scope.row.isDownload"
                    @change="setDownloadStatus(scope.row.id, scope.row.name, scope.row.isDownload)" inline-prompt
                    size="large"
                    active-text="开放" inactive-text="关闭"/>
@@ -27,14 +32,16 @@
     </el-table-column>
     <el-table-column label="开放账密查询" width="180">
       <template #default="scope">
-        <el-switch v-model="scope.row.isQuery"
+        <el-switch :disabled="type2num(scope.row.type) !== 1" v-model="scope.row.isQuery"
                    @change="setQueryStatus(scope.row.id, scope.row.name, scope.row.isQuery)" inline-prompt size="large"
                    active-text="开放" inactive-text="关闭"/>
       </template>
     </el-table-column>
     <el-table-column label="下载Domjudge账密" width="180">
       <template #default="scope">
-        <el-button size="small" type="success" @click="downloadPwd(scope.row)">下载</el-button>
+        <el-button :disabled="type2num(scope.row.type) !== 1" size="small" type="success"
+                   @click="downloadPwd(scope.row)">下载
+        </el-button>
       </template>
     </el-table-column>
     <el-table-column label="下载报名表单" width="180">
@@ -83,13 +90,13 @@
             <el-input v-model="editData.smtpPassword"></el-input>
           </el-form-item>
         </el-col>
-        <el-col :span="12">
+        <el-col :span="12" v-if="type2num(editData.type) === 1">
           <el-form-item label="比赛开始时间" prop="contestBeginTime">
             <el-date-picker v-model="editData.contestBeginTime" type="datetime" placeholder="Pick a Date"
                             format="YYYY-MM-DD HH:mm:ss" value-format="x"/>
           </el-form-item>
         </el-col>
-        <el-col :span="12">
+        <el-col :span="12" v-if="type2num(editData.type) === 1">
           <el-form-item label="比赛结束时间" prop="contestEndTime">
             <el-date-picker v-model="editData.contestEndTime" type="datetime" placeholder="Pick a Date"
                             format="YYYY-MM-DD HH:mm:ss" value-format="x"/>
@@ -109,6 +116,15 @@
         <el-col :span="12">
           <el-form-item label="比赛名称" prop="name">
             <el-input v-model="addData.name"></el-input>
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item label="比赛类型" prop="type">
+            <el-cascader
+                v-model="addData.type"
+                :options="options"
+                :show-all-levels="false"
+            />
           </el-form-item>
         </el-col>
         <el-col :span="12">
@@ -133,13 +149,13 @@
             <el-input v-model="addData.smtpPassword"></el-input>
           </el-form-item>
         </el-col>
-        <el-col :span="12">
+        <el-col :span="12" v-if="comType === 1">
           <el-form-item label="比赛开始时间" prop="contestBeginTime">
             <el-date-picker v-model="addData.contestBeginTime" type="datetime" placeholder="Pick a Date"
                             format="YYYY-MM-DD HH:mm:ss" value-format="x"/>
           </el-form-item>
         </el-col>
-        <el-col :span="12">
+        <el-col :span="12" v-if="comType === 1">
           <el-form-item label="比赛结束时间" prop="contestEndTime">
             <el-date-picker v-model="addData.contestEndTime" type="datetime" placeholder="Pick a Date"
                             format="YYYY-MM-DD HH:mm:ss" value-format="x"/>
@@ -211,6 +227,28 @@ export default {
         userId: undefined,
         name: undefined
       },
+      options: [
+        {
+          value: 'dx',
+          label: '东信杯',
+          children: [
+            {
+              value: 1,
+              label: '报名表单'
+            }
+          ]
+        },
+        {
+          value: 'lq',
+          label: '蓝桥杯',
+          children: [
+            {
+              value: 2,
+              label: '转账记录'
+            }
+          ]
+        }
+      ],
       tableData: [
         // {
         //     id: 1,
@@ -226,6 +264,7 @@ export default {
       ],
       rules: {
         name: [{required: true, trigger: 'blur'}],
+        type: [{required: true, trigger: 'blur'}],
         signUpBeginTime: [{required: true, trigger: 'blur'}],
         signUpEndTime: [{required: true, trigger: 'blur'}],
         email: [{required: true, trigger: 'blur'}],
@@ -240,6 +279,7 @@ export default {
       editData: {
         id: undefined,
         name: undefined,
+        type: undefined,
         signUpBeginTime: undefined,
         signUpEndTime: undefined,
         email: undefined,
@@ -249,6 +289,7 @@ export default {
       },
       addData: {
         name: undefined,
+        type: [],
         signUpBeginTime: undefined,
         signUpEndTime: undefined,
         email: undefined,
@@ -361,7 +402,22 @@ export default {
       })
       loading.close();
     },
-
+    type2num(type) {
+      switch (type) {
+        case '东信杯/报名表单':
+          return 1
+        case '蓝桥杯/转账记录':
+          return 2
+      }
+    },
+    num2type(num) {
+      switch (num) {
+        case 1:
+          return '东信杯/报名表单'
+        case 2:
+          return '蓝桥杯/转账记录'
+      }
+    },
     //Author: cityTS
     //Date: 2022年6月22日
     //打开上传对话框
@@ -427,6 +483,7 @@ export default {
     saveContest() {
       let vis = this.$refs['contest-edit-form'].validate();
       if (!vis) return;
+      this.editData['type'] = this.type2num(this.editData['type'])
       for (var index in this.editData) {
         if (index.includes("Time")) {
           this.editData[index] = parseInt(new Date(this.editData[index]).getTime());
@@ -444,9 +501,11 @@ export default {
           this.showContestDialog()
         } else {
           this.$message.error(res.message)
+          this.editData['type'] = this.num2type(this.editData['type'])
         }
       }).catch(() => {
         this.$message.error('网络故障或系统故障')
+        this.editData['type'] = this.num2type(this.editData['type'])
       })
       loading.close();
     },
@@ -461,7 +520,9 @@ export default {
         text: '添加中，请稍后...',
         background: 'rgba(0, 0, 0, 0.7)',
       })
-      this.$http.post('/admin/contest', this.addData).then((res) => {
+      let newContest = this.jsonClone(this.addData)
+      newContest.type = newContest.type[newContest.type.length - 1]
+      this.$http.post('/admin/contest', newContest).then((res) => {
         if (res.statusCode === 50000) {
           this.$message.success('添加成功')
           this.getContestInfo()
@@ -488,6 +549,7 @@ export default {
             this.tableData[index].signUpBeginTime = getFormtTime(this.tableData[index].signUpBeginTime, true)
             this.tableData[index].contestBeginTime = getFormtTime(this.tableData[index].contestBeginTime, true)
             this.tableData[index].contestEndTime = getFormtTime(this.tableData[index].contestEndTime, true)
+            this.tableData[index].type = this.num2type(this.tableData[index].type)
           }
         } else {
           this.$message.error(res.message)
@@ -521,8 +583,8 @@ export default {
         this.$message.error("文件格式错误，请按照以下格式命名:学号-姓名.pdf")
         return false
       }
-      for(let i = 0; i < arr[0].length; i++) {
-        if(arr[0][i] < '0' || arr[0][i] > '9') {
+      for (let i = 0; i < arr[0].length; i++) {
+        if (arr[0][i] < '0' || arr[0][i] > '9') {
           this.$message.error("文件格式错误，请按照以下格式命名:学号-姓名.pdf")
           return false
         }
@@ -548,12 +610,18 @@ export default {
   },
   mounted() {
     this.getContestInfo()
+  },
+  computed: {
+    comType() {
+      if (!this.addData.type || this.addData.type.length === 0) return -1;
+      return this.addData.type[this.addData.type.length - 1];
+    }
   }
 
 }
 </script>
 
-<style>
+<style scoped>
 .header-contest {
   background-color: #ffffff;
   padding: 10px;

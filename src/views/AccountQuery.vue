@@ -139,7 +139,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .account-query-body {
   height: 100%;
   width: 100%;

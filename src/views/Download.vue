@@ -109,7 +109,7 @@ export default {
         const blob = new Blob([content]);
 
         const elink = document.createElement('a');
-        elink.download = obj.name + '-' + obj.number + '-' + '.pdf';
+        elink.download = obj.name + '-' + obj.number + '.pdf';
         elink.style.display = 'none';
         elink.href = URL.createObjectURL(blob);
         document.body.appendChild(elink);
@@ -150,7 +150,7 @@ export default {
 }
 
 </script>
-<style>
+<style scoped>
 .card {
   padding: 20px;
 }
@@ -173,6 +173,9 @@ export default {
   margin-bottom: 20px;
 }
 
+</style>
+
+<style>
 .el-form-item .el-select {
   width: 100%;
 }

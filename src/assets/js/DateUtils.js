@@ -1,7 +1,7 @@
 //格式化时间
 //dateTime：时间戳；  flag：取值为true/false，用于判断是否需要显示时分秒
 export function getFormtTime(dateTime, flag) {
-    if (dateTime != null) {
+    if (dateTime != null && dateTime > 0) {
         //若传入的dateTime为字符串类型，需要进行转换成数值
         if (typeof (dateTime) === 'string') {
             var time = parseInt(dateTime)

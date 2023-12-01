@@ -232,7 +232,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .img-tag {
   width: 20px;
   height: 20px;

@@ -289,7 +289,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .header-user {
   background-color: #ffffff;
   padding: 10px;

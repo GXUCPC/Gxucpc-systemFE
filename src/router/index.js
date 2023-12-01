@@ -6,9 +6,14 @@ const router = createRouter({
     history: createWebHistory(),  // history 模式
     routes: [
         {
-            path: "/mobile/signup/:itemID(\\d+)",
+            path: "/mobile/signup/:itemID(\\d+)/1",
             name: 'MobileSignUp',
             component: defineAsyncComponent(() => import('../views/MobileSignUp.vue'))
+        },
+        {
+            path: "/mobile/signup/:itemID(\\d+)/2",
+            name: 'MobileSignUpLQ',
+            component: defineAsyncComponent(() => import('../views/MobileSignUpLQ.vue'))
         },
         {
             path: '/',
@@ -26,9 +31,16 @@ const router = createRouter({
                     component: defineAsyncComponent(() => import('../views/Download.vue')),
                 },
                 {
-                    path: 'signup/:itemID(\\d+)',
+                    // 东信杯-报名表单
+                    path: 'signup/:itemID(\\d+)/1',
                     name: 'SignUp',
                     component: defineAsyncComponent(()=>import('../views/SignUp.vue'))
+                },
+                {
+                    // 蓝桥杯-转账记录
+                    path: 'signup/:itemID(\\d+)/2',
+                    name: 'SignUpLQ',
+                    component: defineAsyncComponent(()=>import('../views/SignUpLQ.vue'))
                 },
                 {
                     path: 'login',

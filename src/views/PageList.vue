@@ -62,7 +62,7 @@ export default {
                     this.checkText = this.$route.params.listType === 'board'? '查看榜单' : '立即报名';
                     for(var i = 0; i < res.data.tableData.length; i++) {
                         let temp = {data: res.data.tableData[i]}
-                        temp.data.url = "/" +  this.$route.params.listType + "/" + res.data.tableData[i].id
+                        temp.data.url = "/" +  this.$route.params.listType + "/" + res.data.tableData[i].id + "/" + res.data.tableData[i].type
                         temp.data["title"] = temp.data.name
                         temp.data["time"] = getFormtTime(temp.data.createTime)
                         this.tableData.push(temp)
@@ -95,7 +95,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 
 .page-list-body {
     width: 72%;

@@ -117,7 +117,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .home-img {
     /*设置图片宽度和浏览器宽度一致*/
     width: 100%;

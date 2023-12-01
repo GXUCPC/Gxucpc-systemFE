@@ -42,7 +42,7 @@ import {getFormtTime} from '@/assets/js/DateUtils.js'
     }
 </script>
 
-<style>
+<style scoped>
 .page-body {
     width: 80%;
     height: 100%;
