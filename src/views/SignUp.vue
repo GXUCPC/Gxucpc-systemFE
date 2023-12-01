@@ -513,7 +513,7 @@ export default {
   }
 };
 </script>
-<style scoped>
+<style>
 .signup-key .el-form-item__label {
   color: red;
 }

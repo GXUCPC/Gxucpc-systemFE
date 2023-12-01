@@ -526,7 +526,7 @@ export default {
   },
 };
 </script>
-<style scoped>
+<style>
 .info {
   margin: 0 10px;
 }
@@ -543,9 +543,6 @@ export default {
   text-align: center;
   font-size: 22px;
 }
-</style>
-
-<style>
 .el-message {
   min-width: 0px;
   width: 90%;

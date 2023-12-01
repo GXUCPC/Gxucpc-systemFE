@@ -230,16 +230,15 @@ export default {
 };
 </script>
 
-<style>
-.el-table .cell {
-  white-space: pre-line;
-}
-</style>
 
-<style scoped>
+<style>
 .downloadTable {
   text-align: right;
   margin-top: 10px;
+}
+
+.el-table .cell {
+  white-space: pre-line;
 }
 
 .Board {

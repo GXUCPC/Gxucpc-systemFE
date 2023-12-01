@@ -272,10 +272,6 @@ export default {
     jsonClone(obj) {
       return JSON.parse(JSON.stringify(obj));
     },
-    getYear() {
-      this.range.latest = new Date(this.itemData.startTime).getFullYear();
-      this.range.old = this.range.latest - 3;
-    },
     checkStatus() {
       // 每秒检查一次报名状态
       setInterval(() => {
@@ -301,7 +297,6 @@ export default {
               // 格式化时间戳
               this.itemData.startTime = getFormtTime(res.data.signUpBeginTime, true)
               this.itemData.endTime = getFormtTime(res.data.signUpEndTime, true)
-              this.getYear()
             } else {
               this.$message.error(res.message);
               this.$router.push("/list/signup");

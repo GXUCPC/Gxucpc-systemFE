@@ -169,7 +169,7 @@ export default {
         text: '删除中，请稍后...',
         background: 'rgba(0, 0, 0, 0.7)',
       })
-      await this.$http.delete("/admin/dashboard/images?url=" + tag).then((res) => {
+      await this.$http.put("/admin/dashboard/images?url=" + tag).then((res) => {
         if (res.statusCode === 50000) {
           this.$message.success("删除成功")
           this.getImages()
@@ -232,7 +232,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
 .img-tag {
   width: 20px;
   height: 20px;

@@ -95,7 +95,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
 
 .page-list-body {
     width: 72%;

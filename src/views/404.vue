@@ -22,7 +22,7 @@ export default {
 </script>
 
 
-<style scoped>
+<style>
     .error-page{
         display: flex;
         justify-content: center;

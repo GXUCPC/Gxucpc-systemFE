@@ -28,7 +28,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
 .home-main {
   padding: 0;
   width: 100%;

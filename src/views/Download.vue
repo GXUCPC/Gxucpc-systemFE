@@ -150,7 +150,7 @@ export default {
 }
 
 </script>
-<style scoped>
+<style>
 .card {
   padding: 20px;
 }
@@ -173,9 +173,6 @@ export default {
   margin-bottom: 20px;
 }
 
-</style>
-
-<style>
 .el-form-item .el-select {
   width: 100%;
 }
