@@ -306,7 +306,8 @@ export default {
             this.$message.error("网络故障或系统故障");
           });
     },
-    async submitForm() {
+    async submitForm(ok) {
+      if(ok !== 1) ok = 0
       if (this.itemData.status !== "报名进行中") {
         if (this.itemData.status === "报名未开始") {
           this.$message.info("报名未开始，请耐心等待")
@@ -323,14 +324,13 @@ export default {
       }
 
       let status = "报名中";
-      if (this.submitStatus === true) status = "修改中";
       let loading = ElLoading.service({
         lock: true,
         text: status + '，请稍后...',
         background: 'rgba(0, 0, 0, 0.7)',
       })
       await this.$http
-          .post("/public/signup/lq/" + this.$route.params.itemID, this.formData)
+          .post("/public/signup/lq/" + this.$route.params.itemID + '?ok=' + ok, this.formData)
           .then((res) => {
             if (res.statusCode === 50000) {
               this.$message({
@@ -339,7 +339,22 @@ export default {
                 type: "success"
               })
               this.resetForm();
-            } else {
+            } else if(res.statusCode === 50001) {
+              this.$messageBox.alert(res.message, '警告', {
+                // if you want to disable its autofocus
+                // autofocus: false,
+                confirmButtonText: '替换',
+                cancelButtonText: '取消',
+                callback: (action) => {
+                  if(action === 'confirm') {
+                    this.submitForm(1)
+                  } else {
+                    this.$message.info("取消成功")
+                  }
+                },
+              })
+            }
+            else {
               this.$message.error(res.message)
             }
           })
@@ -347,7 +362,6 @@ export default {
             this.$message.error("网络故障或系统故障");
           });
       loading.close();
-      await this.getIsSubmitted();
     },
     resetForm() {
       this.$refs["elForm"].resetFields();
