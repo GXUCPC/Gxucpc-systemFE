@@ -364,7 +364,7 @@ export default {
         text: '删除中，请稍后...',
         background: 'rgba(0, 0, 0, 0.7)',
       })
-      await this.$http.delete('/admin/form/' + row.informationId).then((res) => {
+      await this.$http.put('/admin/form/delete/' + row.informationId).then((res) => {
         if (res.statusCode === 50000) {
           this.$message.success(res.message)
           this.getFormInfo()

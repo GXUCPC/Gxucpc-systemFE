@@ -389,7 +389,7 @@ export default {
         text: '取消报名中，请稍后...',
         background: 'rgba(0, 0, 0, 0.7)',
       })
-      await this.$http.delete("/public/signup/history?id=" + this.switchList[idx].informationId + "&itemID=" + this.$route.params.itemID).then((res) => {
+      await this.$http.put("/public/signup/history/cancel?id=" + this.switchList[idx].informationId + "&itemID=" + this.$route.params.itemID).then((res) => {
         if (res.statusCode === 50000) {
           this.$message.success(res.message);
         } else {

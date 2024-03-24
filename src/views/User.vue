@@ -183,7 +183,7 @@ export default {
         background: 'rgba(0, 0, 0, 0.7)',
       })
       await this.$http
-          .delete("/admin/user" + "?id=" + row.id + "&name=" + row.username)
+          .put("/admin/user/delete" + "?id=" + row.id + "&name=" + row.username)
           .then((res) => {
             if (res.statusCode === 50000) {
               this.$message.success("删除成功");

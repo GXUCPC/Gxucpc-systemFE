@@ -51,7 +51,7 @@ export default {
             text: '删除中，请稍后...',
             background: 'rgba(0, 0, 0, 0.7)',
           })
-            await this.$http.delete("/admin/text?id=" + id).then((res) => {
+            await this.$http.put("/admin/text/delete?id=" + id).then((res) => {
                 if(res.statusCode === 50000) {
                     this.$message.success("删除成功")
                     this.getList()

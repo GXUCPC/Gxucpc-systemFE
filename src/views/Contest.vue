@@ -450,7 +450,7 @@ export default {
         text: '删除中，请稍后...',
         background: 'rgba(0, 0, 0, 0.7)',
       })
-      this.$http.delete('/admin/contest?id=' + row.id + "&name=" + row.name).then((res) => {
+      this.$http.put('/admin/contest/delete?id=' + row.id + "&name=" + row.name).then((res) => {
         if (res.statusCode === 50000) {
           this.$message.success('删除成功')
         } else {
