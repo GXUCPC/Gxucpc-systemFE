@@ -415,6 +415,7 @@ export default {
     },
     getYear() {
       this.range.latest = new Date(this.itemData.startTime).getFullYear();
+      if (new Date(this.itemData.startTime).getMonth() < 8) this.range.latest--;
       this.range.old = this.range.latest - 3;
     },
     checkStatus() {
