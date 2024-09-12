@@ -16,6 +16,11 @@ const router = createRouter({
             component: defineAsyncComponent(() => import('../views/MobileSignUpLQ.vue'))
         },
         {
+            path: "/mobile/signup/:itemID(\\d+)/3",
+            name: 'MobileSignUpNanNing',
+            component: defineAsyncComponent(() => import('../views/MobileSignUpNanNing.vue'))
+        },
+        {
             path: '/',
             name: 'Public',
             component: defineAsyncComponent(() => import('../views/Public.vue')),
@@ -41,6 +46,12 @@ const router = createRouter({
                     path: 'signup/:itemID(\\d+)/2',
                     name: 'SignUpLQ',
                     component: defineAsyncComponent(()=>import('../views/SignUpLQ.vue'))
+                },
+                {
+                    // 南宁市赛-报名表单
+                    path: 'signup/:itemID(\\d+)/3',
+                    name: 'SignUpNanNing',
+                    component: defineAsyncComponent(() => import('../views/SignUpNanNing.vue'))
                 },
                 {
                     path: 'login',
