@@ -418,6 +418,8 @@ export default {
           return 1
         case '蓝桥杯/转账记录':
           return 2
+        case '南宁市赛/报名表单':
+          return 3
       }
     },
     num2type(num) {
