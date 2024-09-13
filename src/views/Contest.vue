@@ -247,6 +247,16 @@ export default {
               label: '转账记录'
             }
           ]
+        },
+        {
+          value: 'nn',
+          label: '南宁市赛',
+          children: [
+            {
+              value: 3,
+              label: '报名表单'
+            }
+          ]
         }
       ],
       tableData: [
@@ -416,6 +426,8 @@ export default {
           return '东信杯/报名表单'
         case 2:
           return '蓝桥杯/转账记录'
+        case 3:
+          return '南宁市赛/报名表单'
       }
     },
     //Author: cityTS
