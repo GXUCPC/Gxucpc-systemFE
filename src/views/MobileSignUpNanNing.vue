@@ -142,7 +142,7 @@ export default {
   },
   methods: {
     routerToPC() {
-      if (document.body.clientWidth < 960) {
+      if (document.body.clientWidth >= 960) {
         let path = "/signup/" + this.$route.params.itemID + "/3";
         this.$router.push({path: path})
       }
