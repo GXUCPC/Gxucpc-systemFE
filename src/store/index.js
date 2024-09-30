@@ -3,7 +3,7 @@ import {createStore} from 'vuex'
 let baseUrl;
 switch (process.env.VUE_APP_CURENV) {
     case "development":
-        baseUrl = "http://localhost:12335/api";
+        baseUrl = "http://localhost:6789/api";
         break;
     case "production":
         baseUrl = "/api";
