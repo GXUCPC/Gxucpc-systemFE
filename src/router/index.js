@@ -1,6 +1,6 @@
-import { createRouter, createWebHistory } from 'vue-router'
-import { defineAsyncComponent } from "vue"
-import request from "../request/request.js"
+import {createRouter, createWebHistory} from 'vue-router';
+import {defineAsyncComponent} from "vue";
+import request from "../request/request.js";
 
 const router = createRouter({
     history: createWebHistory(),  // history 模式
@@ -39,13 +39,13 @@ const router = createRouter({
                     // 东信杯-报名表单
                     path: 'signup/:itemID(\\d+)/1',
                     name: 'SignUp',
-                    component: defineAsyncComponent(()=>import('../views/SignUp.vue'))
+                    component: defineAsyncComponent(() => import('../views/SignUp.vue'))
                 },
                 {
                     // 蓝桥杯-转账记录
                     path: 'signup/:itemID(\\d+)/2',
                     name: 'SignUpLQ',
-                    component: defineAsyncComponent(()=>import('../views/SignUpLQ.vue'))
+                    component: defineAsyncComponent(() => import('../views/SignUpLQ.vue'))
                 },
                 {
                     // 南宁市赛-报名表单
@@ -79,18 +79,18 @@ const router = createRouter({
                     component: defineAsyncComponent(() => import('../views/AccountQuery.vue'))
                 }
             ],
-            beforeEnter:(to, from, next) => {
+            beforeEnter: (to, from, next) => {
                 let client = localStorage.getItem('client');
-                if(client === null || client === "null" || client === undefined) {
+                if (client === null || client === "null" || client === undefined) {
                     request.get("/public/getClient").then((res) => {
-                        if(res.statusCode === 50000) {
-                            localStorage.setItem('client', res.data)
+                        if (res.statusCode === 50000) {
+                            localStorage.setItem('client', res.data);
                         }
-                    })
+                    });
                 }
-                next()
+                next();
             }
-        },  
+        },
         {
             path: '/admin',
             name: 'Admin',
@@ -145,26 +145,29 @@ const router = createRouter({
             // token验证
 
             beforeEnter: (to, from, next) => {
-                let token = localStorage.getItem('token')
-                let logindto = {}
-                logindto.token = token
-                logindto.urlpath = to.path
+                let token = localStorage.getItem('token');
+                let logindto = {};
+                logindto.token = token;
+                logindto.urlpath = to.path;
                 if (token != null) { //登录过
                     //验证token
                     request.get("/admin/checkToken").then(res => {
                         //成功
-                        if (res.statusCode === 50000) {
-                            next()
-                        } else {
-                            next({ path: '/login' })
-                        }
+                        // if (res.statusCode === 50000) {
+                        next();
+                        // } else {
+                        //     next({ path: '/login' })
+                        // }
 
                     }).catch(() => {
-                        next({ path: '/login' })
-                    })
+                        // next({ path: '/login' })
+                        next();
+                    });
+
 
                 } else { //没有登录
-                    next({ path: '/login' })
+                    // next({path: '/login'});
+                    next()
                 }
 
             }
@@ -175,7 +178,7 @@ const router = createRouter({
             component: defineAsyncComponent(() => import('../views/404.vue'))
         }
     ]
-})
+});
 
 
-export default router
+export default router;

@@ -4,8 +4,8 @@ import router from "@/router";
 
 
 const request = axios.create({
-    baseURL: store.state.backURL,
-    // baseURL: 'http://localhost:80/api',
+    // baseURL: store.state.backURL,
+    baseURL: 'http://localhost:12335/api',
     timeout: 100000
 })
 
