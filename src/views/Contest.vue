@@ -9,7 +9,7 @@
             <!--<div class="add-contest">-->
             <!--  <el-button type="success" @click="showAddContestDialog()" plain>添加比赛</el-button>-->
             <!--</div>-->
-        <el-table :data="tableData" stripe>
+        <el-table :data="tableData">
             <el-table-column header-align="center" fixed="left" label="比赛名称" width="300" prop="name"/>
             <el-table-column align="center" label="比赛类型" width="180" prop="type"/>
             <el-table-column align="center" label="报名开始时间" width="180" prop="signUpBeginTime"/>
