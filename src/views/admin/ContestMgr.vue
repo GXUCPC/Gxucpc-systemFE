@@ -217,7 +217,7 @@
 
 <script>
 import {getFormtTime} from "@/assets/js/DateUtils.js";
-import store from "@/store/index.js";
+import store from "@/store";
 import {ElLoading} from "element-plus";
 
 export default {

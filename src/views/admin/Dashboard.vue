@@ -6,7 +6,7 @@
           <el-col :span="10">
 
             <div class="image-user">
-              <img class="avatar" src="@/assets/images/user.png" alt="">
+              <img class="avatar" src="../../assets/images/user.png" alt="">
             </div>
           </el-col>
           <el-col :span="14">
