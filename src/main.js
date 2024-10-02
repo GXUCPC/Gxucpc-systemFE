@@ -1,11 +1,11 @@
 import { createApp } from "vue";
 import App from "./App.vue";
-import router from "./router";
-import store from "./store";
+import router from "./assets/js/router";
+import store from "./assets/js/store";
 import ElementPlus from "element-plus";
 import "element-plus/dist/index.css";
 import * as ElIcons from "@element-plus/icons-vue";
-import request from "./request/request.js";
+import request from "@/assets/js/request/request.js";
 
 // 预览组件插件
 import VMdPreview from "@kangc/v-md-editor/lib/preview";

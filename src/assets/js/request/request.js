@@ -1,6 +1,6 @@
 import axios from 'axios'
-import store from '@/store/index.js'
-import router from "@/router";
+import store from '@/assets/js/store'
+import router from "@/assets/js/router";
 
 
 const request = axios.create({

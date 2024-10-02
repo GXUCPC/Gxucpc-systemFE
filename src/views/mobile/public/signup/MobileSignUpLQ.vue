@@ -126,7 +126,7 @@
   </div>
 </template>
 <script>
-import store from "@/store";
+import store from "@/assets/js/store";
 import {ElLoading} from "element-plus";
 import {getFormtTime} from "@/assets/js/DateUtils";
 
