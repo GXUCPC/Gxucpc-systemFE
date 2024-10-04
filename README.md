@@ -1,16 +1,16 @@
 # gxucpc-systemfe
 
-## Project setup
+## 安装项目
 ```
 yarn install
 ```
 
-### Compiles and hot-reloads for development
+### 启动开发模式
 ```
 yarn serve
 ```
 
-### Compiles and minifies for production
+### 构建并压缩网页文件
 ```
 yarn build
 ```
