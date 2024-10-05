@@ -1,11 +1,11 @@
 import axios from 'axios'
-import store from '@/store/index.js'
-import router from "@/router";
+import store from '@/assets/js/store'
+import router from "@/assets/js/router";
 
 
 const request = axios.create({
-    baseURL: store.state.backURL,
-    // baseURL: 'http://localhost:80/api',
+    // baseURL: store.state.backURL,
+    baseURL: 'http://localhost:789/api',
     timeout: 100000
 })
 

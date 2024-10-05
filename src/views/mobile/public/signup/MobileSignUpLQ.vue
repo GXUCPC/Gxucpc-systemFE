@@ -1,69 +1,76 @@
 <template>
-  <div class="pageHead">
-    <div class="itemName">
-      {{ itemData.itemName }}
-    </div>
-    <div class="startEndTime">
-      <div class="startTime">报名开始时间：{{ itemData.startTime }}</div>
-      <div class="status">{{ itemData.status }}</div>
-      <div class="endTime">报名结束时间：{{ itemData.endTime }}</div>
-    </div>
-  </div>
-
-  <div class="formTable">
+  <div class="mo-formTable">
     <el-card>
+      <div class="mo-itemName">
+        {{ itemData.itemName }}
+      </div>
+      <div class="mo-startTime">报名开始时间：{{ itemData.startTime }}</div>
+      <div class="mo-endTime">报名结束时间：{{ itemData.endTime }}</div>
+      <div class="mo-status">报名状态:
+        <el-tag type="success" v-if="itemData.status === '报名进行中'">{{ itemData.status }}</el-tag>
+        <el-tag type="danger" v-else-if="itemData.status === '报名已结束'">{{ itemData.status }}</el-tag>
+        <el-tag v-else>{{ itemData.status }}</el-tag>
+      </div>
       <el-form ref="elForm" :model="formData" :rules="rules" size="default" label-width="100px" label-position="top">
-        <el-row :gutter="200">
-          <el-col :span="12">
+        <el-row>
+          <el-col>
             <el-form-item label="姓名" prop="userName">
               <el-input v-model="formData.userName" placeholder="请输入姓名" clearable :style="{ width: '100%' }">
               </el-input>
             </el-form-item>
           </el-col>
-          <el-col :span="12">
+        </el-row>
+        <el-row>
+          <el-col>
             <el-form-item label="学号" prop="userId">
               <el-input v-model="formData.userId" placeholder="请输入学号" :maxlength="10" clearable
                         :style="{ width: '100%' }"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
-        <el-row :gutter="200">
-          <el-col :span="12">
+        <el-row>
+          <el-col>
             <el-form-item label="学院" prop="userCourse">
               <el-select v-model="formData.userCourse" placeholder="请选择学院" clearable :style="{ width: '100%' }">
                 <el-option v-for="item in courseOptions" :key="item" :label="item" :value="item"/>
               </el-select>
             </el-form-item>
           </el-col>
-          <el-col :span="12">
+        </el-row>
+        <el-row>
+          <el-col>
             <el-form-item label="班级" prop="userClass">
               <el-input v-model="formData.userClass" placeholder="请输入班级" clearable :style="{ width: '100%' }">
               </el-input>
             </el-form-item>
           </el-col>
         </el-row>
-        <el-row :gutter="200">
-          <el-col :span="12">
+        <el-row>
+          <el-col>
             <el-form-item label="QQ号码" prop="userQQ">
               <el-input v-model="formData.userQQ" placeholder="请输入QQ号码" clearable :style="{ width: '100%' }">
               </el-input>
             </el-form-item>
           </el-col>
-          <el-col :span="12">
+        </el-row>
+        <el-row>
+          <el-col>
             <el-form-item label="电子邮箱" prop="userMail">
               <el-input v-model="formData.userMail" placeholder="请输入电子邮箱" clearable :style="{ width: '100%' }">
               </el-input>
             </el-form-item>
           </el-col>
         </el-row>
-        <el-row :gutter="200">
-          <el-col :span="12">
+        <el-row>
+          <el-col>
             <el-form-item label="手机号" prop="userPhone">
               <el-input v-model="formData.userPhone" placeholder="请输入手机号" clearable :style="{ width: '100%' }">
               </el-input>
             </el-form-item>
           </el-col>
-          <el-col :span="6">
+        </el-row>
+        <el-row>
+          <el-col>
             <el-form-item label="性别" prop="userSex">
               <el-radio-group v-model="formData.userSex" size="default">
                 <el-radio-button v-for="(item, index) in userSexOptions" :key="index" :label="item.value"
@@ -72,7 +79,9 @@
               </el-radio-group>
             </el-form-item>
           </el-col>
-          <el-col :span="6">
+        </el-row>
+        <el-row>
+          <el-col>
             <el-form-item label="折扣" prop="isDiscount">
               <el-radio-group v-model="formData.isDiscount">
                 <el-radio label='1' size="large">无折扣</el-radio>
@@ -81,27 +90,31 @@
             </el-form-item>
           </el-col>
         </el-row>
-        <el-col :span="24">
-          <el-form-item label="交易记录" prop="imgURI">
-            <el-input disabled v-model="formData.imgURI" placeholder="请上传交易记录图片" clearable
-                      :style="{ width: '100%' }">
-            </el-input>
-          </el-form-item>
-        </el-col>
-        <el-col>
-          <el-upload
-              class="avatar-uploader"
-              :action="getBackURL()"
-              :show-file-list="false"
-              :on-success="handleAvatarSuccess"
-              :accept="'.jpg,.png'"
-          >
-            <img v-if="imgURL" :src="imgURL" class="avatar"/>
-            <el-icon v-else class="avatar-uploader-icon">
-              <Plus/>
-            </el-icon>
-          </el-upload>
-        </el-col>
+        <el-row>
+          <el-col>
+            <el-form-item label="交易记录" prop="imgURI">
+              <el-input disabled v-model="formData.imgURI" placeholder="请上传交易记录图片" clearable
+                        :style="{ width: '100%' }">
+              </el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col>
+            <el-upload
+                class="avatar-uploader"
+                :action="getBackURL()"
+                :show-file-list="false"
+                :on-success="handleAvatarSuccess"
+                :accept="'.jpg,.png'"
+            >
+              <img v-if="imgURL" :src="imgURL" class="avatar"/>
+              <el-icon v-else class="avatar-uploader-icon">
+                <Plus/>
+              </el-icon>
+            </el-upload>
+          </el-col>
+        </el-row>
         <el-col :span="24">
           <el-form-item size="large">
             <el-button type="primary" @click="submitForm">报名</el-button>
@@ -111,10 +124,9 @@
       </el-form>
     </el-card>
   </div>
-
 </template>
 <script>
-import store from "@/store";
+import store from "@/assets/js/store";
 import {ElLoading} from "element-plus";
 import {getFormtTime} from "@/assets/js/DateUtils";
 
@@ -263,9 +275,9 @@ export default {
     getBackURL() {
       return store.state.backURL + "/public/image"
     },
-    routerToMobile() {
-      if (document.body.clientWidth < 960) {
-        let path = "/mobile/signup/" + this.$route.params.itemID + "/2";
+    routerToPC() {
+      if (document.body.clientWidth > 960) {
+        let path = "/signup/" + this.$route.params.itemID + "/2";
         this.$router.push({path: path})
       }
     },
@@ -346,11 +358,11 @@ export default {
                 confirmButtonText: '替换',
                 cancelButtonText: '取消',
                 callback: (action) => {
-                  if(action === 'confirm') {
-                    this.submitForm(1)
-                  } else {
-                    this.$message.info("取消成功")
-                  }
+                    if(action === 'confirm') {
+                      this.submitForm(1)
+                    } else {
+                      this.$message.info("取消成功")
+                    }
                 },
               })
             }
@@ -371,79 +383,37 @@ export default {
   mounted() {
     this.getItemData();
     this.checkStatus();
-    this.routerToMobile();
+    this.routerToPC();
     window.onresize = () => {
       return (() => {
-        this.routerToMobile();
+        this.routerToPC();
       })();
     };
   },
 }
 </script>
-<style scoped>
+<style>
+.info {
+  margin: 0 10px;
+}
 .signup-key .el-form-item__label {
   color: red;
 }
 
-.formTable {
-  width: 80%;
-  margin: 0 auto;
-  margin-top: 50px;
-}
-
-.pageHead {
-  font-size: 30px;
+.update-button {
+  margin: 10px auto;
   text-align: center;
 }
 
-.startEndTime {
-  font-size: 18px;
-  margin: 1% 0;
-}
-
-.startTime {
-  display: inline;
-  float: left;
-  margin-left: 5%;
-}
-
-.endTime {
-  display: inline;
-  float: right;
-  margin-right: 5%;
-}
-
-.status {
-  display: inline;
-}
-
-.avatar-uploader .avatar {
-  width: 178px;
-  height: 178px;
-  display: block;
-}
-
-</style>
-
-<style>
-.avatar-uploader .el-upload {
-  border: 1px dashed var(--el-border-color);
-  border-radius: 6px;
-  cursor: pointer;
-  position: relative;
-  overflow: hidden;
-  transition: var(--el-transition-duration-fast);
-}
-
-.avatar-uploader .el-upload:hover {
-  border-color: var(--el-color-primary);
-}
-
-.el-icon.avatar-uploader-icon {
-  font-size: 28px;
-  color: #8c939d;
-  width: 178px;
-  height: 178px;
+.mo-itemName {
   text-align: center;
+  font-size: 22px;
+}
+.el-message {
+  min-width: 0px;
+  width: 90%;
+}
+.el-dialog {
+  --el-dialog-width: 90%;
 }
 </style>

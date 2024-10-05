@@ -1,29 +1,29 @@
 <template>
     <div class="foot-bg">
         <div class="flex-lr"></div>
-        <div class="support">
-            <p class="p1">支持单位</p>
-            <table class="p2">
-            <tr>
-                <td>主办单位</td>
-                <td>: 广西大学教务处</td>
-            </tr>
-            <tr>
-                <td>承办单位</td>
-                <td>: 广西大学计算机与电子信息学院</td>
-            </tr>
-            <tr>
-                <td>赛事赞助</td>
-                <td>: 中国—东盟信息港股份有限公司</td>
-            </tr>
-            <tr>
-                <td>技术支持</td>
-                <td>: 广西大学计算机与电子信息学院计算机协会、广西大学ICPC/CCPC集训队</td>
-            </tr>
-            </table>
-        </div>
+        <!--<div class="support">-->
+        <!--    <p class="p1">支持单位</p>-->
+        <!--    <table class="p2">-->
+        <!--    <tr>-->
+        <!--        <td>主办单位</td>-->
+        <!--        <td>: 广西大学教务处</td>-->
+        <!--    </tr>-->
+        <!--    <tr>-->
+        <!--        <td>承办单位</td>-->
+        <!--        <td>: 广西大学计算机与电子信息学院</td>-->
+        <!--    </tr>-->
+        <!--    <tr>-->
+        <!--        <td>赛事赞助</td>-->
+        <!--        <td>: 中国—东盟信息港股份有限公司</td>-->
+        <!--    </tr>-->
+        <!--    <tr>-->
+        <!--        <td>技术支持</td>-->
+        <!--        <td>: 广西大学计算机与电子信息学院计算机协会、广西大学ICPC/CCPC集训队</td>-->
+        <!--    </tr>-->
+        <!--    </table>-->
+        <!--</div>-->
         <div class="flex-mid"></div>
-        <div class="relation-me">
+        <div class="relation-me flex-lr">
             <p class="p1">联系我们</p>
             <table class="p2">
                 <tr>
