@@ -205,6 +205,7 @@ export default {
         </template>
         <el-row>
             <!--元素列表-->
+
             <el-col :span="6">
                 <el-scrollbar height="650">
                     <div class="grid-content">
