@@ -163,21 +163,17 @@ const router = createRouter({
                     //验证token
                     request.get("/admin/checkToken").then(res => {
                         //成功
-                        // if (res.statusCode === 50000) {
+                        if (res.statusCode === 50000) {
                         next();
-                        // } else {
-                        //     next({ path: '/login' })
-                        // }
+                        } else {
+                            next({ path: '/login' })
+                        }
 
                     }).catch(() => {
-                        // next({ path: '/login' })
-                        next();
+                        next({ path: '/login' })
                     });
-
-
                 } else { //没有登录
-                    // next({path: '/login'});
-                    next()
+                    next({path: '/login'})
                 }
 
             }
