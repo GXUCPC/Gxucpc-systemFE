@@ -10,10 +10,203 @@ switch (process.env.VUE_APP_CURENV) {
         break;
 }
 
+const formItemType = {
+    SubTitle: 0,
+    Para: 1,
+    Divider: 2,
+    Input: 3,
+    Textarea: 4,
+    Selection: 5,
+    RadioList: 6,
+    CheckboxList: 7,
+};
+
 export default createStore({
     state: {
         // 后端地址
-        backURL: baseUrl
+        backURL: baseUrl,
+        // 表单配置
+        form:{
+            formItemType: formItemType,
+            availableFormItemArr: [
+                {
+                    type: formItemType.SubTitle,
+                    name: "小标题",
+                    prop: {
+                        text: {
+                            label: "标题文字",
+                            value: "小标题"
+                        }
+                    }
+                },
+                {
+                    type: formItemType.Para,
+                    name: "段落文本",
+                    prop: {
+                        text: {
+                            label: "段落文本",
+                            value: "段落"
+                        }
+                    }
+                },
+                {
+                    type: formItemType.Divider,
+                    name: "分割线",
+                    prop: {
+                        lineType: {
+                            label: "线条类型",
+                            selected: 0,
+                            value: ["", ""]
+                        }
+                    }
+                },
+                {
+                    type: formItemType.Input,
+                    name: "输入框",
+                    prop: {
+                        require: {
+                            label: "是否为必填",
+                            value: false
+                        },
+                        label: {
+                            label: "标签",
+                            value: "标签"
+                        },
+                        value: {
+                            label: "默认值",
+                            value: ""
+                        },
+                        placeholder: {
+                            label: "输入提示",
+                            value: ""
+                        }
+                    }
+                },
+                {
+                    type: formItemType.Textarea,
+                    name: "文本域",
+                    prop: {
+                        require: {
+                            label: "是否为必填",
+                            value: false
+                        },
+                        label: {
+                            label: "标签",
+                            value: "标签"
+                        },
+                        value: {
+                            label: "默认值",
+                            value: ""
+                        },
+                        placeholder: {
+                            label: "输入提示",
+                            value: ""
+                        }
+                    }
+                },
+                {
+                    type: formItemType.Selection,
+                    name: "下拉选项",
+                    prop: {
+                        require: {
+                            label: "是否为必填",
+                            value: false
+                        },
+                        label: {
+                            label: "标签",
+                            value: "标签"
+                        },
+                        value: {
+                            label: "默认选择",
+                            value: -1
+                        },
+                        placeholder: {
+                            label: "选择提示",
+                            value: "请选择"
+                        },
+                        option: {
+                            label: "选项",
+                            value: [
+                                {
+                                    label: "选项1",
+                                    value: "1"
+                                }
+                            ]
+                        }
+                    }
+                },
+                {
+                    type: formItemType.RadioList,
+                    name: "单选列表",
+                    prop: {
+                        require: {
+                            label: "是否为必填",
+                            value: false
+                        },
+                        value: {
+                            label: "默认选择",
+                            value: -1
+                        },
+                        label: {
+                            label: "标签",
+                            value: "标签"
+                        },
+                        placeholder: {
+                            label: "选择提示",
+                            value: ""
+                        },
+                        option: {
+                            label: "选项",
+                            value: [
+                                {
+                                    label: "选项1",
+                                    value: "1"
+                                }]
+                        }
+                    }
+                },
+                {
+                    type: formItemType.CheckboxList,
+                    name: "多选列表",
+                    prop: {
+                        require: {
+                            label: "是否为必填",
+                            value: false
+                        },
+                        label: {
+                            label: "标签",
+                            value: "标签"
+                        },
+                        value: {
+                            label: "默认选择",
+                            value: [],
+                            editable: false
+                        },
+                        minCount: {
+                            label: "最小选择数量",
+                            value: 1
+                        },
+                        maxCount: {
+                            label: "最大选择数量",
+                            value: -1
+                        },
+                        placeholder: {
+                            label: "选择提示",
+                            value: ""
+                        },
+                        option: {
+                            label: "选项",
+                            value: [
+                                {
+                                    label: "选项1",
+                                    value: "1"
+                                }
+                            ]
+                        }
+                    }
+                },
+            ],
+        }
     },
     mutations: {},
     actions: {},

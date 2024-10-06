@@ -1,18 +1,8 @@
 <script>
 import draggable from "vuedraggable";
-import index from "vuex";
-import {Close, Delete} from "@element-plus/icons-vue";
+import store from "@/assets/js/store";
+import {Delete} from "@element-plus/icons-vue";
 
-const formItemType = {
-    SubTitle: 0,
-    Para: 1,
-    Divider: 2,
-    Input: 3,
-    Textarea: 4,
-    Selection: 5,
-    RadioList: 6,
-    CheckboxList: 6,
-};
 
 export default {
     components: {
@@ -21,7 +11,7 @@ export default {
     },
     data() {
         return {
-            formItemType: formItemType,
+            formItemType: store.state.form.formItemType,
             groupAvailableFormItemArr: {
                 name: "AvailableFormItem",
                 put: false, //拖入
@@ -31,6 +21,11 @@ export default {
                 name: "FormItem",
                 put: true, //拖入
                 pull: true,
+            },
+            groupItemPropOptionList: {
+                name: "itemPropOptionList",
+                put: false, //拖入
+                pull: false,
             },
             formObj: {
                 id: "",
@@ -45,151 +40,8 @@ export default {
                 }
             },
             activeItem: {},
-
             modules: {
-                availableFormItemArr: [
-                    {
-                        type: formItemType.SubTitle,
-                        name: "小标题",
-                        prop: {
-                            text: {
-                                label: "标题文字",
-                                value: "小标题"
-                            }
-                        }
-                    },
-                    {
-                        type: formItemType.Para,
-                        name: "段落文本",
-                        prop: {
-                            text: {
-                                label: "段落文本",
-                                value: "段落"
-                            }
-                        }
-                    },
-                    {
-                        type: formItemType.Divider,
-                        name: "分割线",
-                        prop: {
-                            lineType: {
-                                label: "线条类型",
-                                selected: 0,
-                                value: ["", ""]
-                            }
-                        }
-                    },
-                    {
-                        type: formItemType.Input,
-                        name: "输入框",
-                        prop: {
-                            require: {
-                                label: "是否为必填",
-                                value: false
-                            },
-                            value: {
-                                label: "默认值",
-                                value: ""
-                            },
-                            placeholder: {
-                                label: "输入提示",
-                                value: ""
-                            }
-                        }
-                    },
-                    {
-                        type: formItemType.Textarea,
-                        name: "文本域",
-                        prop: {
-                            require: {
-                                label: "是否为必填",
-                                value: false
-                            },
-                            value: {
-                                label: "默认值",
-                                value: ""
-                            },
-                            placeholder: {
-                                label: "输入提示",
-                                value: ""
-                            }
-                        }
-                    },
-                    {
-                        type: formItemType.Selection,
-                        name: "下拉选项",
-                        prop: {
-                            require: {
-                                label: "是否为必填",
-                                value: false
-                            },
-                            value: {
-                                label: "默认值",
-                                value: -1
-                            },
-                            placeholder: {
-                                label: "选择提示",
-                                value: ""
-                            },
-                            option: {
-                                label: "选项",
-                                value: []
-                            }
-                        }
-                    },
-                    {
-                        type: formItemType.RadioList,
-                        name: "单选列表",
-                        prop: {
-                            require: {
-                                label: "是否为必填",
-                                value: false
-                            },
-                            value: {
-                                label: "默认值",
-                                value: -1
-                            },
-                            placeholder: {
-                                label: "选择提示",
-                                value: ""
-                            },
-                            option: {
-                                label: "选项",
-                                value: []
-                            }
-                        }
-                    },
-                    {
-                        type: formItemType.CheckboxList,
-                        name: "多选列表",
-                        prop: {
-                            require: {
-                                label: "是否为必填",
-                                value: false
-                            },
-                            value: {
-                                label: "默认值",
-                                value: -1
-                            },
-                            minCount: {
-                                label: "最小选择数量",
-                                value: 1
-                            },
-                            maxCount: {
-                                label: "最大选择数量",
-                                value: -1
-                            },
-                            placeholder: {
-                                label: "选择提示",
-                                value: ""
-                            },
-                            option: {
-                                label: "选项",
-                                value: []
-                            }
-                        }
-                    },
-                ],
+                availableFormItemArr: store.state.form.availableFormItemArr
             },
 
         };
@@ -222,7 +74,7 @@ export default {
                 </el-scrollbar>
             </el-col>
             <el-divider style="height: inherit;" direction="vertical"/>
-            <!--表格预览-->
+            <!--表单预览-->
             <el-col :span="11">
                 <div class="grid-content">
                     <el-scrollbar height="600">
@@ -247,6 +99,13 @@ export default {
                                         </el-icon>
                                     </div>
                                     <div class="itemBody">
+                                        <!--控件标签-->
+                                        <div v-if="element.prop.label" style="margin-bottom: .5em;">
+                                            <span v-if="element.prop.require.value"
+                                                  style="color: red;font-weight: bold;margin-right: .5em;">*</span>
+                                            <span style="font-size: 1.2em;">{{ element.prop.label.value }}</span>
+                                        </div>
+                                        <!--控件主体-->
                                         <div v-if="element.type === formItemType.SubTitle">
                                             <h3>{{ element.prop.text.value }}</h3>
                                         </div>
@@ -265,6 +124,51 @@ export default {
                                             <el-input v-model="element.prop.value.value" type="textarea"
                                                       :placeholder="element.prop.placeholder.value"
                                                       :required="element.prop.require.value"/>
+                                        </div>
+                                        <div v-if="element.type === formItemType.Selection">
+                                            <el-select v-model="element.prop.value.value" clearable
+                                                       :placeholder="element.prop.placeholder.value"
+                                                       :required="element.prop.require.value"
+                                                       @clear="element.prop.value.value=-1">
+                                                <el-option
+                                                    v-for="(option, index) in element.prop.option.value"
+                                                    :key="index"
+                                                    :label="option.label"
+                                                    :value="index">
+                                                </el-option>
+                                            </el-select>
+                                        </div>
+                                        <div v-if="element.type === formItemType.RadioList">
+                                            <el-radio-group v-model="element.prop.value.value"
+                                                            :required="element.prop.require.value"
+                                                            style="width: 100%;">
+                                                <div
+                                                    style="width: 95%;margin: 3px auto;border: 1px solid lightgray;border-radius: 5px"
+                                                    v-for="(option, index) in element.prop.option.value"
+                                                    :key="index">
+                                                    <el-radio :label="option.value" :value="index"
+                                                              style="margin: .2em .5em; width: 100%;">
+                                                        {{ option.label }}
+                                                    </el-radio>
+                                                </div>
+                                            </el-radio-group>
+                                        </div>
+                                        <div v-if="element.type === formItemType.CheckboxList">
+                                            <el-checkbox-group v-model="element.prop.value.value"
+                                                               :min="element.prop.minCount.value"
+                                                               :max="element.prop.maxCount.value>element.prop.minCount.value?element.prop.maxCount.value:element.prop.minCount.value"
+                                                               :required="element.prop.require.value"
+                                                               style="width: 100%;">
+                                                <div
+                                                    style="width: 95%;margin: 3px auto;border: 1px solid lightgray;border-radius: 5px"
+                                                    v-for="(option, index) in element.prop.option.value"
+                                                    :key="index">
+                                                    <el-checkbox :label="option.value" :value="index"
+                                                                 style="margin: .2em .5em; width: 100%;">
+                                                        {{ option.label }}
+                                                    </el-checkbox>
+                                                </div>
+                                            </el-checkbox-group>
                                         </div>
                                     </div>
                                 </div>
@@ -289,7 +193,7 @@ export default {
                             <div>
                                 <h2>表格属性</h2>
                             </div>
-                            <el-scrollbar height="250">
+                            <el-scrollbar height="200">
                                 <!--<pre>-->
                                 <!--{{ JSON.stringify(formObj, null, 2) }}-->
                                 <!--</pre>-->
@@ -309,7 +213,7 @@ export default {
                             </el-scrollbar>
                         </div>
                     </el-row>
-                    <el-divider/>
+                    <el-divider style="height: 1em;margin: .5em 0;"/>
                     <!--元素属性-->
                     <el-row style="flex: 1;">
                         <div class="grid-content" style="width: 100%;">
@@ -317,8 +221,9 @@ export default {
                                 <h2>元素属性</h2>
                             </div>
                             <el-scrollbar height="200">
+                                <!--{{ activeItem }}-->
                                 <template :key="index" v-for="(item, index) in activeItem.prop">
-                                    <div class="propItem">
+                                    <div v-if="item.editable!==false" class="propItem">
                                         <!--元素模板-->
                                         <div class="boolProp" style="display: flex;align-items: center;"
                                              v-if="typeof item.value === 'boolean'">
@@ -339,6 +244,54 @@ export default {
                                                 :placeholder="item.label"
                                                 clearable
                                             />
+                                        </div>
+                                        <div class="numberProp"
+                                             v-if="typeof item.value === 'number' && activeItem.prop.option.value.length">
+                                            <h3>{{ item.label }}</h3>
+                                            <el-input-number
+                                                v-model="item.value"
+                                                :min="-1"
+                                                :max="activeItem.prop.option.value.length"
+                                                :placeholder="item.label"
+                                            />
+                                        </div>
+                                        <div class="itemListProp" v-if="Array.isArray(item.value)">
+                                            <h3>{{ item.label }}</h3>
+                                            <div style="padding: .5em;border: 1px solid lightgray;border-radius: 4px;">
+                                                <draggable :list="item.value" ghost-class="ghost"
+                                                           chosen-class="chosenClass" animation="300" itemKey="id"
+                                                           :group="groupItemPropOptionList">
+                                                    <template #item="{ element, index }">
+                                                        <div class="itemListPropItem">
+                                                            <el-input
+                                                                v-model="element.label"
+                                                                clearable
+                                                                placeholder="显示文本"
+                                                                style="width: 100%"
+                                                            />
+                                                            <el-input
+                                                                v-model="element.value"
+                                                                clearable
+                                                                placeholder="选项值"
+                                                                style="width: 100%"
+                                                            />
+                                                            <el-icon
+                                                                class="itemListPropItemIcon"
+                                                                style="float: right;cursor: pointer"
+                                                                color="red"
+                                                                @click="item.value.splice(index, 1)">
+                                                                <Delete/>
+                                                            </el-icon>
+                                                        </div>
+                                                    </template>
+                                                </draggable>
+                                                <el-button
+                                                    type="primary" plain
+                                                    style="margin: .5em auto;"
+                                                    @click="item.value.push({label: '', value: ''})">
+                                                    添加
+                                                </el-button>
+                                            </div>
                                         </div>
                                     </div>
                                 </template>
@@ -391,12 +344,25 @@ export default {
     box-shadow: rgba(0, 0, 0, 0.05) 0 0 5px 5px;
 }
 
-.itemHeader{
+.itemHeader {
     padding: 1em;
     border-bottom: 1px solid lightgray;
 }
 
-.itemBody{
+.itemBody {
     padding: 1em;
 }
+
+.itemListPropItem {
+    border: 1px solid lightgray;
+    display: flex;
+    align-items: center;
+    padding: .2em;
+    margin-bottom: .2em;
+}
+
+.itemListPropItemIcon {
+    padding: .5em;
+}
+
 </style>
