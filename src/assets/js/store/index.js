@@ -1,4 +1,4 @@
-import {createStore} from 'vuex'
+import {createStore} from 'vuex';
 
 let baseUrl;
 switch (process.env.VUE_APP_CURENV) {
@@ -26,7 +26,7 @@ export default createStore({
         // 后端地址
         backURL: baseUrl,
         // 表单配置
-        form:{
+        form: {
             formItemType: formItemType,
             availableFormItemArr: [
                 {
@@ -70,7 +70,7 @@ export default createStore({
                         },
                         label: {
                             label: "标签",
-                            value: "标签"
+                            value: "输入框"
                         },
                         value: {
                             label: "默认值",
@@ -92,7 +92,7 @@ export default createStore({
                         },
                         label: {
                             label: "标签",
-                            value: "标签"
+                            value: "文本域"
                         },
                         value: {
                             label: "默认值",
@@ -114,7 +114,7 @@ export default createStore({
                         },
                         label: {
                             label: "标签",
-                            value: "标签"
+                            value: "下拉选项"
                         },
                         value: {
                             label: "默认选择",
@@ -129,7 +129,7 @@ export default createStore({
                             value: [
                                 {
                                     label: "选项1",
-                                    value: "1"
+                                    value: 0
                                 }
                             ]
                         }
@@ -149,7 +149,7 @@ export default createStore({
                         },
                         label: {
                             label: "标签",
-                            value: "标签"
+                            value: "单选列表"
                         },
                         placeholder: {
                             label: "选择提示",
@@ -160,7 +160,7 @@ export default createStore({
                             value: [
                                 {
                                     label: "选项1",
-                                    value: "1"
+                                    value: 0
                                 }]
                         }
                     }
@@ -175,7 +175,7 @@ export default createStore({
                         },
                         label: {
                             label: "标签",
-                            value: "标签"
+                            value: "多选列表"
                         },
                         value: {
                             label: "默认选择",
@@ -184,11 +184,11 @@ export default createStore({
                         },
                         minCount: {
                             label: "最小选择数量",
-                            value: 1
+                            value: 0
                         },
                         maxCount: {
                             label: "最大选择数量",
-                            value: -1
+                            value: 1
                         },
                         placeholder: {
                             label: "选择提示",
@@ -199,7 +199,7 @@ export default createStore({
                             value: [
                                 {
                                     label: "选项1",
-                                    value: "1"
+                                    value: 1
                                 }
                             ]
                         }
@@ -211,5 +211,5 @@ export default createStore({
     mutations: {},
     actions: {},
     modules: {}
-})
+});
 

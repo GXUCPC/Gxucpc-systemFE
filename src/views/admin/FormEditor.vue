@@ -2,6 +2,8 @@
 import draggable from "vuedraggable";
 import store from "@/assets/js/store";
 import {Delete} from "@element-plus/icons-vue";
+import request from "@/assets/js/request/request";
+import {ElMessage} from "element-plus";
 
 
 export default {
@@ -30,6 +32,7 @@ export default {
             formObj: {
                 id: "",
                 countPerUser: 1,
+                contestId: "",
                 header: {
                     title: "编辑标题",
                     text: "编辑说明"
@@ -46,7 +49,22 @@ export default {
 
         };
     },
-    methods: {}
+    methods: {
+        async createForm(obj) {
+            const data = {
+                username: localStorage.getItem("username"),
+                formObj: JSON.stringify(obj)
+            };
+            console.log(data);
+            request.post("http://localhost:888/api/form/add", data,
+                {token: localStorage.getItem("token")})
+                .then(res => console.log(res))
+                .catch(err => {
+                    console.log(err);
+                    ElMessage.error("创建失败");
+                });
+        }
+    }
 };
 </script>
 
@@ -100,7 +118,7 @@ export default {
                                     </div>
                                     <div class="itemBody">
                                         <!--控件标签-->
-                                        <div v-if="element.prop.label" style="margin-bottom: .5em;">
+                                        <div v-if="element.prop.label" class="itemLabel" style="margin-bottom: .5em;">
                                             <span v-if="element.prop.require.value"
                                                   style="color: red;font-weight: bold;margin-right: .5em;">*</span>
                                             <span style="font-size: 1.2em;">{{ element.prop.label.value }}</span>
@@ -126,7 +144,7 @@ export default {
                                                       :required="element.prop.require.value"/>
                                         </div>
                                         <div v-if="element.type === formItemType.Selection">
-                                            <el-select v-model="element.prop.value.value" clearable
+                                            <el-select class="Selection" v-model="element.prop.value.value" clearable
                                                        :placeholder="element.prop.placeholder.value"
                                                        :required="element.prop.require.value"
                                                        @clear="element.prop.value.value=-1">
@@ -204,8 +222,8 @@ export default {
                                 <el-input v-model="formObj.header.text" type="textarea"
                                           :autosize="{minRows:3,maxRows:6}"
                                           placeholder="说明"/>
-                                <h3>表单ID</h3>
-                                <el-input v-model="formObj.id" clearable
+                                <h3>比赛ID</h3>
+                                <el-input v-model="formObj.contestId" clearable
                                           placeholder="ID"/>
                                 <h3>每人可填写次数</h3>
                                 <el-input-number v-model="formObj.countPerUser" :min="-1"
@@ -222,8 +240,8 @@ export default {
                             </div>
                             <el-scrollbar height="200">
                                 <!--{{ activeItem }}-->
-                                <template :key="index" v-for="(item, index) in activeItem.prop">
-                                    <div v-if="item.editable!==false" class="propItem">
+                                <template v-for="(item, index) in activeItem.prop">
+                                    <div :key="index" v-if="item.editable!==false" class="propItem">
                                         <!--元素模板-->
                                         <div class="boolProp" style="display: flex;align-items: center;"
                                              v-if="typeof item.value === 'boolean'">
@@ -269,12 +287,12 @@ export default {
                                                                 placeholder="显示文本"
                                                                 style="width: 100%"
                                                             />
-                                                            <el-input
-                                                                v-model="element.value"
-                                                                clearable
-                                                                placeholder="选项值"
-                                                                style="width: 100%"
-                                                            />
+                                                            <!--<el-input-->
+                                                            <!--    v-model="element.value"-->
+                                                            <!--    clearable-->
+                                                            <!--    placeholder="选项值"-->
+                                                            <!--    style="width: 100%"-->
+                                                            <!--/>-->
                                                             <el-icon
                                                                 class="itemListPropItemIcon"
                                                                 style="float: right;cursor: pointer"
@@ -288,7 +306,7 @@ export default {
                                                 <el-button
                                                     type="primary" plain
                                                     style="margin: .5em auto;"
-                                                    @click="item.value.push({label: '', value: ''})">
+                                                    @click="item.value.push({label: '', value: item.value.length})">
                                                     添加
                                                 </el-button>
                                             </div>
@@ -306,7 +324,7 @@ export default {
                 <el-col span="2">
                     <div style="margin-right: 0;margin-left: auto;">
                         <el-button plain>取消</el-button>
-                        <el-button type="success" plain>创建</el-button>
+                        <el-button type="success" plain @click="createForm(formObj)">创建</el-button>
                     </div>
                 </el-col>
             </el-row>
@@ -353,6 +371,10 @@ export default {
     padding: 1em;
 }
 
+.itemLabel ~ * {
+    margin: 0 1em;
+}
+
 .itemListPropItem {
     border: 1px solid lightgray;
     display: flex;
@@ -364,5 +386,6 @@ export default {
 .itemListPropItemIcon {
     padding: .5em;
 }
+
 
 </style>
