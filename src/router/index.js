@@ -143,7 +143,6 @@ const router = createRouter({
                 }
             ],
             // token验证
-
             beforeEnter: (to, from, next) => {
                 let token = localStorage.getItem('token')
                 let logindto = {}
@@ -158,7 +157,6 @@ const router = createRouter({
                         } else {
                             next({ path: '/login' })
                         }
-
                     }).catch(() => {
                         next({ path: '/login' })
                     })
