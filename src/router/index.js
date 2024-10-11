@@ -71,7 +71,7 @@ const router = createRouter({
                 {
                     path: 'list/:listType(notice|news|board|winners|prize|signup)',
                     name: 'PageList',
-                    component: defineAsyncComponent(() => import('../views/PageList.vue'))
+                    component: () => import('../views/PageList.vue')
                 },
                 {
                     path: 'query',
@@ -172,7 +172,7 @@ const router = createRouter({
         {
             path: "/:catAll(.*)",
             name: "404",
-            component: defineAsyncComponent(() => import('../views/404.vue'))
+            component: () => import('../views/404.vue')
         }
     ]
 })
