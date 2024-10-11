@@ -8,6 +8,8 @@ module.exports = defineConfig({
       return args;
     })
   },
+  publicPath: process.env.NODE_ENV === 'production'? './': './',
+  devServer: { historyApiFallback: true}
 })
 
 switch(process.env.VUE_APP_CURENV){
