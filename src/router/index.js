@@ -69,7 +69,7 @@ const router = createRouter({
                     component: defineAsyncComponent(() => import('../views/Page.vue'))
                 },
                 {
-                    path: 'list/:listType(notice|news|board|winners|prize|signup)',
+                    path: ':listType(notice|news|board|winners|prize|signup)',
                     name: 'PageList',
                     component: defineAsyncComponent(() => import('../views/PageList.vue'))
                 },

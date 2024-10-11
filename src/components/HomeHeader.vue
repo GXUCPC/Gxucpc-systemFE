@@ -27,19 +27,19 @@ export default {
             if(key === 'home') {
                 this.$router.push({path: "/"})
             } else if(key === 'notice') {
-                this.$router.push({path: "/list/notice"})
+                this.$router.push({path: "/notice"})
             } else if(key === 'prize') {
-                this.$router.push({path: "/list/prize"})
+                this.$router.push({path: "/prize"})
             } else if(key === 'winners') {
-                this.$router.push({path: "/list/winners"})
+                this.$router.push({path: "/winners"})
             } else if(key === 'news') {
-                this.$router.push({path: "/list/news"})
+                this.$router.push({path: "/news"})
             } else if(key === 'board') {
-                this.$router.push({path: "/list/board"})
+                this.$router.push({path: "/board"})
             } else if(key === "download") {
                 this.$router.push({path: "/download"})
             } else if(key === 'signup') {
-                this.$router.push({path: "/list/signup"})
+                this.$router.push({path: "/signup"})
             } else if(key === 'login') {
                 this.$router.push({path: '/login'})
             } else if(key === 'query') {
