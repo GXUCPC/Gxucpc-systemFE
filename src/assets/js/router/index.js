@@ -124,12 +124,12 @@ const router = createRouter({
                 {
                     path: "form/add",
                     name: "AddForm",
-                    component: defineAsyncComponent(() => import('@/views/admin/FormEditor.vue'))
+                    component: defineAsyncComponent(() => import('@/views/admin/form/FormEditor.vue'))
                 },
                 {
                     path: "form/edit/:itemID",
                     name: "EditForm",
-                    component: defineAsyncComponent(() => import('@/views/admin/FormEditor.vue'))
+                    component: defineAsyncComponent(() => import('@/views/admin/form/FormEditor.vue'))
                 },
                 {
                     path: 'email',

@@ -53,10 +53,18 @@ export default {
         async createForm(obj) {
             const data = {
                 username: localStorage.getItem("username"),
-                formObj: JSON.stringify(obj)
+
+                // 表单对象 formObject
+                countPerUser: obj.countPerUser,
+                title: obj.header.title,
+                text: obj.header.text,
+
+                formItemList: JSON.stringify(obj.formItemList),
+
+                footer: obj.footer.text
             };
             console.log(data);
-            request.post("http://localhost:888/api/form/add", data,
+            this.$http.post("/admin/form/add", data,
                 {token: localStorage.getItem("token")})
                 .then(res => console.log(res))
                 .catch(err => {

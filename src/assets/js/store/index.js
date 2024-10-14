@@ -3,7 +3,7 @@ import {createStore} from 'vuex';
 let baseUrl;
 switch (process.env.VUE_APP_CURENV) {
     case "development":
-        baseUrl = "http://localhost:789/api";
+        baseUrl = "http://123.207.50.47:8080/api";
         break;
     case "production":
         baseUrl = "/api";
@@ -19,6 +19,8 @@ const formItemType = {
     Selection: 5,
     RadioList: 6,
     CheckboxList: 7,
+    Email: 8,
+    Phone: 9,
 };
 
 export default createStore({
