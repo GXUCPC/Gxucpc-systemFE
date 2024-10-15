@@ -66,12 +66,12 @@ const router = createRouter({
                 {
                     path: 'pages/:itemID(\\d+)',
                     name: 'Page',
-                    component: defineAsyncComponent(() => import('@/views/public/signup/Page.vue'))
+                    component: defineAsyncComponent(() => import('@/views/public/page/Page.vue'))
                 },
                 {
                     path: 'list/:listType(notice|news|board|winners|prize|signup)',
                     name: 'PageList',
-                    component: defineAsyncComponent(() => import('@/views/public/signup/PageList.vue'))
+                    component: defineAsyncComponent(() => import('@/views/public/page/PageList.vue'))
                 },
                 {
                     path: 'form',
@@ -82,6 +82,16 @@ const router = createRouter({
                     path: 'query',
                     name: 'AccountQuery',
                     component: defineAsyncComponent(() => import('@/views/public/signup/AccountQuery.vue'))
+                },
+                {
+                    path: 'signup/query',
+                    name: 'SignupQuery',
+                    component: defineAsyncComponent(() => import('@/views/public/query/SignUp.vue'))
+                },
+                {
+                    path: 'signup/query/res',
+                    name: 'SignupQueryRes',
+                    component: defineAsyncComponent(() => import('@/views/public/query/SignUpRes.vue'))
                 }
             ],
             beforeEnter: (to, from, next) => {
