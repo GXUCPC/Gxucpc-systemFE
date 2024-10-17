@@ -37,32 +37,38 @@
         </template>
         <div>
             <el-table :data="tableData" style="width: 100%">
-                <el-table-column label="比赛名称" width="300" prop="contestName" fixed="left"/>
-                <el-table-column label="姓名" width="180" prop="userName"/>
-                <el-table-column label="学号" width="180" prop="userId"/>
-                <el-table-column label="学院" width="180" prop="userCourse"/>
-                <el-table-column label="班级" width="180" prop="userClass"/>
-                <el-table-column label="QQ" width="180" prop="userQQ"/>
-                <el-table-column label="邮箱" width="180" prop="userMail"/>
-                <el-table-column label="手机号" width="180" prop="userPhone"/>
-                <el-table-column label="性别" width="180" prop="userSex"/>
-                <el-table-column label="组别" width="180" prop="group"/>
+                <el-table-column label="比赛名称" width="300" prop="title" fixed="left"/>
+                <!--<el-table-column label="姓名" width="180" prop="userName"/>-->
+                <!--<el-table-column label="学号" width="180" prop="userId"/>-->
+                <!--<el-table-column label="学院" width="180" prop="userCourse"/>-->
+                <!--<el-table-column label="班级" width="180" prop="userClass"/>-->
+                <!--<el-table-column label="QQ" width="180" prop="userQQ"/>-->
+                <!--<el-table-column label="邮箱" width="180" prop="userMail"/>-->
+                <!--<el-table-column label="手机号" width="180" prop="userPhone"/>-->
+                <!--<el-table-column label="性别" width="180" prop="userSex"/>-->
+                <el-table-column label="ID" width="180" prop="id"/>
                 <el-table-column label="打星" width="180" prop="star"/>
                 <el-table-column label="密钥" width="180" prop="key"/>
                 <el-table-column label="备注" width="180" prop="remark"/>
 
                 <el-table-column label="Operations" width="200" fixed="right">
                     <template #default="scope">
-                        <el-button size="small" @click="handleEdit(scope.$index, scope.row)">Edit</el-button>
-                        <el-button size="small" type="danger" @click="handleDelete(scope.$index, scope.row)">Delete
-                        </el-button>
+                        <el-button size="small" @click="this.$router.push({path: '/form?formId=' + scope.row.id})">预览</el-button>
+                        <el-popconfirm title="确认删除该表单吗？" @confirm="handleDelete(scope.$index, scope.row)">
+                            <template #reference>
+                                <el-button size="small" type="danger">
+                                    删除
+                                </el-button>
+                            </template>
+                        </el-popconfirm>
                     </template>
                 </el-table-column>
             </el-table>
         </div>
         <template #footer>
             <!-- 分页 -->
-            <el-pagination background layout="total, prev, pager, next" v-model:currentPage="pagingComponent.currentPage"
+            <el-pagination background layout="total, prev, pager, next"
+                           v-model:currentPage="pagingComponent.currentPage"
                            :total="pagingComponent.total" @current-change="currentChange"/>
         </template>
     </el-card>
@@ -383,15 +389,30 @@ export default {
         },
         // 删除表单
         async handleDelete(index, row) {
+            // let loading = ElLoading.service({
+            //     lock: true,
+            //     text: '删除中，请稍后...',
+            //     background: 'rgba(0, 0, 0, 0.7)',
+            // });
+            // await this.$http.put('/admin/form/delete/' + row.informationId).then((res) => {
+            //     if (res.statusCode === 50000) {
+            //         this.$message.success(res.message);
+            //         this.getFormInfo();
+            //     } else {
+            //         this.$message.error(res.message);
+            //     }
+            // });
+            // loading.close();
             let loading = ElLoading.service({
                 lock: true,
                 text: '删除中，请稍后...',
                 background: 'rgba(0, 0, 0, 0.7)',
             });
-            await this.$http.put('/admin/form/delete/' + row.informationId).then((res) => {
-                if (res.statusCode === 50000) {
+            await this.$http.put('/admin/form/del?formId='+row.id)
+                .then((res) => {
+                if (res.statusCode === 50001) {
                     this.$message.success(res.message);
-                    this.getFormInfo();
+                    this.getFormList();
                 } else {
                     this.$message.error(res.message);
                 }
@@ -432,6 +453,15 @@ export default {
                 }
             });
         },
+        getFormList() {
+            this.$http.get("/admin/form/getList", {params: {page: 1, perPage: 20}})
+                .then((res) => {
+                    if (res.statusCode === 50000) {
+                        console.log(res);
+                        this.tableData = res.data.formList;
+                    }
+                });
+        },
         getContestName(id) {
             for (let i = 0; i < this.contestOptions.length; i++) {
                 if (id === this.contestOptions[i].id) {
@@ -446,24 +476,28 @@ export default {
     },
     mounted() {
         this.getContestInfo();
+        this.getFormList();
     }
 };
 
 </script>
 
 <style>
-.headerContainer{
+.headerContainer {
     display: flex;
 }
+
 .headerContainer > span {
     width: 6em;
     margin: auto 0;
 }
-.headerContainer >*{
+
+.headerContainer > * {
     display: inline-block;
     margin: 0 1em;
 }
-.selectContainer{
+
+.selectContainer {
     width: 50%;
 }
 

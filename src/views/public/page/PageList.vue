@@ -1,5 +1,5 @@
 <template>
-    <div class="page-list-body">
+    <el-card class="page-list-body">
         <el-table :data="tableData" style="width: 100%" :show-header="false">
             <el-table-column prop="data">
                 <template #default="scope">
@@ -16,12 +16,12 @@
                 </template>
             </el-table-column>
         </el-table>
-        <!-- 分页 -->
-        <el-pagination background layout="total, prev, pager, next" v-model:currentPage="pagingComponent.currentPage"
-                       :total="pagingComponent.total" @current-change="currentChange"/>
-
-
-    </div>
+        <template #footer>
+            <!-- 分页 -->
+            <el-pagination background layout="total, prev, pager, next" v-model:currentPage="pagingComponent.currentPage"
+                           :total="pagingComponent.total" @current-change="currentChange"/>
+        </template>
+    </el-card>
 </template>
 
 <script>

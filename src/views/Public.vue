@@ -40,6 +40,7 @@ export default {
     width: 100%;
     height: 100%;
     margin: 0 auto;
+    padding-bottom: 2em;
 }
 
 html, body, #app, .common-layout, .el-container {

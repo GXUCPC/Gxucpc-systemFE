@@ -34,7 +34,6 @@ export default createStore({
                 {
                     type: formItemType.SubTitle,
                     name: "小标题",
-                    test:()=>{},
                     prop: {
                         text: {
                             label: "标题文字",
@@ -58,8 +57,7 @@ export default createStore({
                     prop: {
                         lineType: {
                             label: "线条类型",
-                            selected: 0,
-                            value: ["", ""]
+                            value: ""
                         }
                     }
                 },

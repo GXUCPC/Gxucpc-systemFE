@@ -6,6 +6,19 @@ import request from "@/assets/js/request/request";
 import {ElMessage} from "element-plus";
 
 
+function formatFormItemList(itemList) {
+    const result = [];
+    itemList.forEach(item => {
+        const newItem = JSON.parse(JSON.stringify(item));
+        delete newItem.name;
+        for (const itemPropKey in item.prop) {
+            newItem.prop[itemPropKey] = item.prop[itemPropKey].value;
+        }
+        result.push(newItem);
+    });
+    return result;
+}
+
 export default {
     components: {
         Delete,
@@ -50,23 +63,23 @@ export default {
         };
     },
     methods: {
+        formItemClone: (original)=>{
+            return JSON.parse(JSON.stringify(original));
+        },
         async createForm(obj) {
             const data = {
-                username: localStorage.getItem("username"),
-
                 // 表单对象 formObject
-                countPerUser: obj.countPerUser,
                 title: obj.header.title,
                 text: obj.header.text,
 
-                formItemList: JSON.stringify(obj.formItemList),
-
-                footer: obj.footer.text
+                formItemList: formatFormItemList(obj.formItemList),
             };
-            console.log(data);
-            this.$http.post("/admin/form/add", data,
-                {token: localStorage.getItem("token")})
-                .then(res => console.log(res))
+            console.log(obj.formItemList);
+            this.$http.post("/admin/form/add", data)
+                .then(res => {
+                    this.$router.push("/admin/form");
+                    console.log(res);
+                })
                 .catch(err => {
                     console.log(err);
                     ElMessage.error("创建失败");
@@ -88,7 +101,8 @@ export default {
                 <el-scrollbar height="650">
                     <div class="grid-content">
                         <draggable :list="modules.availableFormItemArr" ghost-class="ghost" :force-fallback="true"
-                                   chosen-class="chosenClass" animation="300" itemKey="id" :sort="false"
+                                   chosen-class="chosenClass" animation="300" :sort="false" itemKey="index"
+                                   :clone="formItemClone"
                                    :group="groupAvailableFormItemArr">
                             <template #item="{ element }">
                                 <div class="formItemListCard">
@@ -111,7 +125,7 @@ export default {
                         <el-divider/>
                         <!--元素编辑-->
                         <draggable :list="formObj.formItemList" ghost-class="ghost" :force-fallback="true"
-                                   chosen-class="chosenClass" animation="300" itemKey="id"
+                                   chosen-class="chosenClass" animation="300" itemKey="index"
                                    style="min-height: 5em"
                                    :group="groupFormItemList">
                             <template #item="{ element, index }">
@@ -221,7 +235,7 @@ export default {
                             </div>
                             <el-scrollbar height="200">
                                 <!--<pre>-->
-                                <!--{{ JSON.stringify(formObj, null, 2) }}-->
+                                <!--{{ JSON.stringify(activeItem, null, 2) }}-->
                                 <!--</pre>-->
                                 <h3>标题</h3>
                                 <el-input v-model="formObj.header.title" clearable

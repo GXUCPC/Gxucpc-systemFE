@@ -5,10 +5,10 @@
             <span>比赛管理</span>
             <el-button style="float: right;" type="success" plain>添加比赛</el-button>
         </template>
-            <!--<header class="header-contest">比赛管理</header>-->
-            <!--<div class="add-contest">-->
-            <!--  <el-button type="success" @click="showAddContestDialog()" plain>添加比赛</el-button>-->
-            <!--</div>-->
+        <!--<header class="header-contest">比赛管理</header>-->
+        <!--<div class="add-contest">-->
+        <!--  <el-button type="success" @click="showAddContestDialog()" plain>添加比赛</el-button>-->
+        <!--</div>-->
         <el-table :data="tableData">
             <el-table-column header-align="center" fixed="left" label="比赛名称" width="300" prop="name"/>
             <el-table-column align="center" label="比赛类型" width="180" prop="type"/>
@@ -22,15 +22,17 @@
                 <template #default="scope">
                     <el-button :disabled="type2num(scope.row.type) !== 1" size="small"
                                @click="showUploadDialog(scope.row.id)"
-                               type="success">Upload
+                               type="success">上传
                     </el-button>
-                    <el-button :disabled="type2num(scope.row.type) !== 1" size="small"
-                               @click="showDeleteDialog(scope.row.id)"
-                               type="danger">Delete
-                    </el-button>
+                    <el-popconfirm title="确认删除该奖状？" @confirm="deleteUpload(scope.row.id, scope.row.name)">
+                        <template #reference>
+                            <el-button :disabled="type2num(scope.row.type) !== 1" size="small"
+                                       type="danger">删除
+                            </el-button>
+                        </template>
+                    </el-popconfirm>
                 </template>
             </el-table-column>
-            <!--TODO 危险操作要添加二级确认弹窗-->
             <el-table-column align="center" label="开放奖状下载" width="180">
                 <template #default="scope">
                     <el-switch :disabled="type2num(scope.row.type) !== 1" v-model="scope.row.isDownload"
@@ -62,8 +64,13 @@
             </el-table-column>
             <el-table-column align="center" fixed="right" label="Operations" width="200">
                 <template #default="scope">
-                    <el-button size="small" @click="handleEdit(scope.$index, scope.row)">Edit</el-button>
-                    <el-button size="small" type="danger" @click="handleDelete(scope.$index, scope.row)">Delete</el-button>
+                    <el-button size="small" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+                    <el-popconfirm title="确认删除该比赛？" @confirm="handleDelete(scope.$index, scope.row)">
+                        <template #reference>
+                    <el-button size="small" type="danger">删除
+                    </el-button>
+                        </template>
+                    </el-popconfirm>
                 </template>
             </el-table-column>
         </el-table>

@@ -18,9 +18,13 @@
             <!--TODO 危险操作要添加二级确认弹窗-->
             <el-table-column align="center" label="Operations">
                 <template #default="scope">
-                    <el-button size="small" @click="handleEdit(scope.$index, scope.row)">Edit</el-button>
-                    <el-button size="small" type="danger" @click="handleDelete(scope.$index, scope.row)">Delete
-                    </el-button>
+                    <el-button size="small" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+                    <el-popconfirm title="确认删除该用户？" @confirm="handleDelete(scope.$index, scope.row)">
+                        <template #reference>
+                            <el-button size="small" type="danger">删除
+                            </el-button>
+                        </template>
+                    </el-popconfirm>
                 </template>
             </el-table-column>
         </el-table>

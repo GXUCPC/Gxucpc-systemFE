@@ -19,8 +19,12 @@
                             <div class="list-item-footer">
                                 <p class="list-item-time">{{ scope.row.data.time }}</p>
                                 <div class="jiange">
-                                    <el-button type="danger" link @click="deleteItem(scope.row.data.id)"> 删除文章
-                                    </el-button>
+                                    <el-popconfirm @confirm="deleteItem(scope.row.data.id)" title="确认删除？">
+                                        <template #reference>
+                                            <el-button type="danger" link> 删除文章
+                                            </el-button>
+                                        </template>
+                                    </el-popconfirm>
                                     <a :href="scope.row.data.url"> 修改文章</a></div>
                             </div>
                         </div>
