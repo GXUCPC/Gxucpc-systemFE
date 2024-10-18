@@ -55,7 +55,7 @@ export default {
 }
 
 .image-logo {
-    height: 100%;
+    height: 80%;
     position: relative;
 }
 

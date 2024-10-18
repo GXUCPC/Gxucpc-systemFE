@@ -45,7 +45,7 @@ export default {
         },
         getCaptcha() {
             localStorage.setItem("coldTime", new Date().setTime(new Date().getTime() + 60000));
-            this.$http.post("/information/primaryInformationQuery", {userName: this.form.name, userMail: this.form.email})
+            this.$http.post("http://123.207.50.47:8082/api/information/sendEmailOtp", {userName: this.form.name, userMail: this.form.email})
                 .then(res=>{
                     console.log(res);
                 })

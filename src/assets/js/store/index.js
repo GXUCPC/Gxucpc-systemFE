@@ -23,6 +23,14 @@ const formItemType = {
     Phone: 9,
 };
 
+const formItemPropType = {
+    text: 0,
+    number: 1,
+    selection: 2,
+    option: 3,
+};
+
+
 export default createStore({
     state: {
         // 后端地址
@@ -30,6 +38,7 @@ export default createStore({
         // 表单配置
         form: {
             formItemType: formItemType,
+            formItemPropType: formItemPropType,
             availableFormItemArr: [
                 {
                     type: formItemType.SubTitle,

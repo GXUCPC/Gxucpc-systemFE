@@ -8,17 +8,17 @@ const router = createRouter({
         {
             path: "/mobile/signup/:itemID(\\d+)/1",
             name: 'MobileSignUp',
-            component: defineAsyncComponent(() => import('@/views/mobile/public/signup/MobileSignUp.vue'))
+            component: defineAsyncComponent(() => import('@/mobileViews/public/signup/MobileSignUp.vue'))
         },
         {
             path: "/mobile/signup/:itemID(\\d+)/2",
             name: 'MobileSignUpLQ',
-            component: defineAsyncComponent(() => import('@/views/mobile/public/signup/MobileSignUpLQ.vue'))
+            component: defineAsyncComponent(() => import('@/mobileViews/public/signup/MobileSignUpLQ.vue'))
         },
         {
             path: "/mobile/signup/:itemID(\\d+)/3",
             name: 'MobileSignUpNanNing',
-            component: defineAsyncComponent(() => import('@/views/mobile/public/signup/MobileSignUpNanNing.vue'))
+            component: defineAsyncComponent(() => import('@/mobileViews/public/signup/MobileSignUpNanNing.vue'))
         },
         {
             path: '/',
@@ -107,6 +107,29 @@ const router = createRouter({
             }
         },
         {
+            path: '/m/',
+            name: 'PublicMobile',
+            component: defineAsyncComponent(() => import('@/mobileViews/Public.vue')),
+            children: [
+                {
+                    path: '',
+                    name: 'Home',
+                    component: defineAsyncComponent(() => import('@/mobileViews/public/Home.vue'))
+                },
+            ],
+            beforeEnter: (to, from, next) => {
+                let client = localStorage.getItem('client');
+                if (client === null || client === "null" || client === undefined) {
+                    request.get("/public/getClient").then((res) => {
+                        if (res.statusCode === 50000) {
+                            localStorage.setItem('client', res.data);
+                        }
+                    });
+                }
+                next();
+            }
+        },
+        {
             path: '/admin',
             name: 'Admin',
             component: defineAsyncComponent(() => import('@/views/Admin.vue')),
@@ -179,16 +202,16 @@ const router = createRouter({
                     request.get("/admin/checkToken").then(res => {
                         //成功
                         if (res.statusCode === 50000) {
-                        next();
+                            next();
                         } else {
-                            next({ path: '/login' })
+                            next({path: '/login'});
                         }
 
                     }).catch(() => {
-                        next({ path: '/login' })
+                        next({path: '/login'});
                     });
                 } else { //没有登录
-                    next({path: '/login'})
+                    next({path: '/login'});
                 }
 
             }
